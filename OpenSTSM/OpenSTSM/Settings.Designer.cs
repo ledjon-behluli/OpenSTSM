@@ -94,5 +94,17 @@ namespace OpenSTSM {
                 this["SpatialDistanceOfCoordinatePointsThreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/ledjon-behluli/OpenSTSM")]
+        public string GitHubUri {
+            get {
+                return ((string)(this["GitHubUri"]));
+            }
+            set {
+                this["GitHubUri"] = value;
+            }
+        }
     }
 }

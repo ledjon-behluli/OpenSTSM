@@ -1,0 +1,105 @@
+﻿<Window x:Class="OpenSTSM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenSTSM.Guis"
+        xmlns:VM="clr-namespace:OpenSTSM.ViewModels.MainWindow"
+        mc:Ignorable="d"
+        Title="OpenSTSM" Height="450" Width="1000" UseLayoutRounding="True">
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Import" Command="{Binding ImportImageCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/import.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Exit" Command="{Binding CloseCommand}" />
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Analyse Image" Command="{Binding AnalyseImageCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/neural.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Generate Simulink Model" Command="{Binding GenerateSimulinkModelCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/run.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Options" Command="{Binding OptionsCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/options.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About OpenSTSM" Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock ="Bottom" >
+            <StatusBarItem>
+                <TextBlock Text="{Binding FileName}" />
+            </StatusBarItem>
+        </StatusBar>
+        <Grid DockPanel.Dock ="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column ="0" Width ="5" />
+            <StackPanel Grid.Column="0" VerticalAlignment ="Stretch" >
+                <TreeView x:Name="MainTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Margin="0 0 5 0" ItemsSource="{Binding ControlSystems}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="TreeViewItem.IsExpanded" Value="True" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding PredictedControlElements}" DataType="{x:Type VM:ControlSystem}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/options.ico" Height="16" Width="16" />
+                                <Label Content="{Binding ControlSystemName}"/>
+                            </StackPanel>
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding PossibleControlElements}" DataType="{x:Type VM:PredictedControlElement}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="true" Margin="0 6 6 0 "/>
+                                        <Image Source="/Resources/tick.ico" Height="16" Width="16" />
+                                        <Label Content="{Binding Information}"/>
+                                    </StackPanel>
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type VM:PossibleControlElement}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox IsChecked="true" Margin="0 6 6 0 "/>
+                                                <Image Source="/Resources/question.png" Height="16" Width="16" />
+                                                <Label Content="{Binding Information}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
+

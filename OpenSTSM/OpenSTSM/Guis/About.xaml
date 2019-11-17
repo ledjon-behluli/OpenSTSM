@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenSTSM.Guis"
+        xmlns:VM="clr-namespace:OpenSTSM.ViewModels.About"
         mc:Ignorable="d"
         Title="About OpenSTSM" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Height="289.376" Width="313.312">
     <Grid Margin="10 0 10 0">
@@ -11,9 +12,9 @@
         <TextBlock HorizontalAlignment="Left" Text="©2019 OpenSTSM&#x0a;All Rights Reserved" Margin="0,82,0,106" />
         <TextBlock HorizontalAlignment="Left" Text="OpenSTSM stands for Open Sketch to Simulink Model." Margin="0,130,0,66" />
         <TextBlock HorizontalAlignment="Left" Text="Designed and Developed by Ledjon Behluli" Margin="0,156,0,43" />
-        <Button Content="Close" Name="btnClose" Click="btnClose_Click" HorizontalAlignment="Left" Margin="202,221,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Close" Command="{Binding CloseCommand}" HorizontalAlignment="Left" Margin="202,221,0,0" VerticalAlignment="Top" Width="75"/>
         <TextBlock Margin="0,190,232,36">           
-            <Hyperlink NavigateUri="https://github.com/ledjon-behluli/OpenSTSM" RequestNavigate="GitHub_RequestNavigate">
+            <Hyperlink Command="{Binding RequestNavigateCommand}">
                 GitHub
             </Hyperlink>
         </TextBlock>
