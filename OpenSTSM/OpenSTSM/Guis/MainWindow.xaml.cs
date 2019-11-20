@@ -7,7 +7,7 @@ namespace OpenSTSM
     {
         public MainWindow()
         {
-            MainWindowViewModel viewModel = new MainWindowViewModel();
+            MainWindowViewModel viewModel = new MainWindowViewModel(ApplicationService.Instance.EventAggregator);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
 

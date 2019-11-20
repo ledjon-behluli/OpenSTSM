@@ -21,7 +21,7 @@ namespace OpenSTSM.Guis
                 LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold
             };
 
-            OptionsViewModel viewModel = new OptionsViewModel(PredictionParameters, Preferences);
+            OptionsViewModel viewModel = new OptionsViewModel(PredictionParameters, Preferences, ApplicationService.Instance.EventAggregator);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
 

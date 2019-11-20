@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using OpenSTSM.ViewModels;
+using Prism.Events;
 
 namespace OpenSTSM.ViewModels.Options
 {
     public class OptionsViewModel : WorkspaceViewModel
     {
+        private IEventAggregator _eventAggregator;
+
         #region "Properties"
 
         private PredictionParameters _predictionParameters;
@@ -50,8 +53,9 @@ namespace OpenSTSM.ViewModels.Options
         
         #endregion
 
-        public OptionsViewModel(PredictionParameters predictionParameters, Preferences preferences)
+        public OptionsViewModel(PredictionParameters predictionParameters, Preferences preferences, IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
             PredictionParameters = predictionParameters;
             Preferences = preferences;
 
@@ -72,6 +76,8 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
 
             Settings.Default.Save();
+            _eventAggregator.GetEvent<OptionsUpdatedEvent>().Publish();
+
             base.Close();
         }
     }

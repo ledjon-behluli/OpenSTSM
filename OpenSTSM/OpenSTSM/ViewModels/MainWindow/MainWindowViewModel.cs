@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System.Windows.Input;
 using System.Windows;
 using OpenSTSM.Guis;
+using Prism.Events;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -70,7 +71,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         #endregion
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IEventAggregator eventAggregator)
         {
             ControlSystems = GetControlSystems();
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
@@ -78,6 +79,8 @@ namespace OpenSTSM.ViewModels.MainWindow
             GenerateSimulinkModelCommand = new RelayCommand(GenerateSimulinkModel, param => canExecute_GenerateSimulinkModel);
             OptionsCommand = new RelayCommand(OpenOptions);
             AboutCommand = new RelayCommand(OpenAbout);
+
+            eventAggregator.GetEvent<OptionsUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
         }
 
         private void ImportImage(object sender)
