@@ -22,8 +22,8 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
-        private string _probability = string.Empty;
-        public string Probability
+        private decimal _probability = 0;    
+        public decimal Probability
         {
             get
             {
@@ -40,11 +40,11 @@ namespace OpenSTSM.ViewModels.MainWindow
         {
             get
             {
-                return $"{ControlElementName} ({Probability}%)";
+                return $"{ControlElementName} ({Probability.ToString()}%)";
             }
         }
 
-        public ControlElement(string controlElementName, string probability)
+        public ControlElement(string controlElementName, decimal probability)
         {
             ControlElementName = controlElementName;
             Probability = probability;

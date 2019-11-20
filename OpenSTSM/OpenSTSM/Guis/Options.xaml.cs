@@ -16,8 +16,12 @@ namespace OpenSTSM.Guis
                 RegionProposalsMultiplicity = Settings.Default.RegionProposalsMultiplicity,
                 SpatialDistanceOfCoordinatePointsThreshold = Settings.Default.SpatialDistanceOfCoordinatePointsThreshold
             };
+            Preferences Preferences = new Preferences()
+            {
+                LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold
+            };
 
-            OptionsViewModel viewModel = new OptionsViewModel(PredictionParameters);
+            OptionsViewModel viewModel = new OptionsViewModel(PredictionParameters, Preferences);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
 

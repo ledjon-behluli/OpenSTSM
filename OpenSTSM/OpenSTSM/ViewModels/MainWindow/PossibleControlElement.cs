@@ -8,7 +8,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 {
     public class PossibleControlElement : ControlElement
     {
-        public PossibleControlElement(string possibleControlElement, string probability) : base(possibleControlElement, probability)
+        public PossibleControlElement(string possibleControlElement, decimal probability) : base(possibleControlElement, probability)
         {
             ControlElementName = possibleControlElement;
         }            

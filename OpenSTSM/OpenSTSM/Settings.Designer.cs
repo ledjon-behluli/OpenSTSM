@@ -106,5 +106,17 @@ namespace OpenSTSM {
                 this["GitHubUri"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20.00")]
+        public decimal LeafProbabilityThreshold {
+            get {
+                return ((decimal)(this["LeafProbabilityThreshold"]));
+            }
+            set {
+                this["LeafProbabilityThreshold"] = value;
+            }
+        }
     }
 }

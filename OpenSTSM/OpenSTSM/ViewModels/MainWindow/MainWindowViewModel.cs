@@ -160,20 +160,20 @@ namespace OpenSTSM.ViewModels.MainWindow
             {
                 PredictedControlElements = new List<PredictedControlElement>()
                 {
-                    new PredictedControlElement("Controller", "98.34")
+                    new PredictedControlElement("Controller", 98.34m)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Output", "1.01"),
-                             new PossibleControlElement("Process", "0.25")
+                             new PossibleControlElement("Output", 1.01m),
+                             new PossibleControlElement("Process", 0.25m)
                          }
                     },
-                    new PredictedControlElement("Arrow Right", "92.78")
+                    new PredictedControlElement("Arrow Right", 62.78m)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Arrow Left", "6.78"),
-                             new PossibleControlElement("Arrow Up", "2.12")
+                             new PossibleControlElement("Arrow Left", 22.46m),
+                             new PossibleControlElement("Arrow Up", 14.76m)
                          }
                     }
                 }

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:OpenSTSM"
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.Options"    
         mc:Ignorable="d"
-        Title="Options" Height="325" Width="382.017" Icon="/Resources/options.ico"
+        Title="Options" Height="325" Width="382.017" Icon="/Resources/gear.png"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -16,8 +16,23 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Top" Grid.Row="0">
-            <TabItem Header="Parameters">
-                <Grid Background="#FFE5E5E5">
+            <TabItem Header="Preferences">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Show yellow leaf if probability is over:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
+                    <xctk:DecimalUpDown Name="udShowYellowLeafOnProbability" Value="{Binding Path=Preferences.LeafProbabilityThreshold}" Increment="0.5" Minimum="0.00" Maximum="100.00" Grid.Column="1" Grid.Row="0" />
+                </Grid>
+            
+            </TabItem>
+            <TabItem Header="Prediction Parameters">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -46,6 +61,6 @@
             </TabItem>
         </TabControl>
         <Button x:Name="btnOk" Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
-        <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CancelCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>            
+        <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>            
     </Grid>
 </Window>

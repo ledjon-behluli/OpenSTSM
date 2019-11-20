@@ -3,17 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OpenSTSM.Guis"
+        xmlns:conv="clr-namespace:OpenSTSM.Converters.MainWindow"
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.MainWindow"
         mc:Ignorable="d"
-        Title="OpenSTSM" Height="450" Width="1000" UseLayoutRounding="True">
+        Title="OpenSTSM" Height="450" Width="1000" UseLayoutRounding="True" >
+
+    <Window.Resources>
+        <conv:ProbabilityToImageConverter x:Key="ProbabilityToImageConverter" />
+    </Window.Resources>
     
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="Import" Command="{Binding ImportImageCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/import.ico" />
+                        <Image Source="/Resources/image-arrow.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
@@ -27,18 +31,24 @@
                 </MenuItem>
                 <MenuItem Header="Generate Simulink Model" Command="{Binding GenerateSimulinkModelCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/run.ico" />
+                        <Image Source="/Resources/control.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Options" Command="{Binding OptionsCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/options.ico" />
+                        <Image Source="/Resources/gear.png" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="About OpenSTSM" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="View Help">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/question.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="About OpenSTSM" Command="{Binding AboutCommand}" />
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock ="Bottom" >
@@ -62,21 +72,21 @@
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding PredictedControlElements}" DataType="{x:Type VM:ControlSystem}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/options.ico" Height="16" Width="16" />
+                                <Image Source="/Resources/sitemap-application-blue.png" Height="16" Width="16" />
                                 <Label Content="{Binding ControlSystemName}"/>
                             </StackPanel>
                             <HierarchicalDataTemplate.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding PossibleControlElements}" DataType="{x:Type VM:PredictedControlElement}">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="true" Margin="0 6 6 0 "/>
-                                        <Image Source="/Resources/tick.ico" Height="16" Width="16" />
+                                        <Image Source="/Resources/leaf-green.png" Height="16" Width="16" />
                                         <Label Content="{Binding Information}"/>
                                     </StackPanel>
                                     <HierarchicalDataTemplate.ItemTemplate>
                                         <DataTemplate DataType="{x:Type VM:PossibleControlElement}">
                                             <StackPanel Orientation="Horizontal">
                                                 <CheckBox IsChecked="true" Margin="0 6 6 0 "/>
-                                                <Image Source="/Resources/question.png" Height="16" Width="16" />
+                                                <Image Source="{Binding Path=Probability, Converter={StaticResource ProbabilityToImageConverter}}" Height="16" Width="16" />
                                                 <Label Content="{Binding Information}"/>
                                             </StackPanel>
                                         </DataTemplate>

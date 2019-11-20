@@ -12,16 +12,30 @@ namespace OpenSTSM.ViewModels.Options
     {
         #region "Properties"
 
-        private PredictionParameters _predictionParametersViewModel;
+        private PredictionParameters _predictionParameters;
         public PredictionParameters PredictionParameters
         {
             get
             {
-                return _predictionParametersViewModel;
+                return _predictionParameters;
             }
             set
             {
-                _predictionParametersViewModel = value;
+                _predictionParameters = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Preferences _preferences;
+        public Preferences Preferences
+        {
+            get
+            {
+                return _preferences;
+            }
+            set
+            {
+                _preferences = value;
                 OnPropertyChanged();
             }
         }
@@ -36,15 +50,17 @@ namespace OpenSTSM.ViewModels.Options
         
         #endregion
 
-        public OptionsViewModel(PredictionParameters predictionParameters)
+        public OptionsViewModel(PredictionParameters predictionParameters, Preferences preferences)
         {
             PredictionParameters = predictionParameters;
-            UpdateCommand = new RelayCommand(UpdateOptions, param => true);      // canExecute is default to true, this can be used as RelayCommand(UpdateOptions)
-            CancelCommand = new RelayCommand(CloseWindow);
+            Preferences = preferences;
+
+            UpdateCommand = new RelayCommand(UpdateOptions);
         }
 
         private void UpdateOptions(object sender)
         {
+            // Prediction Parameters
             Settings.Default.NumberOfRegionProposals = PredictionParameters.NumberOfRegionProposals;
             Settings.Default.MiddlePointDistanceThreshold = PredictionParameters.MiddlePointDistanceThreshold;
             Settings.Default.OuterSelectionThreshold = PredictionParameters.OuterSelectionThreshold;
@@ -52,11 +68,10 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.RegionProposalsMultiplicity = PredictionParameters.RegionProposalsMultiplicity;
             Settings.Default.SpatialDistanceOfCoordinatePointsThreshold = PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold;
 
-            CloseWindow(sender);
-        }
+            // Preferences
+            Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
 
-        private void CloseWindow(object sender)
-        {
+            Settings.Default.Save();
             base.Close();
         }
     }

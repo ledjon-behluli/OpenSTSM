@@ -78,6 +78,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Args.cs" />
+    <Compile Include="Converters\MainWindow\ProbabilityToImageConverter.cs" />
     <Compile Include="Guis\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -93,6 +94,7 @@
     <Compile Include="ViewModels\MainWindow\PredictedControlElement.cs" />
     <Compile Include="ViewModels\MainWindow\ControlSystem.cs" />
     <Compile Include="ViewModels\Options\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\Options\Preferences.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
@@ -153,21 +155,33 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\run.ico" />
-    <Resource Include="Resources\import.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\bittorrent.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\neural.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\options.ico" />
+    <Resource Include="Resources\gear.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tick.ico" />
+    <Resource Include="Resources\control.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\book-question.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\image-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sitemap-application-blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\leaf-red.png" />
+    <Resource Include="Resources\leaf-yellow.png" />
+    <Resource Include="Resources\leaf-green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
