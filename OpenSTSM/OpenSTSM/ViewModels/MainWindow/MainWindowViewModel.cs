@@ -10,6 +10,9 @@ using OpenSTSM.Guis;
 using Prism.Events;
 using NetworkModel;
 using System.Diagnostics;
+using OpenSTSM.Models.MainWindow.SimulinkElement;
+using OpenSTSM.Models.MainWindow.SimulinkElement.Input;
+using OpenSTSM.Models.MainWindow.SimulinkElement.Process;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -530,6 +533,38 @@ namespace OpenSTSM.ViewModels.MainWindow
             return node;
         }
 
+        public NodeViewModel CreateNode(ISimulinkElement simulinkElement, Point nodeLocation, bool centerNode)
+        {
+            var node = new NodeViewModel(simulinkElement.Name);
+            node.X = nodeLocation.X;
+            node.Y = nodeLocation.Y;            
+
+            for (int i = 1; i <= simulinkElement.NumberOfInputs; i++)
+                node.InputConnectors.Add(new ConnectorViewModel($"In{i}"));
+
+            for (int i = 1; i <= simulinkElement.NumberOfOutputs; i++)
+                node.OutputConnectors.Add(new ConnectorViewModel($"Out{i}"));
+
+
+            if (centerNode)
+            {
+                EventHandler<EventArgs> sizeChangedEventHandler = null;
+                sizeChangedEventHandler =
+                    delegate (object sender, EventArgs e)
+                    {
+                        node.X -= node.Size.Width / 2;
+                        node.Y -= node.Size.Height / 2;
+                        node.SizeChanged -= sizeChangedEventHandler;
+                    };
+
+                node.SizeChanged += sizeChangedEventHandler;
+            }
+          
+            this.Network.Nodes.Add(node);
+
+            return node;
+        }
+
         public void DeleteConnection(ConnectionViewModel connection)
         {
             this.Network.Connections.Remove(connection);
@@ -537,27 +572,15 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void PopulateWithTestData()
         {
-            //
-            // Create a network, the root of the view-model.
-            //
             this.Network = new NetworkViewModel();
 
-            //
-            // Create some nodes and add them to the view-model.
-            //
-            NodeViewModel node1 = CreateNode("Node1", new Point(100, 60), false);
-            NodeViewModel node2 = CreateNode("Node2", new Point(350, 80), false);
+            NodeViewModel node1 = CreateNode(new InputElement(SimulinkInputType.Step), new Point(100, 60), false);
+            NodeViewModel node2 = CreateNode(new ProcessElement(), new Point(350, 80), false);
 
-            //
-            // Create a connection between the nodes.
-            //
             ConnectionViewModel connection = new ConnectionViewModel();
             connection.SourceConnector = node1.OutputConnectors[0];
             connection.DestConnector = node2.InputConnectors[0];
 
-            //
-            // Add the connection to the view-model.
-            //
             this.Network.Connections.Add(connection);
         }
 

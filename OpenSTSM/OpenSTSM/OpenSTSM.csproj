@@ -78,7 +78,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApplicationService.cs" />
+    <Compile Include="Attributes\SimulinkElementPropertiesAttribute.cs" />
     <Compile Include="CurvedArrow.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Guis\HelpTextWindow.xaml.cs">
       <DependentUpon>HelpTextWindow.xaml</DependentUpon>
     </Compile>
@@ -95,6 +97,12 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="MainWindow_ZoomAndPan.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\SimulinkElementProperties.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\ISimulinkElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\Input\InputElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\Input\SimulinkInputType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\Process\ProcessElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElement\Process\SimulinkProcessType.cs" />
     <Compile Include="MouseHandlingMode.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
