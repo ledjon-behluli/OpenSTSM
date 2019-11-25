@@ -8,12 +8,15 @@ using System.Windows.Input;
 using System.Windows;
 using OpenSTSM.Guis;
 using Prism.Events;
+using NetworkModel;
+using System.Diagnostics;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
     public class MainWindowViewModel : WorkspaceViewModel
     {
         private bool _isProcessing = false;
+
         #region Properties
 
         #region "TreeView"
@@ -67,6 +70,8 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         public ICommand OptionsCommand { get; set; }
 
+        public ICommand DesignerHelpCommand { get; set; }
+
         public ICommand AboutCommand { get; set; }
 
         #endregion
@@ -74,13 +79,15 @@ namespace OpenSTSM.ViewModels.MainWindow
         public MainWindowViewModel(IEventAggregator eventAggregator)
         {
             ControlSystems = GetControlSystems();
+            PopulateWithTestData();
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
             AnalyseImageCommand = new RelayCommand(AnalyseImage, param => canExecute_AnalyseImage);
             GenerateSimulinkModelCommand = new RelayCommand(GenerateSimulinkModel, param => canExecute_GenerateSimulinkModel);
             OptionsCommand = new RelayCommand(OpenOptions);
+            DesignerHelpCommand = new RelayCommand(OpenDesignerHelp);
             AboutCommand = new RelayCommand(OpenAbout);
 
-            eventAggregator.GetEvent<OptionsUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
+            eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
         }
 
         private void ImportImage(object sender)
@@ -138,6 +145,18 @@ namespace OpenSTSM.ViewModels.MainWindow
             about.ShowDialog();
         }
 
+        private void OpenDesignerHelp(object sender)
+        {
+            if (!Helper.IsWindowOpen<HelpTextWindow>())
+            {
+                var helpTextWindow = new HelpTextWindow();
+                helpTextWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width + 5;                
+                helpTextWindow.Top = App.Current.MainWindow.Top;
+                helpTextWindow.Owner = App.Current.MainWindow;
+                helpTextWindow.Show();
+            }
+        }
+
 
         public void ChangeCanExecute(bool canExecute, ref bool canExecuteObj)
         {
@@ -184,5 +203,365 @@ namespace OpenSTSM.ViewModels.MainWindow
 
             return controlSystems;
         }
+
+
+        #region NetworkUI
+
+        #region Internal Data Members
+
+        /// <summary>
+        /// This is the network that is displayed in the window.
+        /// It is the main part of the view-model.
+        /// </summary>
+        public NetworkViewModel network = null;
+
+        ///
+        /// The current scale at which the content is being viewed.
+        /// 
+        private double contentScale = 1;
+
+        ///
+        /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
+        /// 
+        private double contentOffsetX = 0;
+
+        ///
+        /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
+        /// 
+        private double contentOffsetY = 0;
+
+        ///
+        /// The width of the content (in content coordinates).
+        /// 
+        private double contentWidth = 1000;
+
+        ///
+        /// The heigth of the content (in content coordinates).
+        /// 
+        private double contentHeight = 1000;
+
+        ///
+        /// The width of the viewport onto the content (in content coordinates).
+        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
+        /// view-model so that the value can be shared with the overview window.
+        /// 
+        private double contentViewportWidth = 0;
+
+        ///
+        /// The height of the viewport onto the content (in content coordinates).
+        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
+        /// view-model so that the value can be shared with the overview window.
+        /// 
+        private double contentViewportHeight = 0;
+
+        #endregion Internal Data Members
+
+        #region Properties
+
+        public NetworkViewModel Network
+        {
+            get
+            {
+                return network;
+            }
+            set
+            {
+                network = value;
+
+                OnPropertyChanged("Network");
+            }
+        }
+
+        public double ContentScale
+        {
+            get
+            {
+                return contentScale;
+            }
+            set
+            {
+                contentScale = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public double ContentOffsetX
+        {
+            get
+            {
+                return contentOffsetX;
+            }
+            set
+            {
+                contentOffsetX = value;
+
+                OnPropertyChanged();
+            }
+        }
+        
+        public double ContentOffsetY
+        {
+            get
+            {
+                return contentOffsetY;
+            }
+            set
+            {
+                contentOffsetY = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public double ContentWidth
+        {
+            get
+            {
+                return contentWidth;
+            }
+            set
+            {
+                contentWidth = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public double ContentHeight
+        {
+            get
+            {
+                return contentHeight;
+            }
+            set
+            {
+                contentHeight = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public double ContentViewportWidth
+        {
+            get
+            {
+                return contentViewportWidth;
+            }
+            set
+            {
+                contentViewportWidth = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public double ContentViewportHeight
+        {
+            get
+            {
+                return contentViewportHeight;
+            }
+            set
+            {
+                contentViewportHeight = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+        
+
+        public ConnectionViewModel ConnectionDragStarted(ConnectorViewModel draggedOutConnector, Point curDragPoint)
+        {
+            var connection = new ConnectionViewModel();
+
+            if (draggedOutConnector.Type == ConnectorType.Output)
+            {
+                connection.SourceConnector = draggedOutConnector;
+                connection.DestConnectorHotspot = curDragPoint;
+            }
+            else
+            {
+                connection.DestConnector = draggedOutConnector;
+                connection.SourceConnectorHotspot = curDragPoint;
+            }
+
+            this.Network.Connections.Add(connection);
+
+            return connection;
+        }
+
+        public void QueryConnnectionFeedback(ConnectorViewModel draggedOutConnector, ConnectorViewModel draggedOverConnector, out object feedbackIndicator, out bool connectionOk)
+        {
+            if (draggedOutConnector == draggedOverConnector)
+            {
+                feedbackIndicator = new ConnectionBadIndicator();
+                connectionOk = false;
+            }
+            else
+            {
+                var sourceConnector = draggedOutConnector;
+                var destConnector = draggedOverConnector;
+
+                connectionOk = sourceConnector.ParentNode != destConnector.ParentNode &&
+                                 sourceConnector.Type != destConnector.Type;
+
+                if (connectionOk)
+                {
+                    feedbackIndicator = new ConnectionOkIndicator();
+                }
+                else
+                {
+                    feedbackIndicator = new ConnectionBadIndicator();
+                }
+            }
+        }
+        
+        public void ConnectionDragging(Point curDragPoint, ConnectionViewModel connection)
+        {
+            if (connection.DestConnector == null)
+            {
+                connection.DestConnectorHotspot = curDragPoint;
+            }
+            else
+            {
+                connection.SourceConnectorHotspot = curDragPoint;
+            }
+        }
+
+        public void ConnectionDragCompleted(ConnectionViewModel newConnection, ConnectorViewModel connectorDraggedOut, ConnectorViewModel connectorDraggedOver)
+        {
+            if (connectorDraggedOver == null)
+            {
+                this.Network.Connections.Remove(newConnection);
+                return;
+            }
+
+            bool connectionOk = connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode &&
+                                connectorDraggedOut.Type != connectorDraggedOver.Type;
+
+            if (!connectionOk)
+            {
+                this.Network.Connections.Remove(newConnection);
+                return;
+            }
+
+            var existingConnection = FindConnection(connectorDraggedOut, connectorDraggedOver);
+            if (existingConnection != null)
+            {
+                this.Network.Connections.Remove(existingConnection);
+            }
+
+            if (newConnection.DestConnector == null)
+            {
+                newConnection.DestConnector = connectorDraggedOver;
+            }
+            else
+            {
+                newConnection.SourceConnector = connectorDraggedOver;
+            }
+        }
+
+        public ConnectionViewModel FindConnection(ConnectorViewModel connector1, ConnectorViewModel connector2)
+        {
+            Trace.Assert(connector1.Type != connector2.Type);
+
+            var sourceConnector = connector1.Type == ConnectorType.Output ? connector1 : connector2;
+            var destConnector = connector1.Type == ConnectorType.Output ? connector2 : connector1;
+
+            foreach (var connection in sourceConnector.AttachedConnections)
+            {
+                if (connection.DestConnector == destConnector)
+                {
+                    return connection;
+                }
+            }
+
+            return null;
+        }
+
+        public void DeleteSelectedNodes()
+        {
+            var nodesCopy = this.Network.Nodes.ToArray();
+            foreach (var node in nodesCopy)
+            {
+                if (node.IsSelected)
+                {
+                    DeleteNode(node);
+                }
+            }
+        }
+
+        public void DeleteNode(NodeViewModel node)
+        {
+            this.Network.Connections.RemoveRange(node.AttachedConnections);
+            this.Network.Nodes.Remove(node);
+        }
+
+        public NodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode)
+        {
+            var node = new NodeViewModel(name);
+            node.X = nodeLocation.X;
+            node.Y = nodeLocation.Y;
+
+            node.InputConnectors.Add(new ConnectorViewModel("In1"));
+            node.InputConnectors.Add(new ConnectorViewModel("In2"));
+            node.OutputConnectors.Add(new ConnectorViewModel("Out1"));
+            node.OutputConnectors.Add(new ConnectorViewModel("Out2"));
+
+            if (centerNode)
+            {
+                EventHandler<EventArgs> sizeChangedEventHandler = null;
+                sizeChangedEventHandler =
+                    delegate (object sender, EventArgs e)
+                    {
+                        node.X -= node.Size.Width / 2;
+                        node.Y -= node.Size.Height / 2;                     
+                        node.SizeChanged -= sizeChangedEventHandler;
+                    };
+
+                node.SizeChanged += sizeChangedEventHandler;
+            }
+
+            this.Network.Nodes.Add(node);
+
+            return node;
+        }
+
+        public void DeleteConnection(ConnectionViewModel connection)
+        {
+            this.Network.Connections.Remove(connection);
+        }
+
+        private void PopulateWithTestData()
+        {
+            //
+            // Create a network, the root of the view-model.
+            //
+            this.Network = new NetworkViewModel();
+
+            //
+            // Create some nodes and add them to the view-model.
+            //
+            NodeViewModel node1 = CreateNode("Node1", new Point(100, 60), false);
+            NodeViewModel node2 = CreateNode("Node2", new Point(350, 80), false);
+
+            //
+            // Create a connection between the nodes.
+            //
+            ConnectionViewModel connection = new ConnectionViewModel();
+            connection.SourceConnector = node1.OutputConnectors[0];
+            connection.DestConnector = node2.InputConnectors[0];
+
+            //
+            // Add the connection to the view-model.
+            //
+            this.Network.Connections.Add(connection);
+        }
+
+        #endregion
+
     }
 }

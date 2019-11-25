@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenSTSM
 {
-    public class OptionsUpdatedEvent : PubSubEvent
+    public class PreferencesUpdatedEvent : PubSubEvent
     {
 
     }

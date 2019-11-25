@@ -78,12 +78,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApplicationService.cs" />
-    <Compile Include="Args.cs" />
+    <Compile Include="CurvedArrow.cs" />
+    <Compile Include="Guis\HelpTextWindow.xaml.cs">
+      <DependentUpon>HelpTextWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\OverviewWindow.xaml.cs">
+      <DependentUpon>OverviewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectionBadIndicator.cs" />
+    <Compile Include="ConnectionOkIndicator.cs" />
     <Compile Include="Converters\MainWindow\ProbabilityToImageConverter.cs" />
+    <Compile Include="Converters\MainWindow\ScaleToPercentConverter.cs" />
     <Compile Include="EventAggregator.cs" />
     <Compile Include="Guis\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="MainWindow_ZoomAndPan.cs" />
+    <Compile Include="MouseHandlingMode.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -102,6 +114,14 @@
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Page Include="Guis\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\HelpText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\HelpTextWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +144,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Guis\OverviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\SharedVisualTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -184,6 +212,33 @@
     <Resource Include="Resources\leaf-red.png" />
     <Resource Include="Resources\leaf-yellow.png" />
     <Resource Include="Resources\leaf-green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\block_16.png" />
+    <Resource Include="Resources\scissors.png" />
+    <Resource Include="Resources\tick_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdornedControl\AdornedControl.csproj">
+      <Project>{94b81cb7-f8a6-44bc-bd71-e927f701e0d8}</Project>
+      <Name>AdornedControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModel\NetworkModel.csproj">
+      <Project>{669475da-8f89-4657-b917-0b0c126bcd1d}</Project>
+      <Name>NetworkModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkUI\NetworkUI.csproj">
+      <Project>{b7ca1480-c144-40ac-ab97-a626f800d5b4}</Project>
+      <Name>NetworkUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{e7d6707b-d6ef-4fa8-9374-dc3b7d3cdfd6}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZoomAndPan\ZoomAndPan.csproj">
+      <Project>{468adede-6f5e-40c0-99c9-c6dac4fac934}</Project>
+      <Name>ZoomAndPan</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

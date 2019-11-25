@@ -76,7 +76,7 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
 
             Settings.Default.Save();
-            _eventAggregator.GetEvent<OptionsUpdatedEvent>().Publish();
+            _eventAggregator.GetEvent<PreferencesUpdatedEvent>().Publish();
 
             base.Close();
         }
