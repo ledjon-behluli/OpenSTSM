@@ -10,9 +10,7 @@ using OpenSTSM.Guis;
 using Prism.Events;
 using NetworkModel;
 using System.Diagnostics;
-using OpenSTSM.Models.MainWindow.SimulinkElement;
-using OpenSTSM.Models.MainWindow.SimulinkElement.Input;
-using OpenSTSM.Models.MainWindow.SimulinkElement.Process;
+using OpenSTSM.Models.MainWindow.SimulinkElements;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -71,6 +69,8 @@ namespace OpenSTSM.ViewModels.MainWindow
         public ICommand GenerateSimulinkModelCommand { get; set; }
         private bool canExecute_GenerateSimulinkModel = false;
 
+        public ICommand DiagramOverviewCommand { get; set; }
+
         public ICommand OptionsCommand { get; set; }
 
         public ICommand DesignerHelpCommand { get; set; }
@@ -86,6 +86,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
             AnalyseImageCommand = new RelayCommand(AnalyseImage, param => canExecute_AnalyseImage);
             GenerateSimulinkModelCommand = new RelayCommand(GenerateSimulinkModel, param => canExecute_GenerateSimulinkModel);
+            DiagramOverviewCommand = new RelayCommand(OpenDiagramOverview);
             OptionsCommand = new RelayCommand(OpenOptions);
             DesignerHelpCommand = new RelayCommand(OpenDesignerHelp);
             AboutCommand = new RelayCommand(OpenAbout);
@@ -134,6 +135,19 @@ namespace OpenSTSM.ViewModels.MainWindow
             ChangeCanExecute(true, ref canExecute_ImportImage);
             ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
             _isProcessing = false;
+        }
+
+        private void OpenDiagramOverview(object sender)
+        {
+            if (!Helper.IsWindowOpen<OverviewWindow>())
+            {
+                var overviewWindow = new OverviewWindow();
+                overviewWindow.Left = App.Current.MainWindow.Left;
+                overviewWindow.Top = App.Current.MainWindow.Top + App.Current.MainWindow.Height + 5;
+                overviewWindow.Owner = App.Current.MainWindow;
+                overviewWindow.DataContext = App.Current.MainWindow.DataContext;
+                overviewWindow.Show();
+            }
         }
 
         private void OpenOptions(object sender)
@@ -574,14 +588,38 @@ namespace OpenSTSM.ViewModels.MainWindow
         {
             this.Network = new NetworkViewModel();
 
-            NodeViewModel node1 = CreateNode(new InputElement(SimulinkInputType.Step), new Point(100, 60), false);
-            NodeViewModel node2 = CreateNode(new ProcessElement(), new Point(350, 80), false);
+            var elements = SimulinkElementsTestData();
+            foreach(var elem in elements)
+            {
 
-            ConnectionViewModel connection = new ConnectionViewModel();
-            connection.SourceConnector = node1.OutputConnectors[0];
-            connection.DestConnector = node2.InputConnectors[0];
+            }
 
-            this.Network.Connections.Add(connection);
+
+
+            //NodeViewModel node1 = CreateNode(new InputElement(SimulinkInputType.Step), new Point(100, 80), false);            
+            //NodeViewModel node2 = CreateNode(new ProcessElement(), new Point(350, 80), false);
+            //NodeViewModel node3 = CreateNode(new OutputElement(SimulinkOutputType.ScopeWith1Input), new Point(600, 80), false);
+
+            //ConnectionViewModel connection1 = new ConnectionViewModel();
+            //connection1.SourceConnector = node1.OutputConnectors[0];
+            //connection1.DestConnector = node2.InputConnectors[0];
+
+            //ConnectionViewModel connection2 = new ConnectionViewModel();
+            //connection2.SourceConnector = node2.OutputConnectors[0];
+            //connection2.DestConnector = node3.InputConnectors[0];
+
+            //this.Network.Connections.AddRange(new ConnectionViewModel[] { connection1, connection2 });
+
+        }
+
+        private List<ISimulinkElement> SimulinkElementsTestData()
+        {
+            return new List<ISimulinkElement>()
+            {
+                new InputElement(SimulinkInputType.Step),
+                new ConnectorElement(SimulinkConnectorType.ArrowStraightRight),
+                new OutputElement(SimulinkOutputType.ScopeWith1Input)
+            };
         }
 
         #endregion

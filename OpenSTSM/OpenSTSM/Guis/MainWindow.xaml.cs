@@ -21,22 +21,6 @@ namespace OpenSTSM
 
         public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            //var helpTextWindow = new HelpTextWindow();
-            //helpTextWindow.Left = Left + Width + 5;
-            //helpTextWindow.Top = Top;
-            //helpTextWindow.Owner = this;
-            //helpTextWindow.Show();
-
-            //var overviewWindow = new OverviewWindow();
-            //overviewWindow.Left = Left;
-            //overviewWindow.Top = Top + Height + 5;
-            //overviewWindow.Owner = this;
-            //overviewWindow.DataContext = ViewModel; // Pass the view model onto the overview window.
-            //overviewWindow.Show();
-        }
-
         private void networkControl_ConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
         {
             var draggedOutConnector = (ConnectorViewModel)e.ConnectorDraggedOut;
@@ -77,7 +61,20 @@ namespace OpenSTSM
 
         private void DeleteSelectedNodes_Executed(object sender, ExecutedRoutedEventArgs e) => ViewModel.DeleteSelectedNodes();
 
-        private void CreateNode_Executed(object sender, ExecutedRoutedEventArgs e) => CreateNode();
+        private void CreateNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (!Helper.IsWindowOpen<SimulinkElementsBrowserWindow>())
+            {
+                var sebw = new SimulinkElementsBrowserWindow();
+                sebw.Left = this.Left + this.Width + 5;
+                sebw.Top = this.Top;
+                sebw.Owner = this;
+                sebw.Show();
+            }
+
+            //var newNodePosition = Mouse.GetPosition(NetworkControl);
+            //ViewModel.CreateNode("New Node!", newNodePosition, true);
+        }
 
         private void DeleteNode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -89,12 +86,6 @@ namespace OpenSTSM
         {
             var connection = (ConnectionViewModel)e.Parameter;
             ViewModel.DeleteConnection(connection);
-        }
-
-        private void CreateNode()
-        {
-            var newNodePosition = Mouse.GetPosition(NetworkControl);
-            ViewModel.CreateNode("New Node!", newNodePosition, true);
         }
 
         private void Node_SizeChanged(object sender, SizeChangedEventArgs e)

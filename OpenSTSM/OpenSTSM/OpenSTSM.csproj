@@ -95,14 +95,22 @@
     <Compile Include="Guis\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Guis\SimulinkElementsBrowserWindow.xaml.cs">
+      <DependentUpon>SimulinkElementsBrowserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="MainWindow_ZoomAndPan.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\SimulinkElementProperties.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\ISimulinkElement.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\Input\InputElement.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\Input\SimulinkInputType.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\Process\ProcessElement.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElement\Process\SimulinkProcessType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Connector\ConnectorElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Connector\SimulinkConnectorType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\SimulinkGraphElementType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Output\OutputElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Output\SimulinkOutputType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\SimulinkElementProperties.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\ISimulinkElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Input\InputElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Input\SimulinkInputType.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Process\ProcessElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\Process\SimulinkProcessType.cs" />
     <Compile Include="MouseHandlingMode.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -118,6 +126,7 @@
     <Compile Include="ViewModels\Options\OptionsViewModel.cs" />
     <Compile Include="ViewModels\Options\Preferences.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\SimulinkElementsBrowser\SimulinkElementsBrowserViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
@@ -159,6 +168,10 @@
     <Page Include="Guis\SharedVisualTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Guis\SimulinkElementsBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +260,9 @@
       <Project>{468adede-6f5e-40c0-99c9-c6dac4fac934}</Project>
       <Name>ZoomAndPan</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\magnifier.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

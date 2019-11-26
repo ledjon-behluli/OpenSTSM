@@ -57,11 +57,11 @@ namespace AdornedControl
 
         public static readonly DependencyProperty FadeOutTimeProperty =
             DependencyProperty.Register("FadeOutTime", typeof(double), typeof(AdornedControl),
-                new FrameworkPropertyMetadata(1.0));
+                new FrameworkPropertyMetadata(0.25));
 
         public static readonly DependencyProperty CloseAdornerTimeOutProperty =
             DependencyProperty.Register("CloseAdornerTimeOut", typeof(double), typeof(AdornedControl),
-                new FrameworkPropertyMetadata(2.0, CloseAdornerTimeOut_PropertyChanged));
+                new FrameworkPropertyMetadata(0.25, CloseAdornerTimeOut_PropertyChanged));
 
         public static readonly DependencyProperty AdornedTemplatePartNameProperty =
             DependencyProperty.Register("AdornedTemplatePartName", typeof(string), typeof(AdornedControl),

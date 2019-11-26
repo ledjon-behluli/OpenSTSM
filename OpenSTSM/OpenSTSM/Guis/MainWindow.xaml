@@ -11,7 +11,6 @@
         xmlns:zoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
         xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"        
         mc:Ignorable="d"
-        Loaded="MainWindow_Loaded"
         FocusManager.FocusedElement="{Binding ElementName=NetworkControl}"
         Title="OpenSTSM" Height="450" Width="1000" UseLayoutRounding="True" ResizeMode="CanResizeWithGrip" >
 
@@ -97,8 +96,8 @@
                             >
                             <!-- The visual for the connector. -->
                             <Ellipse
-                                Stroke="{StaticResource nodeBorderBrush}"
-                                Fill="{StaticResource connectorBackgroundBrush}"
+                                Stroke="{StaticResource NodeBorderBrush}"
+                                Fill="{StaticResource ConnectorBackgroundBrush}"
                                 />
                         </ControlTemplate>
                     </Setter.Value>
@@ -228,9 +227,9 @@
 
                     <!-- The connection is represented by a curved arrow. -->
                     <local:CurvedArrow
-                        Stroke="{StaticResource connectionBrush}"
+                        Stroke="{StaticResource ConnectionBrush}"
                         StrokeThickness="2"
-                        Fill="{StaticResource connectionBrush}"
+                        Fill="{StaticResource ConnectionBrush}"
                         Points="{Binding Points}"
                         />
 
@@ -301,11 +300,11 @@
                         <!-- This rectangle is the main visual for the node. -->
 
                         <Rectangle
-                            Stroke="{StaticResource nodeBorderBrush}"
+                            Stroke="{StaticResource NodeBorderBrush}"
                             StrokeThickness="1.3"
                             RadiusX="4"
                             RadiusY="4"
-                            Fill="{StaticResource nodeFillBrush}"
+                            Fill="{StaticResource NodeFillBrush}"
                             />
 
                         <!-- 
@@ -342,7 +341,7 @@
                                 Grid.Column="0"
                                 Grid.Row="2"
                                 ItemsSource="{Binding InputConnectors}"
-                                ItemTemplate="{StaticResource inputConnectorTemplate}"
+                                ItemTemplate="{StaticResource InputConnectorTemplate}"
                                 Focusable="False"
                                 />
 
@@ -351,7 +350,7 @@
                                 Grid.Column="2"
                                 Grid.Row="2"
                                 ItemsSource="{Binding OutputConnectors}"
-                                ItemTemplate="{StaticResource outputConnectorTemplate}"
+                                ItemTemplate="{StaticResource OutputConnectorTemplate}"
                                 Focusable="False"
                                 />
                         </Grid>
@@ -482,9 +481,9 @@
             <!-- Clicking this menu item creates a new node. -->
 
             <MenuItem
-                Header="Create Node"
+                Header="Create Block Element"
                 Command="{StaticResource Commands.CreateNode}"
-                ToolTip="Creates a new node"
+                ToolTip="Creates a new block element"
                 />
 
             <Separator />
@@ -526,7 +525,6 @@
         </ContextMenu>
     </Window.ContextMenu>
 
-
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -547,6 +545,12 @@
                 <MenuItem Header="Generate Simulink Model" Command="{Binding GenerateSimulinkModelCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/control.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Diagram Overview" Command="{Binding DiagramOverviewCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/magnifier.png" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
@@ -744,7 +748,7 @@
                 ContentOffsetY="{Binding ContentOffsetY, Mode=TwoWay}"
                 ContentViewportWidth="{Binding ContentViewportWidth, Mode=OneWayToSource}"
                 ContentViewportHeight="{Binding ContentViewportHeight, Mode=OneWayToSource}"
-                Background="LightGray"
+                Background="White"
                 Focusable="False"
                 >
                         <!--
@@ -807,5 +811,6 @@
             </DockPanel>
         </Grid>
     </DockPanel>
+
 </Window>
 

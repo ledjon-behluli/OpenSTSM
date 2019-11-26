@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using OpenSTSM.Extensions;
+﻿using OpenSTSM.Extensions;
 
-namespace OpenSTSM.Models.MainWindow.SimulinkElement.Process
-{
+namespace OpenSTSM.Models.MainWindow.SimulinkElements
+{ 
     public class ProcessElement : ISimulinkElement
     {
         public SimulinkProcessType SimulinkProcessType { get => SimulinkProcessType.Process; }
@@ -18,6 +12,8 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElement.Process
 
         public int NumberOfOutputs { get; private set; }
 
+        public SimulinkGraphElementType GraphElementType { get; private set; }
+
 
         public ProcessElement()
         {
@@ -27,6 +23,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElement.Process
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;
+            GraphElementType = sep.GraphElementType;
         }
     }
 }

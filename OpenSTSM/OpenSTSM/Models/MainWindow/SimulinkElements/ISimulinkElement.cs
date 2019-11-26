@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace OpenSTSM.Models.MainWindow.SimulinkElement
+namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {
     public interface ISimulinkElement
     {
         string Name { get; }
         int NumberOfInputs { get; }
         int NumberOfOutputs { get; }
+        SimulinkGraphElementType GraphElementType { get; }
     }
 }

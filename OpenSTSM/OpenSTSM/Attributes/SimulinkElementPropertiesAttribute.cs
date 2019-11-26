@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using OpenSTSM.Models.MainWindow.SimulinkElements;
+using System;
 
 namespace OpenSTSM.Attributes
 {
@@ -9,12 +9,14 @@ namespace OpenSTSM.Attributes
         public string Name { get; private set; }
         public int NumberOfInputs { get; private set; }
         public int NumberOfOutputs { get; private set; }
+        public SimulinkGraphElementType GraphElementType { get; private set; }
 
-        public SimulinkElementPropertiesAttribute(string name, int numberOfInputs, int numberOfOutputs)
+        public SimulinkElementPropertiesAttribute(string name, int numberOfInputs, int numberOfOutputs, SimulinkGraphElementType graphElementType)
         {
             Name = name;
             NumberOfInputs = numberOfInputs;
             NumberOfOutputs = numberOfOutputs;
+            GraphElementType = graphElementType;
         }
     }
 }

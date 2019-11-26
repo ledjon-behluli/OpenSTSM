@@ -1,7 +1,6 @@
 ﻿using OpenSTSM.Extensions;
-using System.Windows;
 
-namespace OpenSTSM.Models.MainWindow.SimulinkElement.Input
+namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {    
     public class InputElement : ISimulinkElement
     {
@@ -13,6 +12,9 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElement.Input
 
         public int NumberOfOutputs { get; private set; }
 
+        public SimulinkGraphElementType GraphElementType { get; private set; }
+
+
 
         public InputElement(SimulinkInputType simulinkInputType)
         {
@@ -22,6 +24,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElement.Input
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;
+            GraphElementType = sep.GraphElementType;         
         }
     }
 }
