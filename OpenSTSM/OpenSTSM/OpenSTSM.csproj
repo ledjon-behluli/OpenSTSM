@@ -79,6 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="ApplicationService.cs" />
     <Compile Include="Attributes\SimulinkElementPropertiesAttribute.cs" />
+    <Compile Include="Converters\MainWindow\BooleanToVisibilityConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Guis\HelpTextWindow.xaml.cs">
@@ -263,6 +264,35 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\magnifier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\chain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Sources\constant_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Sources\ramp_block.png" />
+    <Resource Include="Resources\Simulink\Sources\step_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Simulink\Discrete\" />
+    <Folder Include="Resources\Simulink\Math Operations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Sinks\display_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Sinks\scope_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Continuous\transfer_fcn_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Continuous\pid_s_block.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

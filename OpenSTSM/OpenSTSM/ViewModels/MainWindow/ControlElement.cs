@@ -36,6 +36,20 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
+        private bool _needsLinking;
+        public bool NeedsLinking
+        {
+            get
+            {
+                return _needsLinking;
+            }
+            set
+            {
+                _needsLinking = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Information
         {
             get
@@ -44,10 +58,11 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
-        public ControlElement(string controlElementName, decimal probability)
+        public ControlElement(string controlElementName, decimal probability, bool needsLinking)
         {
-            ControlElementName = controlElementName;
-            Probability = probability;
+            _controlElementName = controlElementName;
+            _probability = probability;
+            _needsLinking = needsLinking;
         }
     }
 }

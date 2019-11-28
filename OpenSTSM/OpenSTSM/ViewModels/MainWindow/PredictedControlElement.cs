@@ -23,7 +23,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
-        public PredictedControlElement(string predictedControlElementName, decimal probability) : base(predictedControlElementName, probability)
+        public PredictedControlElement(string predictedControlElementName, decimal probability, bool needsMapping) : base(predictedControlElementName, probability, needsMapping)
         {
           
         }

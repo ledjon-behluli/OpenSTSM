@@ -66,8 +66,7 @@ namespace OpenSTSM
             if (!Helper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
                 var sebw = new SimulinkElementsBrowserWindow();
-                sebw.Left = this.Left + this.Width + 5;
-                sebw.Top = this.Top;
+                sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sebw.Owner = this;
                 sebw.Show();
             }
@@ -94,5 +93,6 @@ namespace OpenSTSM
             var node = (NodeViewModel)element.DataContext;
             node.Size = new Size(element.ActualWidth, element.ActualHeight);
         }
+
     }
 }
