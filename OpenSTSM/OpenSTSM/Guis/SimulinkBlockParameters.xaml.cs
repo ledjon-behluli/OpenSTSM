@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 
 namespace OpenSTSM.Guis
 {
-    public partial class SimulinkElementsBrowserWindow : Window
+    public partial class SimulinkBlockParameters : Window
     {
-        public SimulinkElementsBrowserWindow()
+        public SimulinkBlockParameters()
         {
-            SimulinkElementsBrowserViewModel viewModel = new SimulinkElementsBrowserViewModel(ApplicationService.Instance.EventAggregator);
+            SimulinkBlockParametersViewModel viewModel = new SimulinkBlockParametersViewModel(ApplicationService.Instance.EventAggregator);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
 

@@ -20,7 +20,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         #region Properties
 
-        #region "TreeView"
+        #region TreeView
 
         private List<ControlSystem> _controlSystems;
         public List<ControlSystem> ControlSystems
@@ -38,7 +38,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         #endregion
 
-        #region StatusBar"
+        #region StatusBar
 
         private string _fileName;
         public string FileName
@@ -96,6 +96,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             OpenSimulinkElementsBrowserCommand = new RelayCommand(OpenSimulinkElementsBrowser);
 
             eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
+            eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(() => { }, ThreadOption.UIThread);
         }
 
 

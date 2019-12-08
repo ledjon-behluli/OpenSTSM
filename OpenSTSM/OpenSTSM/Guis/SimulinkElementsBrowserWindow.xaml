@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         ShowInTaskbar="False" 
         ShowActivated="False"
-        Title="Simulink Elements Browser" Height="450" Width="400" Icon="/Resources/block.png">
+        Title="Simulink Elements Browser" Height="450" Width="400" Icon="/Resources/Simulink/block.png">
 
     <Window.Resources>
         
@@ -48,7 +48,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="0">
+                    <Button Name="Constant" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Constant}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -62,7 +63,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="1">
+                    <Button Name="Step" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Step}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="1">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -76,7 +78,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="2">
+                    <Button Name="Ramp" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Ramp}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="2">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -104,7 +107,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="0">
+                    <Button Name="Scope" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Scope}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -118,7 +122,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="1">
+                    <Button Name="Display" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Display}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="1">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -146,7 +151,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="0">
+                    <Button Name="TransferFunction" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=TransferFunction}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -160,7 +166,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Cursor="Hand" Grid.Row="0" Grid.Column="1">
+                    <Button Name="PidController" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=PidController}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="1">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -205,7 +212,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="btnOk" Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1" />
+        <Button x:Name="btnOk" Content="OK" Command="{Binding Path=SelectCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1" />
         <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" Width="75" Grid.Row="1"/>
     </Grid>
 </Window>

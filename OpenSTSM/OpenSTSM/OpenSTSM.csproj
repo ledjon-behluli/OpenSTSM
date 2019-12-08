@@ -82,6 +82,9 @@
     <Compile Include="Converters\MainWindow\BooleanToVisibilityConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Guis\BlockParameters\StepInput.xaml.cs">
+      <DependentUpon>StepInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Guis\HelpTextWindow.xaml.cs">
       <DependentUpon>HelpTextWindow.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,9 @@
     <Compile Include="EventAggregator.cs" />
     <Compile Include="Guis\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\SimulinkBlockParameters.xaml.cs">
+      <DependentUpon>SimulinkBlockParameters.xaml</DependentUpon>
     </Compile>
     <Compile Include="Guis\SimulinkElementsBrowserWindow.xaml.cs">
       <DependentUpon>SimulinkElementsBrowserWindow.xaml</DependentUpon>
@@ -127,11 +133,16 @@
     <Compile Include="ViewModels\Options\OptionsViewModel.cs" />
     <Compile Include="ViewModels\Options\Preferences.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\SimulinkElementsBrowser\SimulinkBlockParametersViewModel.cs" />
     <Compile Include="ViewModels\SimulinkElementsBrowser\SimulinkElementsBrowserViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Page Include="Guis\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\StepInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,6 +180,10 @@
     <Page Include="Guis\SharedVisualTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Guis\SimulinkBlockParameters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Guis\SimulinkElementsBrowserWindow.xaml">
       <SubType>Designer</SubType>
@@ -266,7 +281,7 @@
     <Resource Include="Resources\magnifier.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\block.png" />
+    <Resource Include="Resources\Simulink\block.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\chain.png" />
@@ -293,6 +308,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Simulink\Continuous\pid_s_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\block-parameters.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

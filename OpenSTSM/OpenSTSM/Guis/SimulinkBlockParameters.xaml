@@ -1,0 +1,23 @@
+﻿<Window x:Class="OpenSTSM.Guis.SimulinkBlockParameters"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenSTSM.Guis"
+        xmlns:uc="clr-namespace:OpenSTSM.Guis.BlockParameters"        
+        mc:Ignorable="d"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False" 
+        ShowActivated="False"
+        Title="Block Parameters" Height="450" Width="450" Icon="/Resources/Simulink/block-parameters.png">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <uc:StepInput Grid.Row="0" />
+        <Button x:Name="btnOk" Content="OK" Command="{Binding Path=SelectCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
+        <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>
+    </Grid>
+</Window>

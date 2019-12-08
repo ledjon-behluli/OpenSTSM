@@ -11,4 +11,9 @@ namespace OpenSTSM
     {
 
     }
+
+    public class SimulinkElementChosen : PubSubEvent
+    {
+
+    }
 }

@@ -70,9 +70,6 @@ namespace OpenSTSM
                 sebw.Owner = this;
                 sebw.Show();
             }
-
-            //var newNodePosition = Mouse.GetPosition(NetworkControl);
-            //ViewModel.CreateNode("New Node!", newNodePosition, true);
         }
 
         private void DeleteNode_Executed(object sender, ExecutedRoutedEventArgs e)
