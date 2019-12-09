@@ -82,8 +82,14 @@
     <Compile Include="Converters\MainWindow\BooleanToVisibilityConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Guis\BlockParameters\StepInput.xaml.cs">
-      <DependentUpon>StepInput.xaml</DependentUpon>
+    <Compile Include="Guis\BlockParameters\Sources\Constant.xaml.cs">
+      <DependentUpon>Constant.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\BlockParameters\Sources\Ramp.xaml.cs">
+      <DependentUpon>Ramp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\BlockParameters\Sources\Step.xaml.cs">
+      <DependentUpon>Step.xaml</DependentUpon>
     </Compile>
     <Compile Include="Guis\HelpTextWindow.xaml.cs">
       <DependentUpon>HelpTextWindow.xaml</DependentUpon>
@@ -142,7 +148,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Guis\BlockParameters\StepInput.xaml">
+    <Page Include="Guis\BlockParameters\Sources\Constant.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\Sources\Ramp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\Sources\Step.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -41,38 +41,15 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         public void ChooseBlock(object sender)
         {
             string name = ((Button)sender).Name;
-            switch (name)
-            {
-                case "Constant": { }
-                    break;
-                case "Step":
-                    { }
-                    break;
-                case "Ramp":
-                    { }
-                    break;
-                case "Scope":
-                    { }
-                    break;
-                case "Display":
-                    { }
-                    break;
-                case "TransferFunction":
-                    { }
-                    break;
-                case "PidController":
-                    { }
-                    break;
-                default:
-                    break;
-            }
-
+            
             if (!Helper.IsWindowOpen<SimulinkBlockParameters>())
             {
                 var sbp = new SimulinkBlockParameters();
                 sbp.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sbp.Owner = App.Current.MainWindow;
+                sbp.Title = $"Block Parameters: {name}";
                 sbp.Show();
+                sbp.OpenCorrectUserControl(name);
             }
         }
 

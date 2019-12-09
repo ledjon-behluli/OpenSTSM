@@ -15,21 +15,6 @@
         
     </Window.Resources>
 
-    <!--<Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Label Content="Numerator:" Grid.Row="0" Grid.Column="0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"/>
-                    <Label Content="Denumerator:" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1"/>
-                </Grid>-->
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

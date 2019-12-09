@@ -1,4 +1,5 @@
-﻿using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+﻿using OpenSTSM.Guis.BlockParameters.Sources;
+using OpenSTSM.ViewModels.SimulinkElementsBrowser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,29 @@ namespace OpenSTSM.Guis
         {
             SimulinkBlockParametersViewModel viewModel = new SimulinkBlockParametersViewModel(ApplicationService.Instance.EventAggregator);
             DataContext = viewModel;
-            viewModel.RequestClose += () => this.Close();
+            viewModel.RequestClose += () => this.Close();            
 
             InitializeComponent();
+        }
+
+        public void OpenCorrectUserControl(string blockElementName)
+        {
+            Container.Children.Add(GetUserControl(blockElementName));
+        }
+
+        private FrameworkElement GetUserControl(string blockElementName)
+        {
+            switch (blockElementName)
+            {
+                case "Constant": return new Constant();
+                case "Step": return new Step();
+                case "Ramp": return new Ramp();
+                case "Scope": return null;
+                case "Display": return null;
+                case "TransferFunction": return null;
+                case "PidController": return null;                    
+                default: return null;         
+            }
         }
     }
 }

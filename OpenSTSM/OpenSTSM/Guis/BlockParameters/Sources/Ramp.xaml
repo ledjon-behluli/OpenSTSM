@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="OpenSTSM.Guis.BlockParameters.Sources.Ramp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenSTSM.Guis.BlockParameters.Sources"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="400">
+    <StackPanel>
+        <Label Content="Slope:"/>
+        <TextBox Text="{Binding Slope}" />
+        <Label Content="Start time:"/>
+        <TextBox Text="{Binding StartTime}" />
+        <Label Content="Initial output:" />
+        <TextBox Text="{Binding InitialOutput}" />
+    </StackPanel>
+</UserControl>

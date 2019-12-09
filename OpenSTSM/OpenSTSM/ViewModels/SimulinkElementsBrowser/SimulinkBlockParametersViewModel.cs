@@ -12,6 +12,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
     {
         private IEventAggregator _eventAggregator;
 
+
         public ICommand SelectCommand;
 
         public SimulinkBlockParametersViewModel(IEventAggregator eventAggregator)

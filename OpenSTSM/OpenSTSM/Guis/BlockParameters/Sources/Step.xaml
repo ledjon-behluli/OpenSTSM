@@ -1,20 +1,19 @@
-﻿<UserControl x:Class="OpenSTSM.Guis.BlockParameters.StepInput"
+﻿<UserControl x:Class="OpenSTSM.Guis.BlockParameters.Sources.Step"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OpenSTSM.Guis.BlockParameters"
+             xmlns:local="clr-namespace:OpenSTSM.Guis.BlockParameters.Sources"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400">
-
     <StackPanel>
         <Label Content="Step time:"/>
-        <TextBox Name="txtStepTime" Text="{Binding StepTime}" />
+        <TextBox Text="{Binding StepTime}" />
         <Label Content="Initial value:"/>
-        <TextBox Name="txtInitialValue" Text="{Binding InitialValue}" />
+        <TextBox Text="{Binding InitialValue}" />
         <Label Content="Final value:" />
-        <TextBox Name="txtFinalValue" Text="{Binding FinalValue}" />
+        <TextBox Text="{Binding FinalValue}" />
         <Label Content="Sample time:"/>
-        <TextBox Name="txtSampleTime" Text="{Binding SampleTime}" />
+        <TextBox Text="{Binding SampleTime}" />
     </StackPanel>
 </UserControl>
