@@ -79,9 +79,14 @@
     </ApplicationDefinition>
     <Compile Include="ApplicationService.cs" />
     <Compile Include="Attributes\SimulinkElementPropertiesAttribute.cs" />
-    <Compile Include="Converters\MainWindow\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ListOfDecimalToStringConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Guis\BlockParameters\Continuous\TransferFunction.xaml.cs">
+      <DependentUpon>TransferFunction.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Guis\BlockParameters\Sources\Constant.xaml.cs">
       <DependentUpon>Constant.xaml</DependentUpon>
     </Compile>
@@ -99,8 +104,8 @@
     </Compile>
     <Compile Include="ConnectionBadIndicator.cs" />
     <Compile Include="ConnectionOkIndicator.cs" />
-    <Compile Include="Converters\MainWindow\ProbabilityToImageConverter.cs" />
-    <Compile Include="Converters\MainWindow\ScaleToPercentConverter.cs" />
+    <Compile Include="Converters\ProbabilityToImageConverter.cs" />
+    <Compile Include="Converters\ScaleToPercentConverter.cs" />
     <Compile Include="EventAggregator.cs" />
     <Compile Include="Guis\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
@@ -145,6 +150,10 @@
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Page Include="Guis\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\Continuous\TransferFunction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -308,8 +317,10 @@
     <Resource Include="Resources\Simulink\Sources\step_block.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Guis\BlockParameters\Discrete\" />
+    <Folder Include="Guis\BlockParameters\MathOperations\" />
+    <Folder Include="Guis\BlockParameters\Sinks\" />
     <Folder Include="Resources\Simulink\Discrete\" />
-    <Folder Include="Resources\Simulink\Math Operations\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Simulink\Sinks\display_block.png" />
@@ -325,6 +336,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Simulink\block-parameters.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\Continuous\integrator_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\MathOperations\sum_block.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

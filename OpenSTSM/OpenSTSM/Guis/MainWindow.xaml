@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"       
         xmlns:local="clr-namespace:OpenSTSM"       
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.MainWindow"
-        xmlns:conv="clr-namespace:OpenSTSM.Converters.MainWindow"         
+        xmlns:conv="clr-namespace:OpenSTSM.Converters"         
         xmlns:networkUi="clr-namespace:NetworkUI;assembly=NetworkUI"
         xmlns:networkModel="clr-namespace:NetworkModel;assembly=NetworkModel"
         xmlns:zoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"

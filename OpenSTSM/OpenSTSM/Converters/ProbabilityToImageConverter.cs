@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace OpenSTSM.Converters.MainWindow
+namespace OpenSTSM.Converters
 {
     public class ProbabilityToImageConverter : IValueConverter
     {

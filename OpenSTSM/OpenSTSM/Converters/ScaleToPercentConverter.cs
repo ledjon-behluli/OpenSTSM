@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Globalization;
 
-namespace OpenSTSM.Converters.MainWindow
+namespace OpenSTSM.Converters
 {
     public class ScaleToPercentConverter : IValueConverter
     {

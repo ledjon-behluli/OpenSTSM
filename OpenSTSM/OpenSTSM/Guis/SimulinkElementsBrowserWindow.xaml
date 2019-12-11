@@ -166,6 +166,21 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <Button Name="Integrator" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Integrator}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="2">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Source="/Resources/Simulink/Continuous/integrator_block.png" Grid.Row="0" />
+                                    <Label Content="Integrator" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10.5"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Discrete">
@@ -194,6 +209,21 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <Button Name="Sum" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Sum}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="0">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Source="/Resources/Simulink/MathOperations/sum_block.png" Grid.Row="0" />
+                                    <Label Content="Sum" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10.5"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </Grid>
             </TabItem>
         </TabControl>

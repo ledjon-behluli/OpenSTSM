@@ -10,7 +10,10 @@
         ResizeMode="NoResize"
         ShowInTaskbar="False" 
         ShowActivated="False"
-        Title="Block Parameters:" Height="450" Width="450" Icon="/Resources/Simulink/block-parameters.png">
+        Title="Block Parameters:" 
+        SizeToContent="WidthAndHeight"        
+        Icon="/Resources/Simulink/block-parameters.png">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

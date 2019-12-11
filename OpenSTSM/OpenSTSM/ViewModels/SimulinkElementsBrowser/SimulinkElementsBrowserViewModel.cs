@@ -14,6 +14,8 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
     public class SimulinkElementsBrowserViewModel : WorkspaceViewModel
     {
         private IEventAggregator _eventAggregator;
+        private List<string> elementsWithoutParameters = new List<string>() { "Scope", "Display" };
+
 
         #region Properties
 
@@ -41,15 +43,18 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         public void ChooseBlock(object sender)
         {
             string name = ((Button)sender).Name;
-            
-            if (!Helper.IsWindowOpen<SimulinkBlockParameters>())
+
+            if (!elementsWithoutParameters.Contains(name))
             {
-                var sbp = new SimulinkBlockParameters();
-                sbp.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                sbp.Owner = App.Current.MainWindow;
-                sbp.Title = $"Block Parameters: {name}";
-                sbp.Show();
-                sbp.OpenCorrectUserControl(name);
+                if (!Helper.IsWindowOpen<SimulinkBlockParameters>())
+                {
+                    var sbp = new SimulinkBlockParameters();
+                    sbp.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                    sbp.Owner = App.Current.MainWindow;
+                    sbp.Title = $"Block Parameters: {name}";
+                    sbp.Show();
+                    sbp.OpenCorrectUserControl(name);
+                }
             }
         }
 
