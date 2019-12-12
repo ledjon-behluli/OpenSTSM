@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Prism, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.2.0.1367\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -44,6 +47,9 @@
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -84,6 +90,12 @@
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Guis\BlockParameters\Continuous\Integrator.xaml.cs">
+      <DependentUpon>Integrator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\BlockParameters\Continuous\PidController.xaml.cs">
+      <DependentUpon>PidController.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Guis\BlockParameters\Continuous\TransferFunction.xaml.cs">
       <DependentUpon>TransferFunction.xaml</DependentUpon>
     </Compile>
@@ -118,6 +130,7 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="MainWindow_ZoomAndPan.cs" />
+    <Compile Include="Models\SimulinkBlocks\PidController.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Connector\ConnectorElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Connector\SimulinkConnectorType.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\SimulinkGraphElementType.cs" />
@@ -150,6 +163,14 @@
     <Compile Include="ViewModels\Options\PredictionParameters.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Page Include="Guis\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\Continuous\Integrator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\Continuous\PidController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -31,10 +31,9 @@ namespace OpenSTSM.Guis
                 case "Constant": return new Constant();
                 case "Step": return new Step();
                 case "Ramp": return new Ramp();
-                case "Scope": return null;
-                case "Display": return null;
                 case "TransferFunction": return new TransferFunction();
-                case "PidController": return null;                    
+                case "PidController": return new PidController();
+                case "Integrator": return new Integrator();
                 default: return null;         
             }
         }
