@@ -12,5 +12,213 @@
                   SelectedItem="{Binding SelectedPidController, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedValuePath="Id" DisplayMemberPath="Name">
         </ComboBox>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <StackPanel>
+                <GroupBox Header="Controller parameters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Proportional (P):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Proportional}" Grid.Row="0" Grid.Column="1" />
+                        <Label Content="Integral (I):" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integral}" Grid.Row="1" Grid.Column="1" />
+                        <Label Content="Derivative (D):" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Derivative}" Grid.Row="2" Grid.Column="1" />
+                        <Label Content="FilterCoefficient (N):" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding FilterCoefficient}" Grid.Row="3" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Initial conditions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Integrator:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integrator}" Grid.Row="0" Grid.Column="1" />
+                        <Label Content="Filter:" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding Filter}" Grid.Row="1" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedPidController.Id}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <StackPanel>
+                <GroupBox Header="Controller parameters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Proportional (P):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Proportional}" Grid.Row="0" Grid.Column="1" />
+                        <Label Content="Integral (I):" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integral}" Grid.Row="1" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Initial conditions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Integrator:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integrator}" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedPidController.Id}" Value="1">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <StackPanel>
+                <GroupBox Header="Controller parameters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Proportional (P):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Proportional}" Grid.Row="0" Grid.Column="1" />
+                        <Label Content="Derivative (D):" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding Derivative}" Grid.Row="1" Grid.Column="1" />
+                        <Label Content="FilterCoefficient (N):" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding FilterCoefficient}" Grid.Row="2" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Initial conditions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Filter:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Filter}" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <DockPanel.Style>
+                    <Style TargetType="DockPanel">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedPidController.Id}" Value="2">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <StackPanel>
+                <GroupBox Header="Controller parameters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Proportional (P):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Proportional}" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <DockPanel.Style>
+                    <Style TargetType="DockPanel">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedPidController.Id}" Value="3">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DockPanel.Style>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0 10 0 0">
+            <StackPanel>
+                <GroupBox Header="Controller parameters">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Integral (I):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integral}" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Initial conditions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Integrator:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Integrator}" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedPidController.Id}" Value="4">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+        </DockPanel>
     </StackPanel>
 </UserControl>
