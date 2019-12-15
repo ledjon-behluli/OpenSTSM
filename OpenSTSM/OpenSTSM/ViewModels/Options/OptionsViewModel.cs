@@ -48,8 +48,6 @@ namespace OpenSTSM.ViewModels.Options
         #region "Commands"
 
         public ICommand UpdateCommand { get; set; }
-
-        public ICommand CancelCommand { get; set; }
         
         #endregion
 

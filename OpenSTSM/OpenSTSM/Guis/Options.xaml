@@ -60,7 +60,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="btnOk" Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
-        <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>            
+        <Button Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
+        <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>            
     </Grid>
 </Window>

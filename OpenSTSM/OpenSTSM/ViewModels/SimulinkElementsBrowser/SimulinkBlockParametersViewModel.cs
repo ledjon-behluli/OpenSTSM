@@ -11,20 +11,21 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
     public class SimulinkBlockParametersViewModel : WorkspaceViewModel
     {
         private IEventAggregator _eventAggregator;
+        private string _elementName;
 
+        public ICommand SelectCommand { get; set; }
 
-        public ICommand SelectCommand;
-
-        public SimulinkBlockParametersViewModel(IEventAggregator eventAggregator)
+        public SimulinkBlockParametersViewModel(IEventAggregator eventAggregator, string elementName)
         {
             _eventAggregator = eventAggregator;
-
+            _elementName = elementName;
             SelectCommand = new RelayCommand(Select);
         }
 
-        public void Select(object sender)
+        private void Select(object sender)
         {
             base.Close();
+            _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(_elementName));
         }
     }
 }

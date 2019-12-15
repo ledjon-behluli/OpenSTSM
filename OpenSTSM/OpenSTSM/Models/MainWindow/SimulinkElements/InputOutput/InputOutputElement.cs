@@ -1,10 +1,10 @@
 ﻿using OpenSTSM.Extensions;
 
 namespace OpenSTSM.Models.MainWindow.SimulinkElements
-{ 
-    public class ProcessElement : ISimulinkElement
+{
+    public class InputOutputElement : ISimulinkElement
     {
-        public SimulinkProcessType SimulinkProcessType { get => SimulinkProcessType.Process; }
+        public SimulinkInputOutputType SimulinkInputOutputType { get; private set; }
 
         public string Name { get; private set; }
 
@@ -15,10 +15,11 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         public SimulinkGraphElementType GraphElementType { get; private set; }
 
 
-        public ProcessElement()
+        public InputOutputElement(SimulinkInputOutputType simulinkInputOutputType)
         {
-            SimulinkElementProperties sep = SimulinkProcessType.Process.GetSimulinkElementPropertyValues();
+            SimulinkElementProperties sep = simulinkInputOutputType.GetSimulinkElementPropertyValues();
 
+            SimulinkInputOutputType = simulinkInputOutputType;
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;

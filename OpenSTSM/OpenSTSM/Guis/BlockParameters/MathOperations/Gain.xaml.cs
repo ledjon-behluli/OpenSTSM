@@ -2,30 +2,30 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
-namespace OpenSTSM.Guis.BlockParameters.Continuous
+namespace OpenSTSM.Guis.BlockParameters.MathOperations
 {
     /// <summary>
-    /// Interaction logic for Integrator.xaml
+    /// Interaction logic for Gain.xaml
     /// </summary>
-    public partial class Integrator : UserControl, INotifyPropertyChanged
+    public partial class Gain : UserControl, INotifyPropertyChanged
     {
-        public decimal _initialCondition;
-        public decimal InitialCondition
+        private decimal _value;
+        public decimal Value
         {
             get
             {
-                return _initialCondition;
+                return _value;
             }
             set
             {
-                _initialCondition = value;
+                _value = value;
                 OnPropertyChanged();
             }
         }
 
-        public Integrator()
+        public Gain()
         {
-            _initialCondition = 0;
+            _value = 1;
 
             DataContext = this;
             InitializeComponent();

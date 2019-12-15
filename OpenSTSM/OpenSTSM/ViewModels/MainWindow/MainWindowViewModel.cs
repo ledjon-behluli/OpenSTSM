@@ -77,6 +77,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         public ICommand AboutCommand { get; set; }
 
+        public string SimulinkElementType { get; set; }
         public ICommand OpenSimulinkElementsBrowserCommand { get; set; }
 
         #endregion
@@ -84,7 +85,7 @@ namespace OpenSTSM.ViewModels.MainWindow
         public MainWindowViewModel(IEventAggregator eventAggregator)
         {
             ControlSystems = GetControlSystems();
-            PopulateWithTestData();
+            PopulateControlSystemView();
 
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
             AnalyseImageCommand = new RelayCommand(AnalyseImage, param => canExecute_AnalyseImage);
@@ -96,9 +97,12 @@ namespace OpenSTSM.ViewModels.MainWindow
             OpenSimulinkElementsBrowserCommand = new RelayCommand(OpenSimulinkElementsBrowser);
 
             eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
-            eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(() => { }, ThreadOption.UIThread);
+            eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
         }
 
+       
+
+        #region Main Window
 
         private void ImportImage(object sender)
         {
@@ -145,7 +149,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OpenDiagramOverview(object sender)
         {
-            if (!Helper.IsWindowOpen<OverviewWindow>())
+            if (!WindowHelper.IsWindowOpen<OverviewWindow>())
             {
                 var overviewWindow = new OverviewWindow();
                 overviewWindow.Left = App.Current.MainWindow.Left;
@@ -170,7 +174,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OpenDesignerHelp(object sender)
         {
-            if (!Helper.IsWindowOpen<HelpTextWindow>())
+            if (!WindowHelper.IsWindowOpen<HelpTextWindow>())
             {
                 var helpTextWindow = new HelpTextWindow();
                 helpTextWindow.Left = App.Current.MainWindow.Left + App.Current.MainWindow.Width + 5;                
@@ -182,13 +186,18 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OpenSimulinkElementsBrowser(object sender)
         {
-            if (!Helper.IsWindowOpen<SimulinkElementsBrowserWindow>())
+            if (!WindowHelper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
-                var sebw = new SimulinkElementsBrowserWindow();
+                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex(sender as string));
                 sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sebw.Owner = App.Current.MainWindow;
                 sebw.Show();
             }
+        }
+
+        private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
+        {
+            CreateNode(payload.SimulinkElement, new Point(0, 0), true);
         }
 
 
@@ -216,12 +225,15 @@ namespace OpenSTSM.ViewModels.MainWindow
             {
                 PredictedControlElements = new List<PredictedControlElement>()
                 {
-                    new PredictedControlElement("Controller", 98.34m, true)
+                    new PredictedControlElement("Controller", 96.24m, true)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
+                             new PossibleControlElement("Input", 2.14m, true),
                              new PossibleControlElement("Output", 1.01m, true),
-                             new PossibleControlElement("Process", 0.25m, true)
+                             new PossibleControlElement("Process", 0.12m, true),
+                             new PossibleControlElement("Feedback", 0.12m, true),
+                             new PossibleControlElement("Comparator", 0.02m, true),
                          }
                     },
                     new PredictedControlElement("Arrow Right", 62.78m, false)
@@ -238,6 +250,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             return controlSystems;
         }
 
+        #endregion
 
         #region NetworkUI
 
@@ -601,15 +614,15 @@ namespace OpenSTSM.ViewModels.MainWindow
             this.Network.Connections.Remove(connection);
         }
 
-        private void PopulateWithTestData()
+        private void PopulateControlSystemView()
         {
             this.Network = new NetworkViewModel();
 
-            var elements = SimulinkElementsTestData();
-            foreach(var elem in elements)
-            {
+            //var elements = SimulinkElementsTestData();
+            //foreach(var elem in elements)
+            //{
 
-            }
+            //}
 
 
 
@@ -627,16 +640,6 @@ namespace OpenSTSM.ViewModels.MainWindow
 
             //this.Network.Connections.AddRange(new ConnectionViewModel[] { connection1, connection2 });
 
-        }
-
-        private List<ISimulinkElement> SimulinkElementsTestData()
-        {
-            return new List<ISimulinkElement>()
-            {
-                new InputElement(SimulinkInputType.Step),
-                new ConnectorElement(SimulinkConnectorType.ArrowStraightRight),
-                new OutputElement(SimulinkOutputType.Scope)
-            };
         }
 
         #endregion

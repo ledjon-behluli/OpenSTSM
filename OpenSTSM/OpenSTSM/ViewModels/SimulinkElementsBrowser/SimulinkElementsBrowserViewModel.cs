@@ -15,53 +15,83 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
     {
         private IEventAggregator _eventAggregator;
         private List<string> elementsWithoutParameters = new List<string>() { "Scope", "Display" };
-
+        private int _selectedTabIndex;
 
         #region Properties
 
+        public int SelectedTabIndex { get; private set; }
 
+        public bool SourcesVisibility
+        {
+            get
+            {
+                return SelectedTabIndex == 0 || _selectedTabIndex == -1;
+            }
+        }
+        public bool SinksVisibility
+        {
+            get
+            {
+                return SelectedTabIndex == 1 || _selectedTabIndex == -1;
+            }
+        }
+        public bool ContinuousVisibility
+        {
+            get
+            {
+                return SelectedTabIndex == 2 || _selectedTabIndex == -1;
+            }
+        }
+        public bool MathOperationsVisibility
+        {
+            get
+            {
+                return SelectedTabIndex == 3 || _selectedTabIndex == -1;
+            }
+        }
 
         #endregion
 
         #region "Commands"
 
-        public object CommandParameter { get; set; }
         public ICommand ChooseBlockCommand { get; set; }
-
-        public ICommand SelectCommand { get; set; }
 
         #endregion
 
-        public SimulinkElementsBrowserViewModel(IEventAggregator eventAggregator)
+        public SimulinkElementsBrowserViewModel(IEventAggregator eventAggregator, int selectedTabIndex)
         {
-            _eventAggregator = eventAggregator;
+            _selectedTabIndex = selectedTabIndex;
+            SelectedTabIndex = selectedTabIndex == -1 ? 0 : selectedTabIndex;
 
+            _eventAggregator = eventAggregator;
             ChooseBlockCommand = new RelayCommand(ChooseBlock);
-            SelectCommand = new RelayCommand(Select);            
+            _eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
         }
 
-        public void ChooseBlock(object sender)
+        private void ChooseBlock(object sender)
         {
-            string name = ((Button)sender).Name;
+            var element = sender as Button;            
 
-            if (!elementsWithoutParameters.Contains(name))
+            if (!elementsWithoutParameters.Contains(element.Name))
             {
-                if (!Helper.IsWindowOpen<SimulinkBlockParameters>())
+                if (!WindowHelper.IsWindowOpen<SimulinkBlockParameters>())
                 {
-                    var sbp = new SimulinkBlockParameters();
+                    var sbp = new SimulinkBlockParameters(element.Name);
                     sbp.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     sbp.Owner = App.Current.MainWindow;
-                    sbp.Title = $"Block Parameters: {name}";
+                    sbp.Title += $" {element.Uid}";
                     sbp.Show();
-                    sbp.OpenCorrectUserControl(name);
+                    sbp.OpenCorrectUserControl(element.Name);
                 }
+            }
+            else
+            {
+                _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(element.Name));
             }
         }
 
-        public void Select(object sender)
+        private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
         {
-            _eventAggregator.GetEvent<SimulinkElementChosen>().Publish();
-
             base.Close();
         }
     }

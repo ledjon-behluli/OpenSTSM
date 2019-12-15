@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenSTSM.Guis"
+        xmlns:conv="clr-namespace:OpenSTSM.Converters"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
@@ -12,16 +13,16 @@
         Title="Simulink Elements Browser" Height="450" Width="400" Icon="/Resources/Simulink/block.png">
 
     <Window.Resources>
-        
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TabControl TabStripPlacement="Left" HorizontalContentAlignment="Left" Grid.Column="0">
-            <TabItem Header="Sources">
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}" TabStripPlacement="Left" HorizontalContentAlignment="Left" Grid.Column="0">
+            <TabItem Header="Sources" Visibility="{Binding Path=SourcesVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -33,7 +34,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Name="Constant" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Constant}"
+                    <Button Name="Constant" Uid="Constant" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Constant}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
@@ -48,7 +49,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Name="Step" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Step}"
+                    <Button Name="Step" Uid="Step" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Step}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="1">
                         <Button.Template>
                             <ControlTemplate>
@@ -63,7 +64,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Name="Ramp" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Ramp}"
+                    <Button Name="Ramp" Uid="Ramp" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Ramp}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="2">
                         <Button.Template>
                             <ControlTemplate>
@@ -80,7 +81,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="Sinks">
+            <TabItem Header="Sinks" Visibility="{Binding Path=SinksVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -92,7 +93,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Name="Scope" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Scope}"
+                    <Button Name="Scope" Uid="Scope" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Scope}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
@@ -107,8 +108,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Name="Display" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Display}"
-                            Cursor="Hand" Grid.Row="0" Grid.Column="1">
+                    <Button Name="Display" Uid="Display" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Display}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
                         <Button.Template>
                             <ControlTemplate>
                                 <Grid>
@@ -124,7 +125,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="Continuous">
+            <TabItem Header="Continuous" Visibility="{Binding Path=ContinuousVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -136,7 +137,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Name="TransferFunction" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=TransferFunction}"
+                    <Button Name="TransferFunction" Uid="Transfer Function" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=TransferFunction}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
@@ -151,7 +152,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Name="PidController" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=PidController}"
+                    <Button Name="PidController" Uid="PID Controller" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=PidController}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="1">
                         <Button.Template>
                             <ControlTemplate>
@@ -166,7 +167,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Name="Integrator" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Integrator}"
+                    <Button Name="Integrator" Uid="Integrator" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Integrator}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="2">
                         <Button.Template>
                             <ControlTemplate>
@@ -183,7 +184,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="Discrete">
+            <TabItem Header="Math Operations" Visibility="{Binding Path=MathOperationsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -195,21 +196,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Math Operations">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Button Name="Sum" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Sum}"
+                    <Button Name="Sum" Uid="Sum" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Sum}"
                             Cursor="Hand" Grid.Row="0" Grid.Column="0">
                         <Button.Template>
                             <ControlTemplate>
@@ -224,10 +211,24 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <Button Name="Gain" Uid="Gain" Command="{Binding ChooseBlockCommand}" CommandParameter="{Binding ElementName=Gain}"
+                            Cursor="Hand" Grid.Row="0" Grid.Column="1">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Source="/Resources/Simulink/MathOperations/gain_block.png" Grid.Row="0" />
+                                    <Label Content="Gain" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10.5"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="btnOk" Content="OK" Command="{Binding Path=SelectCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1" />
-        <Button x:Name="btnCancel" Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" Width="75" Grid.Row="1"/>
+        <Button Content="Close" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0" Width="75" Grid.Row="1"/>
     </Grid>
 </Window>

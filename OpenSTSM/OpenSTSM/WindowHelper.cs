@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace OpenSTSM
 {
-    public static class Helper
+    public static class WindowHelper
     {        
         public static bool IsWindowOpen<T>(string name = "") where T : Window
         {

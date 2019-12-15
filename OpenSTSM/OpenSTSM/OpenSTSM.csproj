@@ -86,6 +86,7 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="Attributes\SimulinkElementPropertiesAttribute.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InformationToControlElementNameConverter.cs" />
     <Compile Include="Converters\ListOfDecimalToStringConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -98,6 +99,12 @@
     </Compile>
     <Compile Include="Guis\BlockParameters\Continuous\TransferFunction.xaml.cs">
       <DependentUpon>TransferFunction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\BlockParameters\MathOperations\Gain.xaml.cs">
+      <DependentUpon>Gain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Guis\BlockParameters\MathOperations\Sum.xaml.cs">
+      <DependentUpon>Sum.xaml</DependentUpon>
     </Compile>
     <Compile Include="Guis\BlockParameters\Sources\Constant.xaml.cs">
       <DependentUpon>Constant.xaml</DependentUpon>
@@ -128,7 +135,10 @@
     <Compile Include="Guis\SimulinkElementsBrowserWindow.xaml.cs">
       <DependentUpon>SimulinkElementsBrowserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helper.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\InputOutputElement.cs" />
+    <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\SimulinkInputOutputType.cs" />
+    <Compile Include="SketchToSimulinkHelper.cs" />
+    <Compile Include="WindowHelper.cs" />
     <Compile Include="MainWindow_ZoomAndPan.cs" />
     <Compile Include="Models\SimulinkBlocks\PidController.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Connector\ConnectorElement.cs" />
@@ -175,6 +185,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Guis\BlockParameters\Continuous\TransferFunction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\MathOperations\Gain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\BlockParameters\MathOperations\Sum.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -338,8 +356,6 @@
     <Resource Include="Resources\Simulink\Sources\step_block.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Guis\BlockParameters\Discrete\" />
-    <Folder Include="Guis\BlockParameters\MathOperations\" />
     <Folder Include="Guis\BlockParameters\Sinks\" />
     <Folder Include="Resources\Simulink\Discrete\" />
   </ItemGroup>
@@ -363,6 +379,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Simulink\MathOperations\sum_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Simulink\MathOperations\gain_block.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

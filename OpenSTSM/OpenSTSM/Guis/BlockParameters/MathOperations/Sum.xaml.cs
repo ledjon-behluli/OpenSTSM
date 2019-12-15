@@ -2,30 +2,30 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
-namespace OpenSTSM.Guis.BlockParameters.Continuous
+namespace OpenSTSM.Guis.BlockParameters.MathOperations
 {
     /// <summary>
-    /// Interaction logic for Integrator.xaml
+    /// Interaction logic for Sum.xaml
     /// </summary>
-    public partial class Integrator : UserControl, INotifyPropertyChanged
+    public partial class Sum : UserControl, INotifyPropertyChanged
     {
-        public decimal _initialCondition;
-        public decimal InitialCondition
+        private string _listOfSigns;
+        public string ListOfSigns
         {
             get
             {
-                return _initialCondition;
+                return _listOfSigns;
             }
             set
             {
-                _initialCondition = value;
+                _listOfSigns = value;
                 OnPropertyChanged();
             }
         }
 
-        public Integrator()
+        public Sum()
         {
-            _initialCondition = 0;
+            _listOfSigns = "++";
 
             DataContext = this;
             InitializeComponent();

@@ -63,7 +63,7 @@ namespace OpenSTSM
 
         private void CreateNode_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!Helper.IsWindowOpen<SimulinkElementsBrowserWindow>())
+            if (!WindowHelper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
                 var sebw = new SimulinkElementsBrowserWindow();
                 sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;

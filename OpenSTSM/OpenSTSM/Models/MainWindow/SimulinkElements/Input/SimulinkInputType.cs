@@ -4,7 +4,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {
     public enum SimulinkInputType
     {
-        [SimulinkElementProperties("Const", 0, 1, SimulinkGraphElementType.Node)]
+        [SimulinkElementProperties("Constant", 0, 1, SimulinkGraphElementType.Node)]
         Constant,
 
         [SimulinkElementProperties("Step", 0, 1, SimulinkGraphElementType.Node)]

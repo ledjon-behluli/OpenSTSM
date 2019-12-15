@@ -32,7 +32,7 @@
                         <TextBox Text="{Binding Integral}" Grid.Row="1" Grid.Column="1" />
                         <Label Content="Derivative (D):" Grid.Row="2" Grid.Column="0"/>
                         <TextBox Text="{Binding Derivative}" Grid.Row="2" Grid.Column="1" />
-                        <Label Content="FilterCoefficient (N):" Grid.Row="3" Grid.Column="0"/>
+                        <Label Content="Filter Coefficient (N):" Grid.Row="3" Grid.Column="0"/>
                         <TextBox Text="{Binding FilterCoefficient}" Grid.Row="3" Grid.Column="1" />
                     </Grid>
                 </GroupBox>
