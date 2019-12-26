@@ -56,6 +56,7 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             _numeratorCoefficients = new List<decimal>() { 1 };
             _denominatorCoefficients = new List<decimal>() { 1, 1 };
 
+            this.Name = "TransferFunction";
             DataContext = this;
             InitializeComponent();
         }

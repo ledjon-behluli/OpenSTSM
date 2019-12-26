@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using OpenSTSM.Guis;
+using OpenSTSM.Guis.BlockParameters.Sources;
 using Prism.Events;
 
 namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
@@ -23,9 +25,9 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         }
 
         private void Select(object sender)
-        {
+        {            
+            _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(SimulinkBlockParameters.SelectedUserControl));
             base.Close();
-            _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(_elementName));
         }
     }
 }

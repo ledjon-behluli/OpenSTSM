@@ -1,6 +1,7 @@
 ﻿using OpenSTSM.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,9 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 
         public int NumberOfOutputs { get; private set; }
 
-        public SimulinkGraphElementType GraphElementType { get; private set; }
+        public ListDictionary Properties { get; set; }
+
+        public SimulinkGraphElementType GraphElementType { get; private set; }        
 
 
         public ConnectorElement(SimulinkConnectorType simulinkConnectorType)
@@ -28,6 +31,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;
+            Properties = new ListDictionary();
             GraphElementType = sep.GraphElementType;
         }
     }

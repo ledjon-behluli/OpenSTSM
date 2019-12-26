@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
@@ -9,24 +10,25 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
     /// </summary>
     public partial class Sum : UserControl, INotifyPropertyChanged
     {
-        private string _listOfSigns;
-        public string ListOfSigns
+        private List<string> _signs;
+        public List<string> Signs
         {
             get
             {
-                return _listOfSigns;
+                return _signs;
             }
             set
             {
-                _listOfSigns = value;
+                _signs = value;
                 OnPropertyChanged();
             }
         }
 
         public Sum()
         {
-            _listOfSigns = "++";
+            _signs = new List<string>() { "+", "+" };
 
+            this.Name = "Sum";
             DataContext = this;
             InitializeComponent();
         }

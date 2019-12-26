@@ -9,6 +9,8 @@ namespace OpenSTSM.Guis
 {
     public partial class SimulinkBlockParameters : Window
     {
+        public static FrameworkElement SelectedUserControl;
+        
         public SimulinkBlockParameters(string elementName)
         {
             SimulinkBlockParametersViewModel viewModel = new SimulinkBlockParametersViewModel(ApplicationService.Instance.EventAggregator, elementName);
@@ -20,9 +22,12 @@ namespace OpenSTSM.Guis
 
         public void OpenCorrectUserControl(string blockElementName)
         {
-            var userControl = GetUserControl(blockElementName);
-            if(userControl != null)
+            var userControl = GetUserControl(blockElementName);            
+            if (userControl != null)
+            {
                 Container.Children.Add(userControl);
+                SelectedUserControl = userControl;
+            }
         }
 
         private FrameworkElement GetUserControl(string blockElementName)

@@ -27,6 +27,7 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
         {
             _value = 1;
 
+            this.Name = "Gain";
             DataContext = this;
             InitializeComponent();
         }

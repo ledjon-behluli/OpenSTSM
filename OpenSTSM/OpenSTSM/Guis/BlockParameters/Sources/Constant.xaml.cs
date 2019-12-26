@@ -22,6 +22,7 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
     /// </summary>
     public partial class Constant : UserControl, INotifyPropertyChanged
     {
+        
         private decimal _value;
         public decimal Value
         {
@@ -40,8 +41,9 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
         {
             _value = 1;
 
-            DataContext = this;
-            InitializeComponent();
+            this.Name = "Constant";
+            DataContext = this;            
+            InitializeComponent();            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

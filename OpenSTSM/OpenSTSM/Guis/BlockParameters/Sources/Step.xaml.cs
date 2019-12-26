@@ -85,8 +85,9 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             finalValue = 1;
             sampleTime = 0;
 
+            this.Name = "Step";
             DataContext = this;
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

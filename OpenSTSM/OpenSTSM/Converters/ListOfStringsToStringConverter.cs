@@ -1,16 +1,19 @@
-﻿using System;
+﻿using OpenSTSM.Extensions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
-using OpenSTSM.Extensions;
 
 namespace OpenSTSM.Converters
 {
-    [ValueConversion(typeof(List<decimal>), typeof(string))]
-    public class ListOfDecimalToStringConverter : IValueConverter
+    [ValueConversion(typeof(List<string>), typeof(string))]
+    public class ListOfStringsToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {            
-            var result = string.Join(" ", ((List<decimal>)value).ToArray());
+        {
+            var result = string.Join("", ((List<string>)value).ToArray());
             return $"[{result}]";
         }
 
@@ -19,10 +22,7 @@ namespace OpenSTSM.Converters
             string input = (string)value;
             input = string.Concat(input.RemoveChars('[', ']'));
             input = input.TrimStart().TrimEnd();
-            List<decimal> coefficients = new List<decimal>();
-            var coefficients_string = input.SplitStringOnChar(' ');
-            coefficients_string.ForEach(c => coefficients.Add(decimal.Parse(c)));
-            return coefficients;
+            return input.StringToListOfStrings();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
         {
             _initialCondition = 0;
 
+            this.Name = "Integrator";
             DataContext = this;
             InitializeComponent();
         }

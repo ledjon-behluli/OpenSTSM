@@ -19,5 +19,12 @@ namespace OpenSTSM.Extensions
         {
             return originalString.Except(removingChars);
         }
+
+        public static List<string> StringToListOfStrings(this string input)
+        {
+            List<string> datalist = new List<string>();
+            datalist.AddRange(input.Select(c => c.ToString()));
+            return datalist;
+        }
     }
 }

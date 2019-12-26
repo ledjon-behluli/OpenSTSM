@@ -152,6 +152,7 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             _integrator = 0;
             _filter = 0;
 
+            this.Name = "PidController";
             DataContext = this;
             InitializeComponent();
         }

@@ -71,8 +71,9 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             startTime = 0;
             initialOutput = 0;
 
+            this.Name = "Ramp";
             DataContext = this;
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -88,6 +88,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InformationToControlElementNameConverter.cs" />
     <Compile Include="Converters\ListOfDecimalToStringConverter.cs" />
+    <Compile Include="Converters\ListOfStringsToStringConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -150,8 +151,6 @@
     <Compile Include="Models\MainWindow\SimulinkElements\ISimulinkElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Input\InputElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Input\SimulinkInputType.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElements\Process\ProcessElement.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElements\Process\SimulinkProcessType.cs" />
     <Compile Include="MouseHandlingMode.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>

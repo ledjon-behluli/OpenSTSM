@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         string Name { get; }
         int NumberOfInputs { get; }
         int NumberOfOutputs { get; }
+        ListDictionary Properties { get; set; }
         SimulinkGraphElementType GraphElementType { get; }
     }
 }

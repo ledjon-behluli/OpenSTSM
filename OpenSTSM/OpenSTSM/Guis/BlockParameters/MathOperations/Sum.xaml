@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpenSTSM.Guis.BlockParameters.MathOperations"
+             xmlns:conv="clr-namespace:OpenSTSM.Converters"
              mc:Ignorable="d" Width="400">
+    <UserControl.Resources>
+        <conv:ListOfStringsToStringConverter x:Key="ListOfStringsToStringConverter"/>
+    </UserControl.Resources>
+    
     <StackPanel>
         <Label Content="List of signs:"/>
-        <TextBox Text="{Binding ListOfSigns}" />
+        <TextBox Text="{Binding Path=Signs, Converter={StaticResource ListOfStringsToStringConverter}}" />
     </StackPanel>
 </UserControl>
