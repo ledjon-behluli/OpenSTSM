@@ -1,4 +1,3 @@
-# OpenSTSM
+# OpenSTSM (Under construction!!!)
 
-OpenSTSM stands for Open Sketch to Simulink Model.
-Under construction!!!
+Open Sketch to Simulink Model.
