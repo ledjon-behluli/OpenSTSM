@@ -90,6 +90,7 @@
     <Compile Include="Converters\ListOfDecimalToStringConverter.cs" />
     <Compile Include="Converters\ListOfStringsToStringConverter.cs" />
     <Compile Include="CurvedArrow.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Guis\BlockParameters\Continuous\Integrator.xaml.cs">

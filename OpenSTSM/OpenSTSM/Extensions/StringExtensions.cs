@@ -17,7 +17,7 @@ namespace OpenSTSM.Extensions
 
         public static IEnumerable<char> RemoveChars(this IEnumerable<char> originalString, params char[] removingChars)
         {
-            return originalString.Except(removingChars);
+            return originalString.ExceptAll(removingChars);
         }
 
         public static List<string> StringToListOfStrings(this string input)

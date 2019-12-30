@@ -81,7 +81,6 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
                     sbp.Owner = App.Current.MainWindow;
                     sbp.Title += $" {element.Uid}";
                     sbp.Show();
-                    sbp.OpenCorrectUserControl(element.Name);
                 }
             }
             else

@@ -4,7 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpenSTSM.Guis.BlockParameters.MathOperations"
+             xmlns:conv="clr-namespace:OpenSTSM.Converters"
              mc:Ignorable="d" Width="400">
+    
+    <UserControl.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <StackPanel>
         <Label Content="Gain:"/>
         <TextBox Text="{Binding Value}" />            

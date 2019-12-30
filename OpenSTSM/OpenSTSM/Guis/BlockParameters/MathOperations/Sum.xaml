@@ -9,7 +9,6 @@
     <UserControl.Resources>
         <conv:ListOfStringsToStringConverter x:Key="ListOfStringsToStringConverter"/>
     </UserControl.Resources>
-    
     <StackPanel>
         <Label Content="List of signs:"/>
         <TextBox Text="{Binding Path=Signs, Converter={StaticResource ListOfStringsToStringConverter}}" />

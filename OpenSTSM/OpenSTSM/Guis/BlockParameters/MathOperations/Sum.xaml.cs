@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace OpenSTSM.Guis.BlockParameters.MathOperations
@@ -9,7 +10,7 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
     /// Interaction logic for Sum.xaml
     /// </summary>
     public partial class Sum : UserControl, INotifyPropertyChanged
-    {
+    {      
         private List<string> _signs;
         public List<string> Signs
         {
@@ -22,7 +23,8 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
                 _signs = value;
                 OnPropertyChanged();
             }
-        }
+        }        
+
 
         public Sum()
         {
@@ -32,6 +34,7 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
             DataContext = this;
             InitializeComponent();
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
