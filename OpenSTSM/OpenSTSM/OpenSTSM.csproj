@@ -92,6 +92,7 @@
     <Compile Include="CurvedArrow.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\InterfaceExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Guis\BlockParameters\Continuous\Integrator.xaml.cs">
       <DependentUpon>Integrator.xaml</DependentUpon>
@@ -145,7 +146,6 @@
     <Compile Include="Models\SimulinkBlocks\PidController.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Connector\ConnectorElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Connector\SimulinkConnectorType.cs" />
-    <Compile Include="Models\MainWindow\SimulinkElements\SimulinkGraphElementType.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Output\OutputElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\Output\SimulinkOutputType.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\SimulinkElementProperties.cs" />

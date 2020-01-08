@@ -8,12 +8,21 @@ using System.Windows;
 
 namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {
-    public interface ISimulinkElement
+    public interface ISimulinkNodeElement<T>
     {
+        Guid Guid { get; }
         string Name { get; }
         int NumberOfInputs { get; }
         int NumberOfOutputs { get; }
+        Point Location { get; set; }
         ListDictionary Properties { get; set; }
-        SimulinkGraphElementType GraphElementType { get; }
+        T SimulinkObjectType { get; }
+    }
+
+    public interface ISimulinkConnectionElement<T>
+    {
+        Guid StartNode { get; set; }
+        Guid EndNode { get; set; }
+        T SimulinkObjectType { get; }
     }
 }

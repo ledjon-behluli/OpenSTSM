@@ -9,14 +9,12 @@ namespace OpenSTSM.Attributes
         public string Name { get; private set; }
         public int NumberOfInputs { get; private set; }
         public int NumberOfOutputs { get; private set; }
-        public SimulinkGraphElementType GraphElementType { get; private set; }
 
-        public SimulinkElementPropertiesAttribute(string name, int numberOfInputs, int numberOfOutputs, SimulinkGraphElementType graphElementType)
+        public SimulinkElementPropertiesAttribute(string name, int numberOfInputs, int numberOfOutputs)
         {
             Name = name;
             NumberOfInputs = numberOfInputs;
             NumberOfOutputs = numberOfOutputs;
-            GraphElementType = graphElementType;
         }
     }
 }

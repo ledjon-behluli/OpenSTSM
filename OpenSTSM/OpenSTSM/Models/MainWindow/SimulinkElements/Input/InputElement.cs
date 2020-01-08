@@ -1,11 +1,16 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
+using System.Windows;
 using OpenSTSM.Extensions;
 
 namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {    
-    public class InputElement : ISimulinkElement
+    public class InputElement : ISimulinkNodeElement<SimulinkInputType>
     {
-        public SimulinkInputType SimulinkInputType { get; private set; }
+        public SimulinkInputType SimulinkObjectType { get; private set; }
+
+
+        public Guid Guid { get => Guid.NewGuid(); }
 
         public string Name { get; private set; }
 
@@ -13,21 +18,22 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 
         public int NumberOfOutputs { get; private set; }
 
+        public Point Location { get; set; }
+
         public ListDictionary Properties { get; set; }
 
-        public SimulinkGraphElementType GraphElementType { get; private set; }        
 
 
         public InputElement(SimulinkInputType simulinkInputType)
         {
             SimulinkElementProperties sep = simulinkInputType.GetSimulinkElementPropertyValues();
 
-            SimulinkInputType = simulinkInputType;
+            SimulinkObjectType = simulinkInputType;
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;
             Properties = new ListDictionary();
-            GraphElementType = sep.GraphElementType;                 
+            Location = new Point(0, 0);             
         }
     }
 }

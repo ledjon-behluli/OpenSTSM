@@ -97,7 +97,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             OpenSimulinkElementsBrowserCommand = new RelayCommand(OpenSimulinkElementsBrowser);
 
             eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
-            eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
+            eventAggregator.GetEvent<SimulinkElementChosenEvent>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
         }
 
        
@@ -197,7 +197,14 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
         {
-            CreateNode(payload.SimulinkElement, new Point(0, 0), true);
+            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputType>)            
+                CreateNode((ISimulinkNodeElement<SimulinkInputType>)payload.SimulinkNodeElement, true);            
+
+            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputOutputType>)            
+                CreateNode((ISimulinkNodeElement<SimulinkInputOutputType>)payload.SimulinkNodeElement, true);
+            
+            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkOutputType>)            
+                CreateNode((ISimulinkNodeElement<SimulinkOutputType>)payload.SimulinkNodeElement, true);            
         }
 
 
@@ -546,47 +553,23 @@ namespace OpenSTSM.ViewModels.MainWindow
             this.Network.Connections.RemoveRange(node.AttachedConnections);
             this.Network.Nodes.Remove(node);
         }
-
-        public NodeViewModel CreateNode(string name, Point nodeLocation, bool centerNode)
+     
+        public NodeViewModel CreateNode<T>(ISimulinkNodeElement<T> simulinkNodeElement, bool centerNode)
         {
-            var node = new NodeViewModel(name);
-            node.X = nodeLocation.X;
-            node.Y = nodeLocation.Y;
+            var node = new NodeViewModel(simulinkNodeElement.Name);
+            node.X = simulinkNodeElement.Location.X;
+            node.Y = simulinkNodeElement.Location.Y;
+            node.Properties = simulinkNodeElement.Properties;
 
-            node.InputConnectors.Add(new ConnectorViewModel("In1"));
-            node.InputConnectors.Add(new ConnectorViewModel("In2"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Out1"));
-            node.OutputConnectors.Add(new ConnectorViewModel("Out2"));
-
-            if (centerNode)
+            if((simulinkNodeElement as ISimulinkNodeElement<SimulinkInputOutputType>).SimulinkObjectType == SimulinkInputOutputType.Sum)
             {
-                EventHandler<EventArgs> sizeChangedEventHandler = null;
-                sizeChangedEventHandler =
-                    delegate (object sender, EventArgs e)
-                    {
-                        node.X -= node.Size.Width / 2;
-                        node.Y -= node.Size.Height / 2;                     
-                        node.SizeChanged -= sizeChangedEventHandler;
-                    };
-
-                node.SizeChanged += sizeChangedEventHandler;
+                var a = "asd";
             }
 
-            this.Network.Nodes.Add(node);
-
-            return node;
-        }
-
-        public NodeViewModel CreateNode(ISimulinkElement simulinkElement, Point nodeLocation, bool centerNode)
-        {
-            var node = new NodeViewModel(simulinkElement.Name);
-            node.X = nodeLocation.X;
-            node.Y = nodeLocation.Y;            
-
-            for (int i = 1; i <= simulinkElement.NumberOfInputs; i++)
+            for (int i = 1; i <= simulinkNodeElement.NumberOfInputs; i++)
                 node.InputConnectors.Add(new ConnectorViewModel($"In{i}"));
 
-            for (int i = 1; i <= simulinkElement.NumberOfOutputs; i++)
+            for (int i = 1; i <= simulinkNodeElement.NumberOfOutputs; i++)
                 node.OutputConnectors.Add(new ConnectorViewModel($"Out{i}"));
 
 

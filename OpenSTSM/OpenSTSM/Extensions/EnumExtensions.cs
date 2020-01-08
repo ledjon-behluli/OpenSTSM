@@ -2,8 +2,6 @@
 using OpenSTSM.Models.MainWindow.SimulinkElements;
 using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 
 namespace OpenSTSM.Extensions
 {
@@ -26,7 +24,6 @@ namespace OpenSTSM.Extensions
             cep.Name = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).Name;
             cep.NumberOfInputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfInputs;
             cep.NumberOfOutputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfOutputs;
-            cep.GraphElementType = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).GraphElementType;
 
             return cep;
         }

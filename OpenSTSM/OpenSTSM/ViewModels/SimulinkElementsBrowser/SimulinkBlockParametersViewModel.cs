@@ -64,7 +64,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
         private void Select(object sender)
         {
-            _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(_instance.GetSelectedUserControl(_elementName)));
+            _eventAggregator.GetEvent<SimulinkElementChosenEvent>().Publish(new SimulinkElementChosenPayload(_instance.GetSelectedUserControl(_elementName)));
             base.Close();
         }
     }

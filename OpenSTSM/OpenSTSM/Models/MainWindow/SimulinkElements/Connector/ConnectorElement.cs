@@ -5,34 +5,25 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {
-    public class ConnectorElement : ISimulinkElement
+    public class ConnectorElement : ISimulinkConnectionElement<SimulinkConnectorType>
     {
-        public SimulinkConnectorType SimulinkConnectorType { get; private set; }
+        public SimulinkConnectorType SimulinkObjectType { get; private set; }
 
-        public string Name { get; private set; }
 
-        public int NumberOfInputs { get; private set; }
+        public Guid Guid { get => Guid.NewGuid(); }
 
-        public int NumberOfOutputs { get; private set; }
+        public Guid StartNode { get; set; }
 
-        public ListDictionary Properties { get; set; }
-
-        public SimulinkGraphElementType GraphElementType { get; private set; }        
-
+        public Guid EndNode { get; set; }
+        
 
         public ConnectorElement(SimulinkConnectorType simulinkConnectorType)
         {
-            SimulinkElementProperties sep = simulinkConnectorType.GetSimulinkElementPropertyValues();
-
-            SimulinkConnectorType = simulinkConnectorType;
-            Name = sep.Name;
-            NumberOfInputs = sep.NumberOfInputs;
-            NumberOfOutputs = sep.NumberOfOutputs;
-            Properties = new ListDictionary();
-            GraphElementType = sep.GraphElementType;
+            SimulinkObjectType = simulinkConnectorType;
         }
     }
 }

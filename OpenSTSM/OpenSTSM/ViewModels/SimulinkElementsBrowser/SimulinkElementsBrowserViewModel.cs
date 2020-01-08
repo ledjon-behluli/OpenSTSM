@@ -65,7 +65,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
             _eventAggregator = eventAggregator;
             ChooseBlockCommand = new RelayCommand(ChooseBlock);
-            _eventAggregator.GetEvent<SimulinkElementChosen>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
+            _eventAggregator.GetEvent<SimulinkElementChosenEvent>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
         }
 
         private void ChooseBlock(object sender)
@@ -85,7 +85,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
             }
             else
             {
-                _eventAggregator.GetEvent<SimulinkElementChosen>().Publish(new SimulinkElementChosenPayload(element.Name));
+                _eventAggregator.GetEvent<SimulinkElementChosenEvent>().Publish(new SimulinkElementChosenPayload(element.Name));
             }
         }
 

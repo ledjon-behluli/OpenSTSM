@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using Utils;
 using System.Windows;
+using System.Collections.Specialized;
 
 namespace NetworkModel
 {
@@ -46,6 +47,11 @@ namespace NetworkModel
         ///     so that our application code has access to the size of a node.
         /// </summary>
         private Size size = Size.Empty;
+
+        /// <summary>
+        /// Holds the properties of a simulink element
+        /// </summary>
+        private ListDictionary properties;
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
@@ -189,6 +195,19 @@ namespace NetworkModel
                 {
                     SizeChanged(this, EventArgs.Empty);
                 }
+            }
+        }
+
+        public ListDictionary Properties
+        {
+            get
+            {
+                return properties;
+            }
+            set
+            {
+                properties = value;
+                OnPropertyChanged("Properties");
             }
         }
 
