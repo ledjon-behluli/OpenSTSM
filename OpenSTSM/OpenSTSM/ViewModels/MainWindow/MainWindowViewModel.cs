@@ -11,6 +11,9 @@ using Prism.Events;
 using NetworkModel;
 using System.Diagnostics;
 using OpenSTSM.Models.MainWindow.SimulinkElements;
+using OpenSTSM.Extensions;
+using OpenSTSM.Guis.BlockParameters.MathOperations;
+using System.Collections;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -561,13 +564,39 @@ namespace OpenSTSM.ViewModels.MainWindow
             node.Y = simulinkNodeElement.Location.Y;
             node.Properties = simulinkNodeElement.Properties;
 
-            if((simulinkNodeElement as ISimulinkNodeElement<SimulinkInputOutputType>).SimulinkObjectType == SimulinkInputOutputType.Sum)
+            //////////////////////////// Special case for Sum element ////////////////////////////////////
+           
+            var simulinkNE = simulinkNodeElement as ISimulinkNodeElement<SimulinkInputOutputType>;
+            if (simulinkNE != null)
             {
-                var a = "asd";
+                if (simulinkNE.SimulinkObjectType == SimulinkInputOutputType.Sum)
+                {
+                    foreach (DictionaryEntry de in simulinkNE.Properties)
+                    {
+                        if((string)de.Key == nameof(Sum.Signs))
+                        {
+                            IEnumerable<string> signs = (IEnumerable<string>)de.Value;
+                            signs = signs.RemoveEmpty();
+                            if (signs.Count() > 1)
+                            {
+                                foreach (string sign in (de.Value as IEnumerable<string>).RemoveEmpty())
+                                    node.InputConnectors.Add(new ConnectorViewModel(sign.ToString()));
+
+                                goto LineBreakCondition;
+                            }
+                            else
+                                throw new Exception("Comparator needs at least 2 signs!");
+                        }
+                    }
+                }
             }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////
 
             for (int i = 1; i <= simulinkNodeElement.NumberOfInputs; i++)
                 node.InputConnectors.Add(new ConnectorViewModel($"In{i}"));
+
+    LineBreakCondition:
 
             for (int i = 1; i <= simulinkNodeElement.NumberOfOutputs; i++)
                 node.OutputConnectors.Add(new ConnectorViewModel($"Out{i}"));

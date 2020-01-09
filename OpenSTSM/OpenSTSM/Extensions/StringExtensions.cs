@@ -26,5 +26,19 @@ namespace OpenSTSM.Extensions
             datalist.AddRange(input.Select(c => c.ToString()));
             return datalist;
         }
+
+        public static IEnumerable<string> RemoveEmpty(this IEnumerable<string> input)
+        {
+            if (input == null)
+                throw new NullReferenceException();
+
+            return input.Where(i => !(string.IsNullOrEmpty(i) || string.IsNullOrWhiteSpace(i)));
+        }
+
+        public static int CountNonEmpty(this IEnumerable<string> input)
+        {
+            var filtered = input.RemoveEmpty();
+            return filtered != null ? filtered.Count() : 0;
+        }
     }
 }

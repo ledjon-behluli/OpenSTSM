@@ -14,9 +14,9 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 
         public string Name { get; private set; }
 
-        public int NumberOfInputs { get; private set; }
+        public int NumberOfInputs { get; set; }
 
-        public int NumberOfOutputs { get; private set; }
+        public int NumberOfOutputs { get; set; }
 
         public Point Location { get; set; }
 

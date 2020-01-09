@@ -15,17 +15,17 @@ namespace OpenSTSM.Extensions
                 throw new ArgumentException($"{nameof(simulinkType)} must be of Enum type", nameof(simulinkType));
             }
 
-            SimulinkElementProperties cep = new SimulinkElementProperties();
+            SimulinkElementProperties sep = new SimulinkElementProperties();
 
             var member = simulinkType.ToString();
             var enumValueMemberInfo = type.GetField(member);
             var valueAttributes = enumValueMemberInfo.GetCustomAttributes(typeof(SimulinkElementPropertiesAttribute), false);
            
-            cep.Name = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).Name;
-            cep.NumberOfInputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfInputs;
-            cep.NumberOfOutputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfOutputs;
+            sep.Name = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).Name;
+            sep.NumberOfInputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfInputs;
+            sep.NumberOfOutputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfOutputs;
 
-            return cep;
+            return sep;
         }
 
         public static string GetDescription<T>(this T enumerationValue) where T : struct

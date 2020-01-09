@@ -12,8 +12,8 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
     {
         Guid Guid { get; }
         string Name { get; }
-        int NumberOfInputs { get; }
-        int NumberOfOutputs { get; }
+        int NumberOfInputs { get; set; }
+        int NumberOfOutputs { get; set; }
         Point Location { get; set; }
         ListDictionary Properties { get; set; }
         T SimulinkObjectType { get; }

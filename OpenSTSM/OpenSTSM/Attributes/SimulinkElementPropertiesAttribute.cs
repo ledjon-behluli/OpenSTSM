@@ -1,5 +1,6 @@
 ﻿using OpenSTSM.Models.MainWindow.SimulinkElements;
 using System;
+using System.Windows;
 
 namespace OpenSTSM.Attributes
 {

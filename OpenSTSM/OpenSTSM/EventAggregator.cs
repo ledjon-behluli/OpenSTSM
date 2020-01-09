@@ -3,10 +3,9 @@ using System;
 using OpenSTSM.Models.MainWindow.SimulinkElements;
 using System.Windows;
 using OpenSTSM.Guis.BlockParameters.Sources;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using OpenSTSM.Guis.BlockParameters.Continuous;
+using OpenSTSM.Extensions;
 
 namespace OpenSTSM
 {
@@ -108,6 +107,7 @@ namespace OpenSTSM
                     {
                         Sum sum = (element as Sum);
                         simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Sum);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).NumberOfInputs = sum.Signs.CountNonEmpty();
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(sum.Signs), sum.Signs);
                     }
                     break;
