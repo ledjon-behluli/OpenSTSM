@@ -5,7 +5,7 @@ using OpenSTSM.Extensions;
 
 namespace OpenSTSM.Converters
 {
-    public class InformationToControlElementNameConverter : IValueConverter
+    public class IdentifierToControlElementNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

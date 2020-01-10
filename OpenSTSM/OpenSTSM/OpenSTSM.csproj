@@ -86,7 +86,7 @@
     <Compile Include="ApplicationService.cs" />
     <Compile Include="Attributes\SimulinkElementPropertiesAttribute.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\InformationToControlElementNameConverter.cs" />
+    <Compile Include="Converters\IdentifierToControlElementNameConverter.cs" />
     <Compile Include="Converters\ListOfDecimalToStringConverter.cs" />
     <Compile Include="Converters\ListOfStringsToStringConverter.cs" />
     <Compile Include="CurvedArrow.cs" />

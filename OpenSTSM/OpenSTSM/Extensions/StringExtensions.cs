@@ -40,5 +40,20 @@ namespace OpenSTSM.Extensions
             var filtered = input.RemoveEmpty();
             return filtered != null ? filtered.Count() : 0;
         }
+
+        public static string StringBetweenCharacters(this string input, char charFrom, char charTo)
+        {
+            int posFrom = input.IndexOf(charFrom);
+            if (posFrom != -1) 
+            {
+                int posTo = input.IndexOf(charTo, posFrom + 1);
+                if (posTo != -1)
+                {
+                    return input.Substring(posFrom + 1, posTo - posFrom - 1);
+                }
+            }
+
+            return string.Empty;
+        }
     }
 }

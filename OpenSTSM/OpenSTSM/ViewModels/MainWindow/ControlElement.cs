@@ -8,6 +8,8 @@ namespace OpenSTSM.ViewModels.MainWindow
 {
     public class ControlElement : ViewModelBase
     {
+        public Guid Guid { get; private set; }
+
         private string _controlElementName = string.Empty;
         public string ControlElementName
         {
@@ -58,8 +60,17 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
+        public string Identifier
+        {
+            get
+            {
+                return $"{ControlElementName} ({Guid.ToString()})";
+            }
+        }
+
         public ControlElement(string controlElementName, decimal probability, bool needsLinking)
         {
+            Guid = Guid.NewGuid();
             _controlElementName = controlElementName;
             _probability = probability;
             _needsLinking = needsLinking;

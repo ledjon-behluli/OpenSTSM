@@ -14,6 +14,7 @@ using OpenSTSM.Models.MainWindow.SimulinkElements;
 using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -191,7 +192,25 @@ namespace OpenSTSM.ViewModels.MainWindow
         {
             if (!WindowHelper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
-                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex(sender as string));
+                string identifier = (sender as string).StringBetweenCharacters('(', ')');
+                ControlSystems.FirstOrDefault().PredictedControlElements.ForEach(pre =>
+                {
+                    if (pre.Guid == Guid.Parse(identifier))
+                    {
+                        pre.NeedsLinking = false;
+                        pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
+                    }
+                    else
+                    {
+                        if(pre.PossibleControlElements.Any(poss => poss.Guid == Guid.Parse(identifier)))
+                        {
+                            pre.NeedsLinking = false;
+                            pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
+                        }
+                    }
+                });
+
+                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex((sender as string)));
                 sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sebw.Owner = App.Current.MainWindow;
                 sebw.Show();
@@ -585,7 +604,10 @@ namespace OpenSTSM.ViewModels.MainWindow
                                 goto LineBreakCondition;
                             }
                             else
-                                throw new Exception("Comparator needs at least 2 signs!");
+                            {
+                                MessageBox.Show("Comparator needs at least 2 signs!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return null;
+                            }
                         }
                     }
                 }

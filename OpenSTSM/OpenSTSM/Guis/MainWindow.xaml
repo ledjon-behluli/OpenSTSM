@@ -38,11 +38,11 @@
             <conv:ScaleToPercentConverter x:Key="ScaleToPercentConverter" />
             <conv:ProbabilityToImageConverter x:Key="ProbabilityToImageConverter" />
             <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <conv:InformationToControlElementNameConverter x:Key="InformationToControlElementNameConverter" />
+            <conv:IdentifierToControlElementNameConverter x:Key="IdentifierToControlElementNameConverter" />
 
             <DataTemplate x:Key="NeedsLinkingButton">
                 <Button Command="{Binding RelativeSource={RelativeSource AncestorType=TreeView}, Path=DataContext.OpenSimulinkElementsBrowserCommand}"  
-                        CommandParameter="{Binding ElementName=lblControlElementName, Path=Content, Converter={StaticResource InformationToControlElementNameConverter}}"
+                        CommandParameter="{Binding ElementName=lblControlElementIdentifier, Path=Content}"
                         Visibility="{Binding Path=NeedsLinking, Converter={StaticResource BooleanToVisibilityConverter}}" 
                         ToolTip="Link to Simulink element" Cursor="Hand">
                     <Button.Template>
@@ -616,7 +616,8 @@
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox IsChecked="True" Margin="0 6 6 0 "/>
                                         <Image Source="/Resources/leaf-green.png" Height="16" Width="16" />
-                                        <Label Name="lblControlElementName" Content="{Binding Information}"/>
+                                        <Label Content="{Binding Information}"/>
+                                        <Label Name="lblControlElementIdentifier" Content="{Binding Identifier}" Visibility="Collapsed" />
                                         <ContentPresenter ContentTemplate="{StaticResource NeedsLinkingButton}"/>
                                     </StackPanel>
                                     <HierarchicalDataTemplate.ItemTemplate>
@@ -624,7 +625,8 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <CheckBox IsChecked="False" Margin="0 6 6 0 "/>
                                                 <Image Source="{Binding Path=Probability, Converter={StaticResource ProbabilityToImageConverter}}" Height="16" Width="16" />
-                                                <Label Name="lblControlElementName" Content="{Binding Information}"/>
+                                                <Label Content="{Binding Information}"/>
+                                                <Label Name="lblControlElementIdentifier" Content="{Binding Identifier}" Visibility="Collapsed" />
                                                 <ContentPresenter ContentTemplate="{StaticResource NeedsLinkingButton}"/>
                                             </StackPanel>
                                         </DataTemplate>
