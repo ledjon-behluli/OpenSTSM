@@ -54,6 +54,11 @@ namespace NetworkModel
         private ListDictionary properties;
 
         /// <summary>
+        /// Holds the Guid of a simulink element
+        /// </summary>
+        private Guid guid;
+
+        /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
         private ImpObservableCollection<ConnectorViewModel> inputConnectors = null;
@@ -198,6 +203,9 @@ namespace NetworkModel
             }
         }
 
+        /// <summary>
+        /// Holds the properties of a simulink element
+        /// </summary>
         public ListDictionary Properties
         {
             get
@@ -208,6 +216,22 @@ namespace NetworkModel
             {
                 properties = value;
                 OnPropertyChanged("Properties");
+            }
+        }
+
+        /// <summary>
+        /// Holds the Guid of a simulink element
+        /// </summary>
+        public Guid Guid
+        {
+            get
+            {
+                return guid;
+            }
+            set
+            {
+                guid = value;
+                OnPropertyChanged("Guid");
             }
         }
 

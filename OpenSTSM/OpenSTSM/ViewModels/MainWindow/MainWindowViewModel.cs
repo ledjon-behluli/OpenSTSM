@@ -14,13 +14,13 @@ using OpenSTSM.Models.MainWindow.SimulinkElements;
 using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
-using System.Text.RegularExpressions;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
     public class MainWindowViewModel : WorkspaceViewModel
     {
         private bool _isProcessing = false;
+        public Guid? LastSelectedGuid; 
 
         #region Properties
 
@@ -192,25 +192,13 @@ namespace OpenSTSM.ViewModels.MainWindow
         {
             if (!WindowHelper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
-                string identifier = (sender as string).StringBetweenCharacters('(', ')');
-                ControlSystems.FirstOrDefault().PredictedControlElements.ForEach(pre =>
-                {
-                    if (pre.Guid == Guid.Parse(identifier))
-                    {
-                        pre.NeedsLinking = false;
-                        pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
-                    }
-                    else
-                    {
-                        if(pre.PossibleControlElements.Any(poss => poss.Guid == Guid.Parse(identifier)))
-                        {
-                            pre.NeedsLinking = false;
-                            pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
-                        }
-                    }
-                });
+                string elementName = sender as string;
+                string identifier = elementName.StringBetweenCharacters('(', ')');
+                GlobalVariableManager.LastSelectedElementIdentifer = Guid.Parse(identifier);
+                //this.RemoveLinkingNeed(identifier);
 
-                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex((sender as string)));
+                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserTabVisibilities(elementName),
+                                                             SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex(elementName));
                 sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 sebw.Owner = App.Current.MainWindow;
                 sebw.Show();
@@ -219,16 +207,25 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
         {
-            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputType>)            
-                CreateNode((ISimulinkNodeElement<SimulinkInputType>)payload.SimulinkNodeElement, true);            
-
-            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputOutputType>)            
-                CreateNode((ISimulinkNodeElement<SimulinkInputOutputType>)payload.SimulinkNodeElement, true);
-            
-            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkOutputType>)            
-                CreateNode((ISimulinkNodeElement<SimulinkOutputType>)payload.SimulinkNodeElement, true);            
+            if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputType>)
+            {
+                var element = (ISimulinkNodeElement<SimulinkInputType>)payload.SimulinkNodeElement;
+                element.Location = this.GetCorrectNodeLocation(element.Guid);
+                CreateNode(element, true);
+            }                
+            else if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputOutputType>)
+            {
+                var element = (ISimulinkNodeElement<SimulinkInputOutputType>)payload.SimulinkNodeElement;
+                element.Location = this.GetCorrectNodeLocation(element.Guid);
+                CreateNode(element, true);
+            }
+            else if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkOutputType>)
+            {
+                var element = (ISimulinkNodeElement<SimulinkOutputType>)payload.SimulinkNodeElement;
+                element.Location = this.GetCorrectNodeLocation(element.Guid);
+                CreateNode(element, true);
+            }
         }
-
 
         public void ChangeCanExecute(bool canExecute, ref bool canExecuteObj)
         {
@@ -246,35 +243,72 @@ namespace OpenSTSM.ViewModels.MainWindow
                 base.Close();
         }
 
+        private void RemoveLinkingNeed(string identifier)
+        {
+            if (!string.IsNullOrEmpty(identifier))
+            {
+                ControlSystems.FirstOrDefault().PredictedControlElements.ForEach(pre =>
+                {
+                    if (pre.Guid == Guid.Parse(identifier))
+                    {
+                        pre.NeedsLinking = false;
+                        pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
+                    }
+                    else
+                    {
+                        if (pre.PossibleControlElements.Any(poss => poss.Guid == Guid.Parse(identifier)))
+                        {
+                            pre.NeedsLinking = false;
+                            pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
+                        }
+                    }
+                });
+            }
+        }
 
         private List<ControlSystem> GetControlSystems()
         {
+            Point pce1 = new Point(100, 100);
+            Point pce2 = new Point(200, 100);
+            Point pce3 = new Point(300, 100);
             List<ControlSystem> controlSystems = new List<ControlSystem>();
             controlSystems.Add(new ControlSystem("System")
             {
+                
                 PredictedControlElements = new List<PredictedControlElement>()
                 {
-                    new PredictedControlElement("Controller", 96.24m, true)
+                    new PredictedControlElement("Controller", 96.24m, true, pce1)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Input", 2.14m, true),
-                             new PossibleControlElement("Output", 1.01m, true),
-                             new PossibleControlElement("Process", 0.12m, true),
-                             new PossibleControlElement("Feedback", 0.12m, true),
-                             new PossibleControlElement("Comparator", 0.02m, true),
+                             new PossibleControlElement("Input", 2.14m, true, pce1),
+                             new PossibleControlElement("Output", 1.01m, true, pce1),
+                             new PossibleControlElement("Process", 0.12m, true, pce1),
+                             new PossibleControlElement("Feedback", 0.12m, true, pce1),
+                             new PossibleControlElement("Comparator", 0.02m, true, pce1),
                          }
                     },
-                    new PredictedControlElement("Arrow Right", 62.78m, false)
+                    new PredictedControlElement("Output", 96.24m, true, pce3)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Arrow Left", 22.46m, false),
-                             new PossibleControlElement("Arrow Up", 14.76m, false)
+                             new PossibleControlElement("Input", 2.14m, true, pce3),
+                             new PossibleControlElement("Controller", 1.01m, true, pce3),
+                             new PossibleControlElement("Process", 0.12m, true, pce3),
+                             new PossibleControlElement("Feedback", 0.12m, true, pce3),
+                             new PossibleControlElement("Comparator", 0.02m, true, pce3),
+                         }
+                    },
+                    new PredictedControlElement("Arrow Right", 62.78m, false, pce2)
+                    {
+                         PossibleControlElements = new List<PossibleControlElement>()
+                         {
+                             new PossibleControlElement("Arrow Left", 22.46m, false, pce2),
+                             new PossibleControlElement("Arrow Up", 14.76m, false, pce2)
                          }
                     }
                 }
-            });
+            }); ;
 
             return controlSystems;
         }
@@ -582,9 +616,10 @@ namespace OpenSTSM.ViewModels.MainWindow
             node.X = simulinkNodeElement.Location.X;
             node.Y = simulinkNodeElement.Location.Y;
             node.Properties = simulinkNodeElement.Properties;
+            node.Guid = simulinkNodeElement.Guid;
 
-            //////////////////////////// Special case for Sum element ////////////////////////////////////
-           
+            #region Special case for Sum element
+
             var simulinkNE = simulinkNodeElement as ISimulinkNodeElement<SimulinkInputOutputType>;
             if (simulinkNE != null)
             {
@@ -613,7 +648,7 @@ namespace OpenSTSM.ViewModels.MainWindow
                 }
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////////////
+            #endregion
 
             for (int i = 1; i <= simulinkNodeElement.NumberOfInputs; i++)
                 node.InputConnectors.Add(new ConnectorViewModel($"In{i}"));
@@ -646,6 +681,45 @@ namespace OpenSTSM.ViewModels.MainWindow
         public void DeleteConnection(ConnectionViewModel connection)
         {
             this.Network.Connections.Remove(connection);
+        }
+
+        private Point GetCorrectNodeLocation(Guid nodeIdentifier)
+        {
+            Point location = new Point(55, 25);     // Deafult location (top left of nodes view) if its a new node (it does not come from the sketch)
+           
+            foreach(var pre in ControlSystems.FirstOrDefault().PredictedControlElements)
+            {
+                if(pre.Guid == nodeIdentifier)
+                {
+                    location = pre.Location;
+                    break;
+                }
+                else
+                {
+                    if (pre.PossibleControlElements.Any(poss => poss.Guid == nodeIdentifier))       
+                    {
+                        location = pre.Location;        // We can take the location of the parent since if a match in guid happens in any of the children, than that said children will have the same location as the parent
+                        break;
+                    }
+                }
+            }
+
+            return location;
+        }
+
+        public void ArrangeNodes()
+        {
+            foreach(var node in this.network.Nodes)
+            {
+                var a = ControlSystems.FirstOrDefault();
+                var b = a.PredictedControlElements;
+                var c = b.Where(pre => pre.Guid == node.Guid);
+                var d = c.FirstOrDefault().Location;
+                
+                Point location = ControlSystems.FirstOrDefault().PredictedControlElements.Where(pre => pre.Guid == node.Guid).FirstOrDefault().Location;
+                node.X = location.X;
+                node.Y = location.Y;
+            }
         }
 
         private void PopulateControlSystemView()

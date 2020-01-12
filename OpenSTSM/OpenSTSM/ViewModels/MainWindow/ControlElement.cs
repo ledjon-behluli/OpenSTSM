@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -10,7 +7,7 @@ namespace OpenSTSM.ViewModels.MainWindow
     {
         public Guid Guid { get; private set; }
 
-        private string _controlElementName = string.Empty;
+        private string _controlElementName;
         public string ControlElementName
         {
             get
@@ -34,6 +31,20 @@ namespace OpenSTSM.ViewModels.MainWindow
             set
             {
                 _probability = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Point _location;
+        public Point Location
+        {
+            get
+            {
+                return _location;
+            }
+            set
+            {
+                _location = value;
                 OnPropertyChanged();
             }
         }
@@ -67,13 +78,15 @@ namespace OpenSTSM.ViewModels.MainWindow
                 return $"{ControlElementName} ({Guid.ToString()})";
             }
         }
+        
 
-        public ControlElement(string controlElementName, decimal probability, bool needsLinking)
+        public ControlElement(string controlElementName, decimal probability, bool needsLinking, Point location)
         {
             Guid = Guid.NewGuid();
             _controlElementName = controlElementName;
             _probability = probability;
             _needsLinking = needsLinking;
+            _location = location;
         }
     }
 }

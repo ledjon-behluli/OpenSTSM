@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
     public class PossibleControlElement : ControlElement
     {
-        public PossibleControlElement(string possibleControlElement, decimal probability, bool needsLinking) : base(possibleControlElement, probability, needsLinking)
+        public PossibleControlElement(string possibleControlElement, decimal probability, bool needsLinking, Point location) 
+            : base(possibleControlElement, probability, needsLinking, location)
         {
           
         }            

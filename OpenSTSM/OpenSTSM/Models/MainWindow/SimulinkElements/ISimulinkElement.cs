@@ -10,7 +10,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 {
     public interface ISimulinkNodeElement<T>
     {
-        Guid Guid { get; }
+        Guid Guid { get; set; }
         string Name { get; }
         int NumberOfInputs { get; set; }
         int NumberOfOutputs { get; set; }

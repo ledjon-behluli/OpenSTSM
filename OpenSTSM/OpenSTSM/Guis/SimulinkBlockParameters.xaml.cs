@@ -8,9 +8,7 @@ using System.Windows;
 namespace OpenSTSM.Guis
 {
     public partial class SimulinkBlockParameters : Window
-    {
-        public static FrameworkElement SelectedUserControl;
-        
+    {        
         public SimulinkBlockParameters(string elementName)
         {
             SimulinkBlockParametersViewModel viewModel = new SimulinkBlockParametersViewModel(ApplicationService.Instance.EventAggregator, this, elementName);

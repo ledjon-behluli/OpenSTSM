@@ -94,6 +94,7 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\InterfaceExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="GlobalVariableManager.cs" />
     <Compile Include="Guis\BlockParameters\Continuous\Integrator.xaml.cs">
       <DependentUpon>Integrator.xaml</DependentUpon>
     </Compile>

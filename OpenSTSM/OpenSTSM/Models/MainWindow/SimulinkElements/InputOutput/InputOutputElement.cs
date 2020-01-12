@@ -10,7 +10,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         public SimulinkInputOutputType SimulinkObjectType { get; private set; }
 
 
-        public Guid Guid { get => Guid.NewGuid(); }
+        public Guid Guid { get; set; }
 
         public string Name { get; private set; }
 
@@ -24,11 +24,12 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 
 
 
-        public InputOutputElement(SimulinkInputOutputType simulinkInputOutputType)
+        public InputOutputElement(SimulinkInputOutputType simulinkInputOutputType, Guid? guid = null)
         {
             SimulinkElementProperties sep = simulinkInputOutputType.GetSimulinkElementPropertyValues();
 
             SimulinkObjectType = simulinkInputOutputType;
+            Guid = guid ?? Guid.NewGuid();
             Name = sep.Name;
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;

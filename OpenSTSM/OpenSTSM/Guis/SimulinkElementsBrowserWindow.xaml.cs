@@ -5,9 +5,9 @@ namespace OpenSTSM.Guis
 {
     public partial class SimulinkElementsBrowserWindow : Window
     {
-        public SimulinkElementsBrowserWindow(int selectedTabIndex = -1)
+        public SimulinkElementsBrowserWindow(SimulinkBrowserTabVisibilities simulinkBrowserTabVisibilities = null, int selectedTabIndex = -1)
         {
-            SimulinkElementsBrowserViewModel viewModel = new SimulinkElementsBrowserViewModel(ApplicationService.Instance.EventAggregator, selectedTabIndex);
+            SimulinkElementsBrowserViewModel viewModel = new SimulinkElementsBrowserViewModel(ApplicationService.Instance.EventAggregator, simulinkBrowserTabVisibilities, selectedTabIndex);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
 

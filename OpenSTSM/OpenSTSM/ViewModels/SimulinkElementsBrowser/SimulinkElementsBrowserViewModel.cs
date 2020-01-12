@@ -15,6 +15,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
     {
         private IEventAggregator _eventAggregator;
         private List<string> elementsWithoutParameters = new List<string>() { "Scope", "Display" };
+        private SimulinkBrowserTabVisibilities _simulinkBrowserTabVisibilities;
         private int _selectedTabIndex;
 
         #region Properties
@@ -25,28 +26,28 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         {
             get
             {
-                return SelectedTabIndex == 0 || _selectedTabIndex == -1;
+                return _simulinkBrowserTabVisibilities.SourcesVisibility;
             }
         }
         public bool SinksVisibility
         {
             get
             {
-                return SelectedTabIndex == 1 || _selectedTabIndex == -1;
+                return _simulinkBrowserTabVisibilities.SinksVisibility;
             }
         }
         public bool ContinuousVisibility
         {
             get
             {
-                return SelectedTabIndex == 2 || _selectedTabIndex == -1;
+                return _simulinkBrowserTabVisibilities.ContinuousVisibility;
             }
         }
         public bool MathOperationsVisibility
         {
             get
             {
-                return SelectedTabIndex == 3 || _selectedTabIndex == -1;
+                return _simulinkBrowserTabVisibilities.MathOperationsVisibility;
             }
         }
 
@@ -58,10 +59,11 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
         #endregion
 
-        public SimulinkElementsBrowserViewModel(IEventAggregator eventAggregator, int selectedTabIndex)
+        public SimulinkElementsBrowserViewModel(IEventAggregator eventAggregator, SimulinkBrowserTabVisibilities simulinkBrowserTabVisibilities, int selectedTabIndex)
         {
             _selectedTabIndex = selectedTabIndex;
             SelectedTabIndex = selectedTabIndex == -1 ? 0 : selectedTabIndex;
+            _simulinkBrowserTabVisibilities = simulinkBrowserTabVisibilities ?? new SimulinkBrowserTabVisibilities(true, true, true, true);
 
             _eventAggregator = eventAggregator;
             ChooseBlockCommand = new RelayCommand(ChooseBlock);
@@ -92,6 +94,22 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
         {
             base.Close();
+        }
+    }
+
+    public class SimulinkBrowserTabVisibilities
+    {
+        public bool SourcesVisibility { get; set; } 
+        public bool SinksVisibility { get; set; } 
+        public bool ContinuousVisibility { get; set; }
+        public bool MathOperationsVisibility { get; set; }
+
+        public SimulinkBrowserTabVisibilities(bool sourcesVisibility = false, bool sinksVisibility = false, bool continuousVisibility = false, bool mathOperationsVisibility = false)
+        {
+            SourcesVisibility = sourcesVisibility;
+            SinksVisibility = sinksVisibility;
+            ContinuousVisibility = continuousVisibility;
+            MathOperationsVisibility = mathOperationsVisibility;
         }
     }
 }

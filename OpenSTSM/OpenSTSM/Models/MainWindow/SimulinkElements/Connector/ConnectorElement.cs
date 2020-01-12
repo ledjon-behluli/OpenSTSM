@@ -14,7 +14,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         public SimulinkConnectorType SimulinkObjectType { get; private set; }
 
 
-        public Guid Guid { get => Guid.NewGuid(); }
+        public Guid Guid { get; private set; }
 
         public Guid StartNode { get; set; }
 
@@ -24,6 +24,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         public ConnectorElement(SimulinkConnectorType simulinkConnectorType)
         {
             SimulinkObjectType = simulinkConnectorType;
+            Guid = Guid.NewGuid();
         }
     }
 }

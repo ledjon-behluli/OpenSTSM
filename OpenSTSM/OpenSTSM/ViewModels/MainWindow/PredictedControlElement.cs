@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Windows;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -23,7 +20,8 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
-        public PredictedControlElement(string predictedControlElementName, decimal probability, bool needsMapping) : base(predictedControlElementName, probability, needsMapping)
+        public PredictedControlElement(string predictedControlElementName, decimal probability, bool needsMapping, Point location) 
+            : base(predictedControlElementName, probability, needsMapping, location)
         {
           
         }

@@ -36,21 +36,22 @@ namespace OpenSTSM
 
         private void SetPayload(FrameworkElement element)
         {
-            object simulinkNodeElement;            
+            object simulinkNodeElement;
+            Guid? guid = GlobalVariableManager.LastSelectedElementIdentifer;
 
             switch (element.Name)
             {
                 case "Constant":
                     {
                         Constant constant = (element as Constant);
-                        simulinkNodeElement = new InputElement(SimulinkInputType.Constant);
+                        simulinkNodeElement = new InputElement(SimulinkInputType.Constant, guid);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(constant.Value), constant.Value);
                     }
                     break;
                 case "Step":
                     {
                         Step step = (element as Step);
-                        simulinkNodeElement = new InputElement(SimulinkInputType.Step);
+                        simulinkNodeElement = new InputElement(SimulinkInputType.Step, guid);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.StepTime), step.StepTime);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.InitialValue), step.InitialValue);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.FinalValue), step.FinalValue);
@@ -60,22 +61,22 @@ namespace OpenSTSM
                 case "Ramp":
                     {
                         Ramp ramp = (element as Ramp);
-                        simulinkNodeElement = new InputElement(SimulinkInputType.Ramp);
+                        simulinkNodeElement = new InputElement(SimulinkInputType.Ramp, guid);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.Slope), ramp.Slope);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.StartTime), ramp.StartTime);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.InitialOutput), ramp.InitialOutput);
                     }
                     break;
                 case "Scope":
-                    simulinkNodeElement = new OutputElement(SimulinkOutputType.Scope);
+                    simulinkNodeElement = new OutputElement(SimulinkOutputType.Scope, guid);
                     break;
                 case "Display":
-                    simulinkNodeElement = new OutputElement(SimulinkOutputType.Display);
+                    simulinkNodeElement = new OutputElement(SimulinkOutputType.Display, guid);
                     break;
                 case "TransferFunction":
                     {
                         TransferFunction transferFunction = (element as TransferFunction);
-                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.TransferFunction);
+                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.TransferFunction, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(transferFunction.NumeratorCoefficients), transferFunction.NumeratorCoefficients);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(transferFunction.DenominatorCoefficients), transferFunction.DenominatorCoefficients);
                     }
@@ -83,7 +84,7 @@ namespace OpenSTSM
                 case "PidController":
                     {
                         PidController pidController = (element as PidController);
-                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.PidController);
+                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.PidController, guid);
                         // Selected Controller
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(pidController.SelectedPidController), pidController.SelectedPidController);
                         // Controller Parameters
@@ -99,14 +100,14 @@ namespace OpenSTSM
                 case "Integrator":
                     {
                         Integrator integrator = (element as Integrator);
-                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Integrator);
+                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Integrator, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(integrator.InitialCondition), integrator.InitialCondition);
                     }
                     break;
                 case "Sum":
                     {
                         Sum sum = (element as Sum);
-                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Sum);
+                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Sum, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).NumberOfInputs = sum.Signs.CountNonEmpty();
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(sum.Signs), sum.Signs);
                     }
@@ -114,14 +115,14 @@ namespace OpenSTSM
                 case "Gain":
                     {
                         Gain gain = (element as Gain);
-                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Gain);
+                        simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Gain, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(gain.Value), gain.Value);
                     }
                     break;
                 default:
                     throw new InvalidOperationException();
             }
-
+            
             SimulinkNodeElement = simulinkNodeElement;
         }
     }

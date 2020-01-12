@@ -23,7 +23,7 @@
 
           
             <!-- UI commands. -->
-
+            <RoutedCommand x:Key="Commands.ArrangeNodes" />
             <RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />
             <RoutedUICommand x:Key="Commands.CreateNode" />
             <RoutedUICommand x:Key="Commands.DeleteNode" />
@@ -447,6 +447,11 @@
 
         <!-- Bind commands to event handlers.-->
 
+        <CommandBinding
+            Command="{StaticResource Commands.ArrangeNodes}"
+            Executed="ArrangeNodes_Executed"
+            />
+
         <CommandBinding 
             Command="{StaticResource Commands.DeleteSelectedNodes}" 
             Executed="DeleteSelectedNodes_Executed" 
@@ -641,6 +646,8 @@
                 <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
                     <Grid.ColumnDefinitions>
 
+                        <ColumnDefinition Width="60" />
+
                         <!-- empty space -->
                         <ColumnDefinition Width="*" />
 
@@ -694,38 +701,43 @@
 
                     </Grid.ColumnDefinitions>
                     <Button
-                        Grid.Column="1"
+                        Grid.Column="0"
+                        Command="{StaticResource Commands.ArrangeNodes}"
+                        ToolTip="Arrange all nodes in canvas based on sketch">Arrange
+                    </Button>
+                    <Button
+                        Grid.Column="2"
                         Command="{StaticResource Commands.FitContent}"
                         ToolTip="Fit all nodes to the viewport">Fit
                     </Button>
                     <Button
-                        Grid.Column="3"
+                        Grid.Column="4"
                         Command="{StaticResource Commands.Fill}"
                         ToolTip="Fit the entire content area to the viewport">Fill
                     </Button>
                     <Button
-                        Grid.Column="5"
+                        Grid.Column="6"
                         Command="{StaticResource Commands.OneHundredPercent}"
                         ToolTip="Scale the content to 100%">100%
                     </Button>
                     <TextBlock
-                        Grid.Column="7"
+                        Grid.Column="8"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
                         Text="{Binding ElementName=ZoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}"
                         />
                     <TextBlock
-                        Grid.Column="8"
+                        Grid.Column="9"
                         VerticalAlignment="Center"
                         Text="%"
                         />
                     <Button
-                        Grid.Column="10"
+                        Grid.Column="11"
                         Command="{StaticResource Commands.ZoomOut}"
                         ToolTip="Zoom out from the content">-
                     </Button>
                     <Slider
-                        Grid.Column="12"
+                        Grid.Column="13"
                         Minimum="10" 
                         LargeChange="20" 
                         TickFrequency="10" 
@@ -736,7 +748,7 @@
                         ToolTip="Change the zoom level of the content"
                         />
                     <Button
-                        Grid.Column="14"
+                        Grid.Column="15"
                         Command="{StaticResource Commands.ZoomIn}"
                         ToolTip="Zoom in on the content">+
                     </Button>
