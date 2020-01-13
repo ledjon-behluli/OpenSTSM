@@ -8,8 +8,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 {
     public class ControlSystem : ViewModelBase
     {
-        private List<PredictedControlElement> _predictedControlElements;
-
+        public List<PredictedControlElement> _predictedControlElements;
         public List<PredictedControlElement> PredictedControlElements
         {
             get

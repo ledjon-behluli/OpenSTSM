@@ -3,6 +3,12 @@ using System.Windows;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
+    public enum ControlElementType
+    {
+        Node,
+        Connector
+    }
+
     public class ControlElement : ViewModelBase
     {
         public Guid Guid { get; private set; }
@@ -78,15 +84,69 @@ namespace OpenSTSM.ViewModels.MainWindow
                 return $"{ControlElementName} ({Guid.ToString()})";
             }
         }
-        
 
-        public ControlElement(string controlElementName, decimal probability, bool needsLinking, Point location)
+        private ControlElementType _type;
+        public ControlElementType Type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                _type = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Guid? _originIdentifier;
+        public Guid? OriginIdentifier
+        {
+            get
+            {
+                return _originIdentifier; 
+            }
+            set
+            {
+                _originIdentifier = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Guid? _targetIdentifier;
+        public Guid? TargetIdentifier
+        {
+            get
+            {
+                return _targetIdentifier;
+            }
+            set
+            {
+                _targetIdentifier = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="controlElementName"></param>
+        /// <param name="probability"></param>
+        /// <param name="location"></param>
+        /// <param name="origin">The element identifier that represents the origin of the connector</param>
+        /// <param name="target">The element identifier that represents the target of the connector</param>
+        public ControlElement(ControlElementType type, string controlElementName, decimal probability, Point? location = null, Guid? origin = null, Guid? target = null)
         {
             Guid = Guid.NewGuid();
+            _type = type;
             _controlElementName = controlElementName;
             _probability = probability;
-            _needsLinking = needsLinking;
-            _location = location;
+            _needsLinking = true;
+            _location = location ?? GlobalVariableManager.DefaultNodeLocation;
+            _originIdentifier = origin;
+            _targetIdentifier = target;
         }
     }
 }

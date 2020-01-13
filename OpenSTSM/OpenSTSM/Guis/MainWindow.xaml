@@ -619,7 +619,6 @@
                             <HierarchicalDataTemplate.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding PossibleControlElements}" DataType="{x:Type VM:PredictedControlElement}">
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox IsChecked="True" Margin="0 6 6 0 "/>
                                         <Image Source="/Resources/leaf-green.png" Height="16" Width="16" />
                                         <Label Content="{Binding Information}"/>
                                         <Label Name="lblControlElementIdentifier" Content="{Binding Identifier}" Visibility="Collapsed" />
@@ -628,7 +627,6 @@
                                     <HierarchicalDataTemplate.ItemTemplate>
                                         <DataTemplate DataType="{x:Type VM:PossibleControlElement}">
                                             <StackPanel Orientation="Horizontal">
-                                                <CheckBox IsChecked="False" Margin="0 6 6 0 "/>
                                                 <Image Source="{Binding Path=Probability, Converter={StaticResource ProbabilityToImageConverter}}" Height="16" Width="16" />
                                                 <Label Content="{Binding Information}"/>
                                                 <Label Name="lblControlElementIdentifier" Content="{Binding Identifier}" Visibility="Collapsed" />

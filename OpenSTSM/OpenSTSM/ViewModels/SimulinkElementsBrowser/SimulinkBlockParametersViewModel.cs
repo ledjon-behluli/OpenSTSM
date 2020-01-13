@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using OpenSTSM.Guis;
-using OpenSTSM.Guis.BlockParameters.MathOperations;
-using OpenSTSM.Guis.BlockParameters.Sources;
 using Prism.Events;
 
 namespace OpenSTSM.ViewModels.SimulinkElementsBrowser

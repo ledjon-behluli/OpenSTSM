@@ -207,11 +207,13 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private void OnSimulinkElementChosen(SimulinkElementChosenPayload payload)
         {
+            this.RemoveLinkingNeed(GlobalVariableManager.LastSelectedElementIdentifer);
+
             if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputType>)
             {
                 var element = (ISimulinkNodeElement<SimulinkInputType>)payload.SimulinkNodeElement;
                 element.Location = this.GetCorrectNodeLocation(element.Guid);
-                CreateNode(element, true);
+                CreateNode(element, true);                
             }                
             else if (payload.SimulinkNodeElement is ISimulinkNodeElement<SimulinkInputOutputType>)
             {
@@ -243,20 +245,20 @@ namespace OpenSTSM.ViewModels.MainWindow
                 base.Close();
         }
 
-        private void RemoveLinkingNeed(string identifier)
+        private void RemoveLinkingNeed(Guid? identifier)
         {
-            if (!string.IsNullOrEmpty(identifier))
+            if (identifier != null)
             {
                 ControlSystems.FirstOrDefault().PredictedControlElements.ForEach(pre =>
                 {
-                    if (pre.Guid == Guid.Parse(identifier))
+                    if (pre.Guid == identifier)
                     {
                         pre.NeedsLinking = false;
                         pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
                     }
                     else
                     {
-                        if (pre.PossibleControlElements.Any(poss => poss.Guid == Guid.Parse(identifier)))
+                        if (pre.PossibleControlElements.Any(poss => poss.Guid == identifier))
                         {
                             pre.NeedsLinking = false;
                             pre.PossibleControlElements.ForEach(poss => poss.NeedsLinking = false);
@@ -274,41 +276,49 @@ namespace OpenSTSM.ViewModels.MainWindow
             List<ControlSystem> controlSystems = new List<ControlSystem>();
             controlSystems.Add(new ControlSystem("System")
             {
-                
+                // TODO: Get Guids for origin & target for Predicted &  Possible ConnectorControlElement
                 PredictedControlElements = new List<PredictedControlElement>()
                 {
-                    new PredictedControlElement("Controller", 96.24m, true, pce1)
+                    new PredictedNodeControlElement("Controller", 96.24m, pce1)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Input", 2.14m, true, pce1),
-                             new PossibleControlElement("Output", 1.01m, true, pce1),
-                             new PossibleControlElement("Process", 0.12m, true, pce1),
-                             new PossibleControlElement("Feedback", 0.12m, true, pce1),
-                             new PossibleControlElement("Comparator", 0.02m, true, pce1),
+                             new PossibleNodeControlElement("Feedback", 0.12m, pce1),
+                             new PossibleNodeControlElement("Comparator", 0.02m, pce1),
+                             new PossibleNodeControlElement("Input", 2.14m, pce1),
+                             new PossibleNodeControlElement("Output", 1.01m, pce1),
+                             new PossibleNodeControlElement("Process", 0.12m, pce1)
                          }
                     },
-                    new PredictedControlElement("Output", 96.24m, true, pce3)
+                    new PredictedConnectorControlElement("Arrow", 62.78m, Guid.NewGuid(), Guid.NewGuid())
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Input", 2.14m, true, pce3),
-                             new PossibleControlElement("Controller", 1.01m, true, pce3),
-                             new PossibleControlElement("Process", 0.12m, true, pce3),
-                             new PossibleControlElement("Feedback", 0.12m, true, pce3),
-                             new PossibleControlElement("Comparator", 0.02m, true, pce3),
+                             new PossibleNodeControlElement("Process", 12.4m, pce2),
+                             new PossibleNodeControlElement("Feedback", 12.4m, pce2),
+                             new PossibleNodeControlElement("Comparator", 12.4m, pce2)
                          }
                     },
-                    new PredictedControlElement("Arrow Right", 62.78m, false, pce2)
+                    new PredictedNodeControlElement("Output", 96.24m, pce3)
                     {
                          PossibleControlElements = new List<PossibleControlElement>()
                          {
-                             new PossibleControlElement("Arrow Left", 22.46m, false, pce2),
-                             new PossibleControlElement("Arrow Up", 14.76m, false, pce2)
+                             new PossibleNodeControlElement("Input", 2.14m, pce3),
+                             new PossibleNodeControlElement("Controller", 1.01m, pce3),
+                             new PossibleNodeControlElement("Process", 0.12m, pce3),
+                             new PossibleNodeControlElement("Feedback", 0.12m, pce3),
+                             new PossibleNodeControlElement("Comparator", 0.01m, pce3),
+                             new PossibleConnectorControlElement("Arrow", 0.01m, Guid.NewGuid(), Guid.NewGuid())
                          }
                     }
                 }
-            }); ;
+            });
+
+            controlSystems.ForEach(cs => 
+            {
+                cs.PredictedControlElements.ForEach(pce => pce.PossibleControlElements.Sort());
+                cs.PredictedControlElements.Sort();
+            });
 
             return controlSystems;
         }
@@ -685,9 +695,9 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         private Point GetCorrectNodeLocation(Guid nodeIdentifier)
         {
-            Point location = new Point(55, 25);     // Deafult location (top left of nodes view) if its a new node (it does not come from the sketch)
-           
-            foreach(var pre in ControlSystems.FirstOrDefault().PredictedControlElements)
+            Point location = GlobalVariableManager.DefaultNodeLocation;
+
+            foreach (var pre in ControlSystems.FirstOrDefault().PredictedControlElements)
             {
                 if(pre.Guid == nodeIdentifier)
                 {
