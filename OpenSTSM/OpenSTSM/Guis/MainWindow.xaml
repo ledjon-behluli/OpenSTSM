@@ -23,7 +23,6 @@
 
           
             <!-- UI commands. -->
-            <RoutedCommand x:Key="Commands.ArrangeNodes" />
             <RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />
             <RoutedUICommand x:Key="Commands.CreateNode" />
             <RoutedUICommand x:Key="Commands.DeleteNode" />
@@ -447,11 +446,6 @@
 
         <!-- Bind commands to event handlers.-->
 
-        <CommandBinding
-            Command="{StaticResource Commands.ArrangeNodes}"
-            Executed="ArrangeNodes_Executed"
-            />
-
         <CommandBinding 
             Command="{StaticResource Commands.DeleteSelectedNodes}" 
             Executed="DeleteSelectedNodes_Executed" 
@@ -602,9 +596,9 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <GridSplitter Grid.Column ="0" Width ="5" />
-            <StackPanel Grid.Column="0" VerticalAlignment ="Stretch" >
-                <TreeView x:Name="MainTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Margin="0 0 5 0" ItemsSource="{Binding ControlSystems}">
+            <ScrollViewer Grid.Column="0" VerticalAlignment ="Stretch" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <TreeView x:Name="MainTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" 
+                          Margin="0 0 5 0" ItemsSource="{Binding ControlSystems}">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="TreeViewItem">
                             <Setter Property="TreeViewItem.IsExpanded" Value="True" />
@@ -639,11 +633,13 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </StackPanel>
+            </ScrollViewer>
+            <GridSplitter Grid.Column="0" Width="5" />
             <DockPanel Grid.Column="1">
                 <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
                     <Grid.ColumnDefinitions>
 
+                        <!-- place holder for a button in the far left of the network view-->
                         <ColumnDefinition Width="60" />
 
                         <!-- empty space -->
@@ -698,11 +694,6 @@
                         <ColumnDefinition Width="Auto" />
 
                     </Grid.ColumnDefinitions>
-                    <Button
-                        Grid.Column="0"
-                        Command="{StaticResource Commands.ArrangeNodes}"
-                        ToolTip="Arrange all nodes in canvas based on sketch">Arrange
-                    </Button>
                     <Button
                         Grid.Column="2"
                         Command="{StaticResource Commands.FitContent}"
@@ -786,7 +777,7 @@
                         Height="{Binding ContentHeight}"
                         >
 
-                                <!-- In this sample the NetworkView is the content displayed by the ZoomAndPanControl. -->
+                                <!-- NetworkView is the content displayed by the ZoomAndPanControl. -->
 
                                 <networkUi:NetworkView
                             x:Name="NetworkControl"

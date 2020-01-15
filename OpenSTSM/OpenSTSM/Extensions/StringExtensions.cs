@@ -15,6 +15,17 @@ namespace OpenSTSM.Extensions
                         .Where(keyword => !string.IsNullOrWhiteSpace(keyword)).ToList();
         }
 
+        public static string SplitStringOnCharTakeFirst(this string input, char character)
+        {
+            List<string> data = input.SplitStringOnChar(character);
+            if(data.Count > 0)
+            {
+                return data.FirstOrDefault();
+            }
+
+            return string.Empty;
+        }
+
         public static IEnumerable<char> RemoveChars(this IEnumerable<char> originalString, params char[] removingChars)
         {
             return originalString.ExceptAll(removingChars);

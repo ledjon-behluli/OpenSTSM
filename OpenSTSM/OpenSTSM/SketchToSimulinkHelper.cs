@@ -1,6 +1,4 @@
-﻿using System;
-using OpenSTSM.Extensions;
-using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+﻿using OpenSTSM.ViewModels.SimulinkElementsBrowser;
 
 namespace OpenSTSM
 {
@@ -8,17 +6,17 @@ namespace OpenSTSM
     {
         public static int GetSimulinkBrowserCorrectTabIndex(string sketchElementName)
         {
-            switch (sketchElementName.ToLower().Split(' ')[0])
+            switch (sketchElementName)
             {
-                case "input": 
+                case "Input": 
                     return 0;
-                case "output":
+                case "Output":
                     return 1;
-                case "controller":
-                case "process":                
+                case "Controller":
+                case "Process":                
                     return 2;
-                case "comparator":
-                case "feedback":
+                case "Comparator":
+                case "Feedback":
                     return 3;
                 default: 
                     return 0;
@@ -27,18 +25,18 @@ namespace OpenSTSM
 
         public static SimulinkBrowserTabVisibilities GetSimulinkBrowserTabVisibilities(string sketchElementName)
         {
-            switch (sketchElementName.ToLower().Split(' ')[0])
+            switch (sketchElementName)
             {
-                case "input": 
+                case "Input": 
                     return new SimulinkBrowserTabVisibilities(sourcesVisibility: true);
-                case "output": 
+                case "Output": 
                     return new SimulinkBrowserTabVisibilities(sinksVisibility: true);
-                case "controller":
-                case "process":
+                case "Controller":
+                case "Process":
                     return new SimulinkBrowserTabVisibilities(continuousVisibility: true);
-                case "comparator":
+                case "Comparator":
                     return new SimulinkBrowserTabVisibilities(mathOperationsVisibility: true);
-                case "feedback":
+                case "Feedback":
                     return new SimulinkBrowserTabVisibilities(continuousVisibility: true, mathOperationsVisibility:true);
                 default: 
                     return new SimulinkBrowserTabVisibilities(true, true, true, true);

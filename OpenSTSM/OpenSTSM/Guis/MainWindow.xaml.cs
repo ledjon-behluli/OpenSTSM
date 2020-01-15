@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using NetworkModel;
 using NetworkUI;
@@ -92,6 +93,11 @@ namespace OpenSTSM
             node.Size = new Size(element.ActualWidth, element.ActualHeight);
         }
 
-        private void ArrangeNodes_Executed(object sender, ExecutedRoutedEventArgs e) => ViewModel.ArrangeNodes();
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
     }
 }

@@ -143,6 +143,10 @@ namespace OpenSTSM.ViewModels.MainWindow
             ChangeCanExecute(false, ref canExecute_AnalyseImage);
             ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);
 
+
+
+
+
             MessageBox.Show("Generating"); // Some long running code ...            
             
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
@@ -193,15 +197,39 @@ namespace OpenSTSM.ViewModels.MainWindow
             if (!WindowHelper.IsWindowOpen<SimulinkElementsBrowserWindow>())
             {
                 string elementName = sender as string;
-                string identifier = elementName.StringBetweenCharacters('(', ')');
-                GlobalVariableManager.LastSelectedElementIdentifer = Guid.Parse(identifier);
-                //this.RemoveLinkingNeed(identifier);
+                string identifier = elementName.StringBetweenCharacters('(', ')');                
 
-                var sebw = new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserTabVisibilities(elementName),
-                                                             SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex(elementName));
-                sebw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                sebw.Owner = App.Current.MainWindow;
-                sebw.Show();
+                string elementActualName = elementName.SplitStringOnCharTakeFirst(' ');
+                if(elementActualName != "Arrow")
+                {
+                    var parent = this.GetParentObjectOfPossibleControlElement(Guid.Parse(identifier));
+                    if(parent != null)
+                    {
+                        GlobalVariableManager.LastSelectedElementIdentifer = parent.Guid;
+                        (new SimulinkElementsBrowserWindow(SketchToSimulinkHelper.GetSimulinkBrowserTabVisibilities(elementActualName),
+                                                             SketchToSimulinkHelper.GetSimulinkBrowserCorrectTabIndex(elementActualName))
+                        {
+                            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                            Owner = App.Current.MainWindow,
+                        }).Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No parent found for object with Guid={identifier}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    GlobalVariableManager.LastSelectedElementIdentifer = Guid.Parse(identifier);
+                    if (this.LinkNodesWithRespectiveConnector((Guid)GlobalVariableManager.LastSelectedElementIdentifer))
+                    {
+                        this.RemoveLinkingNeed(GlobalVariableManager.LastSelectedElementIdentifer);
+                    }
+                    else
+                    {
+                        GlobalVariableManager.LastSelectedElementIdentifer = null;
+                    }
+                }                
             }
         }
 
@@ -268,49 +296,72 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
         }
 
+        private PredictedControlElement GetParentObjectOfPossibleControlElement(Guid guid)
+        {
+            PredictedControlElement parent = null;
+            foreach(var pre in ControlSystems.FirstOrDefault().PredictedControlElements)
+            {
+                if (pre.Guid == guid)
+                {
+                    parent = pre;
+                }
+                else if (pre.PossibleControlElements.Any(pce => pce.Guid == guid))
+                {
+                    parent = pre;
+                }
+            }
+
+            return parent;
+        }
+
         private List<ControlSystem> GetControlSystems()
         {
             Point pce1 = new Point(100, 100);
             Point pce2 = new Point(200, 100);
             Point pce3 = new Point(300, 100);
+
             List<ControlSystem> controlSystems = new List<ControlSystem>();
+            
+            PredictedNodeControlElement pnce1 = new PredictedNodeControlElement("Controller", 96.24m, pce1)
+            {
+                PossibleControlElements = new List<PossibleControlElement>()
+                {
+                    new PossibleNodeControlElement("Feedback", 0.12m, pce1),
+                    new PossibleNodeControlElement("Comparator", 0.02m, pce1),
+                    new PossibleNodeControlElement("Input", 2.14m, pce1),
+                    new PossibleNodeControlElement("Output", 1.01m, pce1),
+                    new PossibleNodeControlElement("Process", 0.12m, pce1)
+                }
+            };
+
+            PredictedNodeControlElement pnce2 = new PredictedNodeControlElement("Output", 96.24m, pce3)
+            {
+                PossibleControlElements = new List<PossibleControlElement>()
+                {
+                    new PossibleNodeControlElement("Input", 2.14m, pce3),
+                    new PossibleNodeControlElement("Controller", 1.01m, pce3),
+                    new PossibleNodeControlElement("Process", 0.12m, pce3),
+                    new PossibleNodeControlElement("Feedback", 0.12m, pce3),
+                    new PossibleNodeControlElement("Comparator", 0.01m, pce3),
+                    new PossibleConnectorControlElement("Arrow", 0.01m, Guid.NewGuid(), Guid.NewGuid())
+                }
+            };
+
+            PredictedConnectorControlElement pcce1 = new PredictedConnectorControlElement("Arrow", 62.78m, pnce1.Guid, pnce2.Guid)
+            {
+                PossibleControlElements = new List<PossibleControlElement>()
+                {
+                    new PossibleNodeControlElement("Process", 12.4m, pce2),
+                    new PossibleNodeControlElement("Feedback", 12.4m, pce2),
+                    new PossibleNodeControlElement("Comparator", 12.4m, pce2)
+                }
+            };
+
             controlSystems.Add(new ControlSystem("System")
             {
-                // TODO: Get Guids for origin & target for Predicted &  Possible ConnectorControlElement
                 PredictedControlElements = new List<PredictedControlElement>()
                 {
-                    new PredictedNodeControlElement("Controller", 96.24m, pce1)
-                    {
-                         PossibleControlElements = new List<PossibleControlElement>()
-                         {
-                             new PossibleNodeControlElement("Feedback", 0.12m, pce1),
-                             new PossibleNodeControlElement("Comparator", 0.02m, pce1),
-                             new PossibleNodeControlElement("Input", 2.14m, pce1),
-                             new PossibleNodeControlElement("Output", 1.01m, pce1),
-                             new PossibleNodeControlElement("Process", 0.12m, pce1)
-                         }
-                    },
-                    new PredictedConnectorControlElement("Arrow", 62.78m, Guid.NewGuid(), Guid.NewGuid())
-                    {
-                         PossibleControlElements = new List<PossibleControlElement>()
-                         {
-                             new PossibleNodeControlElement("Process", 12.4m, pce2),
-                             new PossibleNodeControlElement("Feedback", 12.4m, pce2),
-                             new PossibleNodeControlElement("Comparator", 12.4m, pce2)
-                         }
-                    },
-                    new PredictedNodeControlElement("Output", 96.24m, pce3)
-                    {
-                         PossibleControlElements = new List<PossibleControlElement>()
-                         {
-                             new PossibleNodeControlElement("Input", 2.14m, pce3),
-                             new PossibleNodeControlElement("Controller", 1.01m, pce3),
-                             new PossibleNodeControlElement("Process", 0.12m, pce3),
-                             new PossibleNodeControlElement("Feedback", 0.12m, pce3),
-                             new PossibleNodeControlElement("Comparator", 0.01m, pce3),
-                             new PossibleConnectorControlElement("Arrow", 0.01m, Guid.NewGuid(), Guid.NewGuid())
-                         }
-                    }
+                    pnce1, pnce2, pcce1
                 }
             });
 
@@ -717,19 +768,69 @@ namespace OpenSTSM.ViewModels.MainWindow
             return location;
         }
 
-        public void ArrangeNodes()
+        private bool LinkNodesWithRespectiveConnector(Guid connectorIdentifier)
         {
-            foreach(var node in this.network.Nodes)
+            ControlElement connectorElement = null;
+            foreach (var pre in ControlSystems.FirstOrDefault().PredictedControlElements)
             {
-                var a = ControlSystems.FirstOrDefault();
-                var b = a.PredictedControlElements;
-                var c = b.Where(pre => pre.Guid == node.Guid);
-                var d = c.FirstOrDefault().Location;
-                
-                Point location = ControlSystems.FirstOrDefault().PredictedControlElements.Where(pre => pre.Guid == node.Guid).FirstOrDefault().Location;
-                node.X = location.X;
-                node.Y = location.Y;
+                if (pre.GetType() == typeof(PredictedConnectorControlElement))
+                {
+                    if(pre.Guid == connectorIdentifier)
+                    {
+                        connectorElement = pre;
+                        break;
+                    }                        
+                }
+                else
+                {
+                    bool elementFound = false;
+                    foreach(var pce in pre.PossibleControlElements)
+                    {
+                        if (pce.GetType() == typeof(PossibleConnectorControlElement))
+                        {
+                            if (pce.Guid == connectorIdentifier)
+                            {
+                                connectorElement = pce;        // Get parent to retrive the Guid because nodes in the network get associated with the PredictedControlElement (parent of PossibleControlElement's)
+                                elementFound = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (elementFound) 
+                        break;
+                }
             }
+
+            if(connectorElement != null)
+            {
+                var A = ControlSystems;
+                var originNode = this.Network.Nodes.FirstOrDefault(n => n.Guid == connectorElement.OriginIdentifier);
+                var targetNode = this.Network.Nodes.FirstOrDefault(n => n.Guid == connectorElement.TargetIdentifier);
+
+                if (originNode == null)
+                {
+                    MessageBox.Show("Connectors origin element has not been mappend!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
+                if (targetNode == null)
+                {
+                    MessageBox.Show($"Connectors target element has not been mappend!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
+
+                ConnectionViewModel connection = new ConnectionViewModel();
+               
+                connection.SourceConnector = originNode.OutputConnectors.FirstOrDefault(oc => !oc.IsConnectionAttached);        // Connect to the first available connector in the origin node
+                connection.DestConnector = targetNode.InputConnectors.FirstOrDefault(oc => !oc.IsConnectionAttached);        // Connect to the first available connector in the target node                              
+                this.Network.Connections.Add(connection);
+
+                return true;
+            }
+
+            return false;
         }
 
         private void PopulateControlSystemView()
