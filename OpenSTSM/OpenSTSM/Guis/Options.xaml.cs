@@ -18,6 +18,7 @@ namespace OpenSTSM.Guis
             };
             Preferences Preferences = new Preferences()
             {
+                UseGpuAcceleration = Settings.Default.UseGpuAcceleration,
                 LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold
             };
 

@@ -139,6 +139,7 @@
     <Compile Include="Guis\SimulinkElementsBrowserWindow.xaml.cs">
       <DependentUpon>SimulinkElementsBrowserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageRecognition\PythonCaller.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\InputOutputElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\SimulinkInputOutputType.cs" />
     <Compile Include="SketchToSimulinkHelper.cs" />

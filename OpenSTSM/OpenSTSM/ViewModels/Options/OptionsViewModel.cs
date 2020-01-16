@@ -72,6 +72,7 @@ namespace OpenSTSM.ViewModels.Options
 
             // Preferences
             Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
+            Settings.Default.UseGpuAcceleration = Preferences.UseGpuAcceleration;
 
             Settings.Default.Save();
             _eventAggregator.GetEvent<PreferencesUpdatedEvent>().Publish();

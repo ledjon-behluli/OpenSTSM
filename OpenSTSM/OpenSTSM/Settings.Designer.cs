@@ -118,5 +118,17 @@ namespace OpenSTSM {
                 this["LeafProbabilityThreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseGpuAcceleration {
+            get {
+                return ((bool)(this["UseGpuAcceleration"]));
+            }
+            set {
+                this["UseGpuAcceleration"] = value;
+            }
+        }
     }
 }
