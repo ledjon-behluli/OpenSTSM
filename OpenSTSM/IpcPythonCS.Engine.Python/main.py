@@ -1,20 +1,18 @@
-from Example.PyCalculator import PyCalculator
+from ML.SelectiveSearch import SelectiveSearch
 from IpcPythonCS.Communication.Pipe.PipeServer import PipeServer
 
 server = PipeServer()
-server.WaitForConnection("calculator")
-calc = PyCalculator(server)
-
-#print("hello")
+server.WaitForConnection("openSTSM")
+ss = SelectiveSearch(server)
 
 ## Infinite execution ##
 while (True):
     try:
-        calc.ProcessFunctionCall()
+        ss.ProcessFunctionCall()
     except:
         server.Close()
-        server.WaitForConnection("calculator")
-        calc = PyCalculator(server)
+        server.WaitForConnection("openSTSM")
+        ss = SelectiveSearch(server)
 
 '''
 ## One time execution ##

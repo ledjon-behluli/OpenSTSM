@@ -28,7 +28,21 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.py" />
+    <Compile Include="Example\PyCalculator.py" />
+    <Compile Include="Example\__init__.py" />
+    <Compile Include="IpcPythonCS\Communication\ICommunicator.py" />
+    <Compile Include="IpcPythonCS\Communication\Pipe\PipeClient.py" />
+    <Compile Include="IpcPythonCS\Communication\Pipe\PipeServer.py" />
+    <Compile Include="IpcPythonCS\Communication\Pipe\__init__.py" />
+    <Compile Include="IpcPythonCS\Communication\__init__.py" />
+    <Compile Include="IpcPythonCS\RPC\RPCWrapper.py" />
+    <Compile Include="IpcPythonCS\RPC\__init__.py" />
+    <Compile Include="IpcPythonCS\__init__.py" />
+    <Compile Include="main.py" />
+    <Compile Include="ML\SelectiveSearch.py" />
+    <Compile Include="ML\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Communication\" />
@@ -38,7 +52,11 @@
     <Folder Include="IpcPythonCS\Communication\" />
     <Folder Include="IpcPythonCS\Communication\Pipe\" />
     <Folder Include="IpcPythonCS\RPC\" />
+    <Folder Include="ML\" />
+    <Folder Include="TempFiles\" />
     <Folder Include="RPC\" />
+    <Folder Include="TempFiles\SelectiveOutput\" />
+    <Folder Include="TempFiles\SelectiveOutput\Coordinates\" />
   </ItemGroup>
   <!-- Uncomment the CoreCompile target to enable the Build command in
        Visual Studio and specify your pre- and post-build commands in
