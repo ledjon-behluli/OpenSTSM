@@ -9,7 +9,7 @@ class RPCWrapper:
     # Wait for client to request function call and process it
     def ProcessFunctionCall(self):
         funcDesc = self._communicator.Read()
-        funcDesc = funcDesc.decode("utf-8")
+        funcDesc = funcDesc.decode("utf-8")                
         funcRtn = self.__callByXMLFuncDesc(funcDesc)
 
         self._communicator.Write(self.__generateXMLReturnValue("int", funcRtn))

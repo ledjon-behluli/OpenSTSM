@@ -2,7 +2,7 @@ from ML.SelectiveSearch import SelectiveSearch
 from IpcPythonCS.Communication.Pipe.PipeServer import PipeServer
 
 server = PipeServer()
-server.WaitForConnection("openSTSM")
+server.WaitForConnection("openstsm")
 ss = SelectiveSearch(server)
 
 ## Infinite execution ##
@@ -11,14 +11,14 @@ while (True):
         ss.ProcessFunctionCall()
     except:
         server.Close()
-        server.WaitForConnection("openSTSM")
+        server.WaitForConnection("openstsm")
         ss = SelectiveSearch(server)
 
 '''
 ## One time execution ##
 try:
     while(True):
-        calc.ProcessFunctionCall()
+        ss.ProcessFunctionCall()
 
 except:
     print("Connection ended.")

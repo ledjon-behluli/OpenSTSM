@@ -16,7 +16,7 @@ namespace IpcPythonCS.Engine.ML
             return CallPythonFunction<bool>(inputImgPath, numRegionProposals);
         }
 
-        public int Test(int a)
+        public int MachineComp(int a)
         {
             return CallPythonFunction<int>(a);
         }

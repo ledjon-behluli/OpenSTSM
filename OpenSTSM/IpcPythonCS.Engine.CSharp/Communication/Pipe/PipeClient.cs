@@ -36,8 +36,22 @@ namespace IpcPythonCS.Engine.CSharp.Communication.Pipe
 
         public void Write(string message)
         {
-            _sw.Write(message);
-            _sw.Flush();
+            try
+            {
+                _sw.Write(message);
+                _sw.Flush();
+            }
+            catch (IOException)     // Raised if pipe is broken or disconnected.
+            {
+                if (_pipeClient.IsConnected)
+                {
+                    _pipeClient.Close();
+                    _pipeClient.Dispose();
+                }
+
+                this.Connect(_pipeName);
+                this.Write(message);
+            }
         }
 
         public string Read()
@@ -52,7 +66,6 @@ namespace IpcPythonCS.Engine.CSharp.Communication.Pipe
             count = 65535;
 
             numBytes = _pipeClient.Read(buffer, offset, count);
-
             return System.Text.Encoding.UTF8.GetString(buffer);
         }
 
