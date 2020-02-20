@@ -86,7 +86,11 @@ namespace IpcPythonCS.Engine.CSharp.RPC
 
             rtnVal = null;
 
-            if (typeof(T) == typeof(int))
+            if(typeof(T) == typeof(bool))
+            {
+                rtnVal = Convert.ToBoolean(value);
+            }
+            else if (typeof(T) == typeof(int))
             {
                 rtnVal = Convert.ToInt32(value);
             }

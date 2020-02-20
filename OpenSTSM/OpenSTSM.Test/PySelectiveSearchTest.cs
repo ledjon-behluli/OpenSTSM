@@ -2,8 +2,6 @@
 using IpcPythonCS.Engine.CSharp.Communication.Pipe;
 using IpcPythonCS.Engine.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IpcPythonCS.Engine.CSharp.Example;
-using System.Threading;
 
 namespace OpenSTSM.Test
 {
@@ -20,19 +18,19 @@ namespace OpenSTSM.Test
             try
             {
                 python.RunScript("main.py");
-                client = new PipeClient();
               
                 client.Connect("openstsm");
                 ss = new SelectiveSearch(client);
-                //ss.Run("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);
-                var b = ss.MachineComp(8);
+                bool a = ss.Run("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);
 
                 client.Close();
                 python.Close();
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-                client.Close();
+                if(client.isConnected())
+                    client.Close();
+                
                 python.Close();
             }
         }

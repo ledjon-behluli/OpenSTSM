@@ -44,7 +44,6 @@
     <Compile Include="Communication\ICommunicator.cs" />
     <Compile Include="Communication\Pipe\PipeClient.cs" />
     <Compile Include="Communication\Pipe\PipeServer.cs" />
-    <Compile Include="Example\PyCalculator.cs" />
     <Compile Include="ML\SelectiveSearch.cs" />
     <Compile Include="Tool\PythonDownloader.cs" />
     <Compile Include="PythonExecutor.cs" />

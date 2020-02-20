@@ -28,8 +28,6 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Example\PyCalculator.py" />
-    <Compile Include="Example\__init__.py" />
     <Compile Include="IpcPythonCS\Communication\ICommunicator.py" />
     <Compile Include="IpcPythonCS\Communication\Pipe\PipeClient.py" />
     <Compile Include="IpcPythonCS\Communication\Pipe\PipeServer.py" />
@@ -47,14 +45,12 @@
   <ItemGroup>
     <Folder Include="Communication\" />
     <Folder Include="Communication\Pipe\" />
-    <Folder Include="Example\" />
     <Folder Include="IpcPythonCS\" />
     <Folder Include="IpcPythonCS\Communication\" />
     <Folder Include="IpcPythonCS\Communication\Pipe\" />
     <Folder Include="IpcPythonCS\RPC\" />
     <Folder Include="ML\" />
     <Folder Include="TempFiles\" />
-    <Folder Include="RPC\" />
     <Folder Include="TempFiles\SelectiveOutput\" />
     <Folder Include="TempFiles\SelectiveOutput\Coordinates\" />
   </ItemGroup>
