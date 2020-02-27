@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace OpenSTSM.ViewModels.Options
 {
     public class PredictionParameters : ViewModelBase
@@ -88,6 +83,20 @@ namespace OpenSTSM.ViewModels.Options
             set
             {
                 _spatialDistanceOfCoordinatePointsThreshold = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _NN_ModelPath { get; set; }
+        public string NN_ModelPath
+        {
+            get
+            {
+                return _NN_ModelPath;
+            }
+            set
+            {
+                _NN_ModelPath = value;
                 OnPropertyChanged();
             }
         }

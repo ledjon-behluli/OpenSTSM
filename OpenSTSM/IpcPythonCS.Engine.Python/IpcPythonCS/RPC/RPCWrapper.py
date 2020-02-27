@@ -12,7 +12,7 @@ class RPCWrapper:
         funcDesc = funcDesc.decode("utf-8")                
         funcRtn = self.__callByXMLFuncDesc(funcDesc)
 
-        self._communicator.Write(self.__generateXMLReturnValue("int", funcRtn))
+        self._communicator.Write(self.__generateXMLReturnValue("int", funcRtn))     # Why always return int ?! Check this maybe it should return string, if so adjust RunSS
 
     # ElementTree XML Parser reference:
     # https://docs.python.org/2/library/xml.etree.elementtree.html
@@ -33,6 +33,8 @@ class RPCWrapper:
                     args.append(int(child.text))
                 elif (child.attrib["type"] == "string" or child.attrib["type"] == "System.String"): # if type is int
                     args.append(str(child.text))
+                elif (child.attrib["type"] == "bool" or child.attrib["type"] == "System.Boolean"): # if type is boolean
+                    args.append(child.text == "True")
 
         return self.__callByFuncName(funcName, *args)
 

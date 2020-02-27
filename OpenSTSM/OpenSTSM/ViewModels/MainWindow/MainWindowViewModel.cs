@@ -14,6 +14,9 @@ using OpenSTSM.Models.MainWindow.SimulinkElements;
 using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
+using IpcPythonCS.Engine.ML;
+using IpcPythonCS.Engine.CSharp;
+using IpcPythonCS.Engine.CSharp.Communication.Pipe;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -128,7 +131,11 @@ namespace OpenSTSM.ViewModels.MainWindow
             ChangeCanExecute(false, ref canExecute_ImportImage);
             ChangeCanExecute(false, ref canExecute_AnalyseImage);
 
-            MessageBox.Show("Analysing"); // Some long running code ...            
+            ImageAnalysis analysis = new ImageAnalysis(FileName);
+            if(analysis.RunSelectiveSearch())
+            {
+                analysis.RunPrediction();
+            }
             
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
             ChangeCanExecute(true, ref canExecute_ImportImage);

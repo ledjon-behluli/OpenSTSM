@@ -14,11 +14,13 @@ namespace OpenSTSM.Guis
                 OuterSelectionThreshold = Settings.Default.OuterSelectionThreshold,
                 DecimalPointProbabilityRounding = Settings.Default.DecimalPointProbabilityRounding,
                 RegionProposalsMultiplicity = Settings.Default.RegionProposalsMultiplicity,
-                SpatialDistanceOfCoordinatePointsThreshold = Settings.Default.SpatialDistanceOfCoordinatePointsThreshold
+                SpatialDistanceOfCoordinatePointsThreshold = Settings.Default.SpatialDistanceOfCoordinatePointsThreshold,
+                NN_ModelPath = Settings.Default.NN_ModelPath
             };
             Preferences Preferences = new Preferences()
             {
                 UseGpuAcceleration = Settings.Default.UseGpuAcceleration,
+                NumberOfResultsPerElement = Settings.Default.NumberOfResultsPerElement,
                 LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold
             };
 

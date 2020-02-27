@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using OpenSTSM.ViewModels;
+﻿using System.Windows.Input;
 using Prism.Events;
 
 namespace OpenSTSM.ViewModels.Options
@@ -69,9 +63,11 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.DecimalPointProbabilityRounding = PredictionParameters.DecimalPointProbabilityRounding;
             Settings.Default.RegionProposalsMultiplicity = PredictionParameters.RegionProposalsMultiplicity;
             Settings.Default.SpatialDistanceOfCoordinatePointsThreshold = PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold;
+            Settings.Default.NN_ModelPath = PredictionParameters.NN_ModelPath;
 
             // Preferences
             Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
+            Settings.Default.NumberOfResultsPerElement = Preferences.NumberOfResultsPerElement;
             Settings.Default.UseGpuAcceleration = Preferences.UseGpuAcceleration;
 
             Settings.Default.Save();

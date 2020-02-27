@@ -37,7 +37,9 @@
     <Compile Include="IpcPythonCS\RPC\__init__.py" />
     <Compile Include="IpcPythonCS\__init__.py" />
     <Compile Include="main.py" />
-    <Compile Include="ML\SelectiveSearch.py" />
+    <Compile Include="ML\Predict.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ML\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -50,9 +52,6 @@
     <Folder Include="IpcPythonCS\Communication\Pipe\" />
     <Folder Include="IpcPythonCS\RPC\" />
     <Folder Include="ML\" />
-    <Folder Include="TempFiles\" />
-    <Folder Include="TempFiles\SelectiveOutput\" />
-    <Folder Include="TempFiles\SelectiveOutput\Coordinates\" />
   </ItemGroup>
   <!-- Uncomment the CoreCompile target to enable the Build command in
        Visual Studio and specify your pre- and post-build commands in

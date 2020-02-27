@@ -1,24 +1,24 @@
-from ML.SelectiveSearch import SelectiveSearch
+from ML.Predict import Predict
 from IpcPythonCS.Communication.Pipe.PipeServer import PipeServer
 
 server = PipeServer()
 server.WaitForConnection("openstsm")
-ss = SelectiveSearch(server)
+predict = Predict(server)
 
 ## Infinite execution ##
 while (True):
     try:
-        ss.ProcessFunctionCall()
+        predict.ProcessFunctionCall()
     except:
         server.Close()
         server.WaitForConnection("openstsm")
-        ss = SelectiveSearch(server)
+        predict = Predict(server)
 
 '''
 ## One time execution ##
 try:
     while(True):
-        ss.ProcessFunctionCall()
+        predict.ProcessFunctionCall()
 
 except:
     print("Connection ended.")

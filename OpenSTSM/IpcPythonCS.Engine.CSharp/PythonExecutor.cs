@@ -17,7 +17,7 @@ namespace IpcPythonCS.Engine.CSharp
     public class PythonExecutor
     {
         public const string DEFAULT_PYTHON_PATH = @"C:\Program Files\Python35\Python.exe";
-        public const string DEFAULT_SCRIPT_PATH = @"..\..\..\IpcPythonCS.Engine.Python";
+        public const string DEFAULT_SCRIPT_PATH = @"..\..\..\IpcPythonCS.Engine.Python";    
         private FileInfo _pythonInterpreter;
         private DirectoryInfo _scriptPath;
         private Thread _thread = null;
@@ -46,7 +46,6 @@ namespace IpcPythonCS.Engine.CSharp
             _pythonInterpreter = new FileInfo(pythonPath);
             _scriptPath = new DirectoryInfo(DEFAULT_SCRIPT_PATH);
         }
-
 
         /// <summary>
         /// Tell PythonExecutor that some StandartOutputs are not considered as errors
@@ -148,6 +147,7 @@ namespace IpcPythonCS.Engine.CSharp
         private void RunPyton(string arg)
         {
             _thread = new Thread(() => _runPythonInternal(arg));
+            _thread.IsBackground = true;
             _thread.Start();
         }
 

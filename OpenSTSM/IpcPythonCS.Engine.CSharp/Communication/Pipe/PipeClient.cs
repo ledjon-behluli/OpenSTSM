@@ -28,7 +28,7 @@ namespace IpcPythonCS.Engine.CSharp.Communication.Pipe
             _pipeName = pipeName;
             _pipeClient = new NamedPipeClientStream(".", _pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
 
-            _pipeClient.Connect(2000);
+            _pipeClient.Connect();
 
             _sw = new StreamWriter(_pipeClient);
             //_sw.AutoFlush = true;

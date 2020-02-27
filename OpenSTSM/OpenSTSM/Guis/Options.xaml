@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:OpenSTSM"
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.Options"    
         mc:Ignorable="d"
-        Title="Options" Height="325" Width="382.017" Icon="/Resources/gear.png"
+        Title="Options" Height="371" Width="395.017" Icon="/Resources/gear.png"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -25,14 +25,17 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Content="Show yellow leaf if probability is over:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
                     <xctk:DecimalUpDown Name="udShowYellowLeafOnProbability" Value="{Binding Path=Preferences.LeafProbabilityThreshold}" Increment="0.5" Minimum="0.00" Maximum="100.00" Grid.Column="1" Grid.Row="0" />
-                    <Label Content="Use GPU Acceleration for image analysis:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
-                    <CheckBox IsChecked="{Binding Preferences.UseGpuAcceleration}" Grid.Column="1" Grid.Row="1" Margin="0 8 0 0" />
+                    <Label Content="Number of results per identified element:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
+                    <xctk:IntegerUpDown Name="udNumberOfResultsPerElement" Height="30" Value="{Binding Path=Preferences.NumberOfResultsPerElement}" Minimum="1" Grid.Column="1" Grid.Row="1"/>
+                    <Label Content="Use GPU Acceleration for image analysis:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
+                    <CheckBox IsChecked="{Binding Preferences.UseGpuAcceleration}" Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" />
                 </Grid>
-            
+
             </TabItem>
             <TabItem Header="Prediction Parameters">
                 <Grid>
@@ -43,27 +46,32 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="43*"/>
+                        <ColumnDefinition Width="221*"/>
+                        <ColumnDefinition Width="98*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Number of Region Propsals:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
-                    <Label Content="Middle Point Distance Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
-                    <Label Content="Outer Selection Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
-                    <Label Content="Probability Decimal Point Rounding:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"/>
-                    <Label Content="Region Proposals Multiplicity:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4"/>
-                    <Label Content="Spatial Distance of Coordinance Points Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5"/>
-                    <xctk:IntegerUpDown Name="udNumberOfRegionProposals" Height="30" Value="{Binding Path=PredictionParameters.NumberOfRegionProposals}" Increment="5" Minimum="0" Grid.Column="1" Grid.Row="0" />
-                    <xctk:IntegerUpDown Name="udMiddlePointDistanceThreshold" Height="30" Value="{Binding Path=PredictionParameters.MiddlePointDistanceThreshold}" Minimum="0" Grid.Column="1" Grid.Row="1"/>
-                    <xctk:IntegerUpDown Name="udOuterSelectionThreshold" Height="30" Value="{Binding Path=PredictionParameters.OuterSelectionThreshold}" Minimum="0" Grid.Column="1" Grid.Row="2"/>
-                    <xctk:IntegerUpDown Name="udDecimalPointProbabilityRounding" Height="30" Value="{Binding Path=PredictionParameters.DecimalPointProbabilityRounding}" Minimum="0" Grid.Column="1" Grid.Row="3"/>
-                    <xctk:IntegerUpDown Name="udRegionProposalsMultiplicity" Height="30" Value="{Binding Path=PredictionParameters.RegionProposalsMultiplicity}" Minimum="0" Grid.Column="1" Grid.Row="4"/>
-                    <xctk:IntegerUpDown Name="udSpatialDistanceOfCoordinatePointsThreshold" Height="30" Value="{Binding Path=PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold}" Minimum="0" Grid.Column="1" Grid.Row="5"/>
+                    <Label Content="Number of Region Propsals:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Middle Point Distance Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3" Margin="0,2,0,3"/>
+                    <Label Content="Outer Selection Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Probability Decimal Point Rounding:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Region Proposals Multiplicity:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Spatial Distance of Coordinance Points Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Neural Network Model Path:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.ColumnSpan="3" Margin="0,3,0,2"/>
+                    <xctk:IntegerUpDown Name="udNumberOfRegionProposals" Height="30" Value="{Binding Path=PredictionParameters.NumberOfRegionProposals}" Increment="5" Minimum="0" Grid.Column="3" Grid.Row="0" Margin="0,1" />
+                    <xctk:IntegerUpDown Name="udMiddlePointDistanceThreshold" Height="30" Value="{Binding Path=PredictionParameters.MiddlePointDistanceThreshold}" Minimum="0" Grid.Column="3" Grid.Row="1" Margin="0,0,0,1"/>
+                    <xctk:IntegerUpDown Name="udOuterSelectionThreshold" Height="30" Value="{Binding Path=PredictionParameters.OuterSelectionThreshold}" Minimum="0" Grid.Column="3" Grid.Row="2" Margin="0,1"/>
+                    <xctk:IntegerUpDown Name="udDecimalPointProbabilityRounding" Height="30" Value="{Binding Path=PredictionParameters.DecimalPointProbabilityRounding}" Minimum="0" Grid.Column="3" Grid.Row="3" Margin="0,1"/>
+                    <xctk:IntegerUpDown Name="udRegionProposalsMultiplicity" Height="30" Value="{Binding Path=PredictionParameters.RegionProposalsMultiplicity}" Minimum="0" Grid.Column="3" Grid.Row="4" Margin="0,1"/>
+                    <xctk:IntegerUpDown Name="udSpatialDistanceOfCoordinatePointsThreshold" Height="30" Value="{Binding Path=PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold}" Minimum="0" Grid.Column="3" Grid.Row="5" Margin="0,1"/>
+                    <TextBox Name="txtNN_ModelPath" Text="{Binding Path=PredictionParameters.NN_ModelPath}" Grid.Column="2" Grid.Row="6" Margin="122,1,0,1" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
-        <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>            
+        <Button Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,62,95,10" Width="75" Grid.Row="1"/>
+        <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,62,10,10"  Width="75" Grid.Row="1"/>
     </Grid>
 </Window>

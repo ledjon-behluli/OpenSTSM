@@ -37,6 +37,9 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Prism, Version=7.2.0.1367, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.2.0.1367\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -62,6 +65,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=1.4.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.1.4.15\lib\net\WpfAnimatedGif.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=3.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.6.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
@@ -122,6 +128,9 @@
     <Compile Include="Guis\HelpTextWindow.xaml.cs">
       <DependentUpon>HelpTextWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Guis\InfoBox.xaml.cs">
+      <DependentUpon>InfoBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Guis\OverviewWindow.xaml.cs">
       <DependentUpon>OverviewWindow.xaml</DependentUpon>
     </Compile>
@@ -139,10 +148,11 @@
     <Compile Include="Guis\SimulinkElementsBrowserWindow.xaml.cs">
       <DependentUpon>SimulinkElementsBrowserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageRecognition\PythonCaller.cs" />
+    <Compile Include="ImageAnalysis.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\InputOutputElement.cs" />
     <Compile Include="Models\MainWindow\SimulinkElements\InputOutput\SimulinkInputOutputType.cs" />
     <Compile Include="SketchToSimulinkHelper.cs" />
+    <Compile Include="ThreadedInfoBox.cs" />
     <Compile Include="WindowHelper.cs" />
     <Compile Include="MainWindow_ZoomAndPan.cs" />
     <Compile Include="Models\SimulinkBlocks\PidController.cs" />
@@ -215,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Guis\HelpTextWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Guis\InfoBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,6 +338,10 @@
       <Project>{94b81cb7-f8a6-44bc-bd71-e927f701e0d8}</Project>
       <Name>AdornedControl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IpcPythonCS.Engine.CSharp\IpcPythonCS.Engine.CSharp.csproj">
+      <Project>{1E3EEA90-0546-44C3-9513-799999592B77}</Project>
+      <Name>IpcPythonCS.Engine.CSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetworkModel\NetworkModel.csproj">
       <Project>{669475da-8f89-4657-b917-0b0c126bcd1d}</Project>
       <Name>NetworkModel</Name>
@@ -384,6 +402,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Simulink\MathOperations\gain_block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\done.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\loader.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
