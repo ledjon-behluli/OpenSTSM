@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Microsoft.Win32;
+using System.Windows.Input;
 using Prism.Events;
 
 namespace OpenSTSM.ViewModels.Options
@@ -42,6 +43,7 @@ namespace OpenSTSM.ViewModels.Options
         #region "Commands"
 
         public ICommand UpdateCommand { get; set; }
+        public ICommand ChooseModelPathCommand { get; set; }
         
         #endregion
 
@@ -52,6 +54,7 @@ namespace OpenSTSM.ViewModels.Options
             Preferences = preferences;
 
             UpdateCommand = new RelayCommand(UpdateOptions);
+            ChooseModelPathCommand = new RelayCommand(ChooseModelPath);
         }
 
         private void UpdateOptions(object sender)
@@ -74,6 +77,19 @@ namespace OpenSTSM.ViewModels.Options
             _eventAggregator.GetEvent<PreferencesUpdatedEvent>().Publish();
 
             base.Close();
+        }
+
+        private void ChooseModelPath(object sender)
+        {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Filter = "Keras model file (*.model)|*.model"
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                PredictionParameters.NN_ModelPath = ofd.FileName;
+            }
         }
     }
 }

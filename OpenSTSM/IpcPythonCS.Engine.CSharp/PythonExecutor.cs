@@ -137,7 +137,7 @@ namespace IpcPythonCS.Engine.CSharp
                 OnPythonError(errorMessage);
             }
 
-            throw new PythonExecutionException(errorMessage);
+            //throw new PythonExecutionException(errorMessage);
         }
 
         /// <summary>

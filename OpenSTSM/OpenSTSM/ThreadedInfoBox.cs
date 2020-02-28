@@ -29,7 +29,7 @@ namespace OpenSTSM
             this.Top = _top;
         }
 
-        public void StartNewThreadInfoBox(string DisplayText, string Title)
+        public void Start(string DisplayText, string Title)
         {
             Thread newInfoBoxThread = new Thread(() =>
             {
@@ -57,7 +57,7 @@ namespace OpenSTSM
             newInfoBoxThread.Start();
         }
 
-        public void EndNewThreadInfoBox()
+        public void Close()
         {
             if (infoBox != null)
                 try { infoBox.Dispatcher.BeginInvoke((Action)infoBox.Close); }

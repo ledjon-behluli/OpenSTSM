@@ -5,9 +5,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSTSM
 {
@@ -18,6 +15,7 @@ namespace OpenSTSM
         private Predict predict;
         private PythonExecutor python;
         private PipeClient client;
+        ThreadedInfoBox TinfoBox;
 
         public ImageAnalysis(string imagePath)
         {
@@ -31,6 +29,22 @@ namespace OpenSTSM
             python.AddStandartOutputErrorFilters("CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected");
             client = new PipeClient();
             predict = new Predict(client);
+            python.OnPythonError += Python_OnPythonError;
+        }
+
+        ~ImageAnalysis()
+        {            
+            TinfoBox.Close();
+            if (client.isConnected())
+                client.Close();
+
+            python.OnPythonError -= Python_OnPythonError;
+            python.Close();
+        }
+
+        private void Python_OnPythonError(string output)
+        {
+            HandleException(new Exception(output));
         }
 
         public bool RunSelectiveSearch()
@@ -40,16 +54,16 @@ namespace OpenSTSM
                 python.RunScript("main.py");
                 client.Connect("openstsm");
 
-                ThreadedInfoBox TinfoBox = new ThreadedInfoBox();
+                TinfoBox = new ThreadedInfoBox();
                 TinfoBox.Canceled += () => {
                     client.Close();
                     python.Close();
                 };
-                TinfoBox.StartNewThreadInfoBox("Running selective search algorithm...", "Image Analysis");                             
+                TinfoBox.Start("Running selective search algorithm...", "Image Analysis");                             
 
                 bool retValue = predict.RunSelectiveSearch(imagePath, 80);
 
-                TinfoBox.EndNewThreadInfoBox();
+                TinfoBox.Close();
                 return retValue;
             }
             catch (Exception e)
@@ -64,22 +78,21 @@ namespace OpenSTSM
             {
                 bool retValue = false;
 
-                ThreadedInfoBox TinfoBox = new ThreadedInfoBox();
+                TinfoBox = new ThreadedInfoBox();
                 TinfoBox.Canceled += () => {
                     client.Close();
                     python.Close();
                 };
-                TinfoBox.StartNewThreadInfoBox("Running object prediction on image...", "Image Analysis");
+                TinfoBox.Start("Running object prediction on image...", "Image Analysis");
 
-                string results = predict.RunPrediction(@"E:\\Storage\\Python\\OpenSTSM\\ML\\models\\model.model", 5, 3, 5, 1, 8, 2, true);
+                string results = predict.RunPrediction(Settings.Default.NN_ModelPath, 5, 3, 5, 1, 8, 2, true);
                 if (!string.IsNullOrEmpty(results))
                 {
-                    PredictionObject predObj = JsonConvert.DeserializeObject<PredictionObject>(results);
+                    List<PredictionObject> predObjs = JsonConvert.DeserializeObject<List<PredictionObject>>(results);
                     retValue = true;
                 }
 
-                TinfoBox.EndNewThreadInfoBox();
-                
+                TinfoBox.Close();                
                 client.Close();
                 python.Close();
                                 
@@ -93,6 +106,7 @@ namespace OpenSTSM
 
         private bool HandleException(Exception e)
         {
+            TinfoBox.Close();
             if (client.isConnected())
                 client.Close();
 
