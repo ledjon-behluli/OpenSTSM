@@ -25,7 +25,7 @@ namespace OpenSTSM {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
         public int MiddlePointDistanceThreshold {
             get {
                 return ((int)(this["MiddlePointDistanceThreshold"]));
@@ -37,7 +37,7 @@ namespace OpenSTSM {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
         public int NumberOfRegionProposals {
             get {
                 return ((int)(this["NumberOfRegionProposals"]));
@@ -49,7 +49,7 @@ namespace OpenSTSM {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int OuterSelectionThreshold {
             get {
                 return ((int)(this["OuterSelectionThreshold"]));

@@ -14,16 +14,13 @@ using OpenSTSM.Models.MainWindow.SimulinkElements;
 using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
-using IpcPythonCS.Engine.ML;
-using IpcPythonCS.Engine.CSharp;
-using IpcPythonCS.Engine.CSharp.Communication.Pipe;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
     public class MainWindowViewModel : WorkspaceViewModel
     {
         private bool _isProcessing = false;
-        public Guid? LastSelectedGuid; 
+        public Guid? LastSelectedGuid;
 
         #region Properties
 
@@ -90,9 +87,8 @@ namespace OpenSTSM.ViewModels.MainWindow
         #endregion
 
         public MainWindowViewModel(IEventAggregator eventAggregator)
-        {
-            ControlSystems = GetControlSystems();
-            PopulateControlSystemView();
+        {            
+            PopulateControlSystemsView(null);
 
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
             AnalyseImageCommand = new RelayCommand(AnalyseImage, param => canExecute_AnalyseImage);
@@ -103,7 +99,7 @@ namespace OpenSTSM.ViewModels.MainWindow
             AboutCommand = new RelayCommand(OpenAbout);
             OpenSimulinkElementsBrowserCommand = new RelayCommand(OpenSimulinkElementsBrowser);
 
-            eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => ControlSystems = GetControlSystems(), ThreadOption.UIThread);
+            eventAggregator.GetEvent<PreferencesUpdatedEvent>().Subscribe(() => PopulateControlSystemsView(null), ThreadOption.UIThread);
             eventAggregator.GetEvent<SimulinkElementChosenEvent>().Subscribe(OnSimulinkElementChosen, ThreadOption.UIThread);
         }
 
@@ -128,18 +124,23 @@ namespace OpenSTSM.ViewModels.MainWindow
         private void AnalyseImage(object sender)
         {
             _isProcessing = true;
+            this.ControlSystems = new List<ControlSystem>();
+            this.Network = new NetworkViewModel();
             ChangeCanExecute(false, ref canExecute_ImportImage);
             ChangeCanExecute(false, ref canExecute_AnalyseImage);
 
             ImageAnalysis analysis = new ImageAnalysis(FileName);
-            if(analysis.RunSelectiveSearch())
-            {
-                analysis.RunPrediction();
-            }
+            if(analysis.LoadModel())            
+                if(analysis.RunSelectiveSearch())            
+                    if (analysis.RunPrediction())
+                    {
+                        PopulateControlSystemsView(analysis.Predictions);
+                        ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
+                    }            
             
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
             ChangeCanExecute(true, ref canExecute_ImportImage);
-            ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
+            
             _isProcessing = false;
         }
 
@@ -319,6 +320,52 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
 
             return parent;
+        }
+
+        private void PopulateControlSystemsView(List<Prediction> predictions)
+        {
+            ControlSystem system = new ControlSystem("Control System");
+            List<ControlSystem> controlSystems = new List<ControlSystem>() { system };
+
+            if (predictions != null)
+            {
+                foreach (var predGroup in predictions.GroupBy(p => p.Id))
+                {
+                    Prediction mostProbable = predGroup.MaxBy(g => g.Probability);
+                    if (mostProbable.ControlElementType == ControlElementType.Node)
+                    {
+                        PredictedNodeControlElement pnce = new PredictedNodeControlElement(mostProbable.Name, mostProbable.Probability, mostProbable.Location);                        
+                        foreach (var pred in predGroup)
+                        {
+                            if (pred.UniqueId != mostProbable.UniqueId)
+                            {
+                                if (pred.ControlElementType == ControlElementType.Node)
+                                    pnce.PossibleControlElements.Add(new PossibleNodeControlElement(pred.Name, pred.Probability, pred.Location));
+                                else
+                                    pnce.PossibleControlElements.Add(new PossibleConnectorControlElement(pred.Name, pred.Probability, Guid.NewGuid(), Guid.NewGuid()));
+                            }
+                        }
+                        system.PredictedControlElements.Add(pnce);
+                    }
+                    else
+                    {
+                        PredictedConnectorControlElement pcce = new PredictedConnectorControlElement(mostProbable.Name, mostProbable.Probability, Guid.NewGuid(), Guid.NewGuid());
+                        foreach (var pred in predGroup)
+                        {
+                            if (pred.UniqueId != mostProbable.UniqueId)
+                            {
+                                if (pred.ControlElementType == ControlElementType.Node)
+                                    pcce.PossibleControlElements.Add(new PossibleNodeControlElement(pred.Name, pred.Probability, pred.Location));
+                                else
+                                    pcce.PossibleControlElements.Add(new PossibleConnectorControlElement(pred.Name, pred.Probability, Guid.NewGuid(), Guid.NewGuid()));
+                            }
+                        }
+                        system.PredictedControlElements.Add(pcce);
+                    }
+                }
+            }            
+
+            ControlSystems = controlSystems;
         }
 
         private List<ControlSystem> GetControlSystems()
@@ -838,34 +885,6 @@ namespace OpenSTSM.ViewModels.MainWindow
             }
 
             return false;
-        }
-
-        private void PopulateControlSystemView()
-        {
-            this.Network = new NetworkViewModel();
-
-            //var elements = SimulinkElementsTestData();
-            //foreach(var elem in elements)
-            //{
-
-            //}
-
-
-
-            //NodeViewModel node1 = CreateNode(new InputElement(SimulinkInputType.Step), new Point(100, 80), false);            
-            //NodeViewModel node2 = CreateNode(new ProcessElement(), new Point(350, 80), false);
-            //NodeViewModel node3 = CreateNode(new OutputElement(SimulinkOutputType.ScopeWith1Input), new Point(600, 80), false);
-
-            //ConnectionViewModel connection1 = new ConnectionViewModel();
-            //connection1.SourceConnector = node1.OutputConnectors[0];
-            //connection1.DestConnector = node2.InputConnectors[0];
-
-            //ConnectionViewModel connection2 = new ConnectionViewModel();
-            //connection2.SourceConnector = node2.OutputConnectors[0];
-            //connection2.DestConnector = node3.InputConnectors[0];
-
-            //this.Network.Connections.AddRange(new ConnectionViewModel[] { connection1, connection2 });
-
         }
 
         #endregion

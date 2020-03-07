@@ -18,6 +18,7 @@ namespace IpcPythonCS.Engine.CSharp
     {
         public const string DEFAULT_PYTHON_PATH = @"C:\Program Files\Python35\Python.exe";
         public const string DEFAULT_SCRIPT_PATH = @"..\..\..\IpcPythonCS.Engine.Python";    
+        private Process pythonProc;
         private FileInfo _pythonInterpreter;
         private DirectoryInfo _scriptPath;
         private Thread _thread = null;
@@ -66,8 +67,7 @@ namespace IpcPythonCS.Engine.CSharp
         /// <returns>Console output from python</returns>
         private string _runPythonInternal(string arg)
         {
-            ProcessStartInfo startInfo;
-            Process proc;
+            ProcessStartInfo startInfo;            
             StreamReader sr, stderr;
             string output;
 
@@ -84,10 +84,10 @@ namespace IpcPythonCS.Engine.CSharp
             _sbOutput = new StringBuilder();
             output = "";
 
-            proc = Process.Start(startInfo);
+            pythonProc = Process.Start(startInfo);
 
-            sr = proc.StandardOutput;
-            stderr = proc.StandardError;
+            sr = pythonProc.StandardOutput;
+            stderr = pythonProc.StandardError;
             
             do
             {
@@ -97,8 +97,8 @@ namespace IpcPythonCS.Engine.CSharp
 
             //output = sr.ReadToEnd();
 
-            proc.WaitForExit();
-            proc.Close();
+            pythonProc.WaitForExit();
+            pythonProc.Close();
 
             if (stderr.Peek() != -1)
             {
@@ -210,9 +210,9 @@ namespace IpcPythonCS.Engine.CSharp
         /// </summary>
         public void Close()
         {
-            if (_thread != null && _thread.ThreadState == System.Threading.ThreadState.Running)
+            if (_thread != null && _thread.ThreadState == System.Threading.ThreadState.Background)
             {
-                _thread.Abort();
+                _thread.Abort();                
             }
         }
     }

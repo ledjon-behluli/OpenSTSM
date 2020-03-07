@@ -25,22 +25,7 @@ namespace OpenSTSM.Guis
                 this.Close(); 
             };
 
-            TinfoBox.DisplayTextChanged += (text) => this.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                lblText.Content = text;
-
-                if (text.Split(':')[0] == "Number of steps traveled")
-                {
-                    try
-                    {
-                        btnCancel.IsEnabled = false;
-                        img.Margin = new Thickness(28, 10, 20, 35);
-                        WpfAnimatedGif.ImageBehavior.SetRepeatBehavior(img, new System.Windows.Media.Animation.RepeatBehavior(1));
-                        WpfAnimatedGif.ImageBehavior.SetAnimatedSource(img, new BitmapImage(new Uri("pack://application:,,,/Resources/done.gif")));
-                    }
-                    catch { }
-                }
-            }));
+            TinfoBox.DisplayTextChanged += (text) => this.Dispatcher.BeginInvoke(new Action(() => lblText.Content = text));
         }
     }
 }

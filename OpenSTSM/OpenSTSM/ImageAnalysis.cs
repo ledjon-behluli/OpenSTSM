@@ -2,9 +2,14 @@
 using IpcPythonCS.Engine.CSharp.Communication.Pipe;
 using IpcPythonCS.Engine.ML;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using OpenSTSM.Extensions;
+using OpenSTSM.ViewModels.MainWindow;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Windows;
 
 namespace OpenSTSM
 {
@@ -15,7 +20,10 @@ namespace OpenSTSM
         private Predict predict;
         private PythonExecutor python;
         private PipeClient client;
-        ThreadedInfoBox TinfoBox;
+        private ThreadedInfoBox TinfoBox;
+
+
+        public List<Prediction> Predictions { get; private set; }
 
         public ImageAnalysis(string imagePath)
         {
@@ -23,12 +31,18 @@ namespace OpenSTSM
                 throw new ArgumentException("Invalid image path!");
 
             this.imagePath = imagePath;
+            Predictions = null;
             pythonPath = GetPythonPath();
             python = !string.IsNullOrEmpty(pythonPath) ? new PythonExecutor(pythonPath) : new PythonExecutor();
             python.AddStandartOutputErrorFilters("Using TensorFlow backend.");
             python.AddStandartOutputErrorFilters("CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected");
             client = new PipeClient();
             predict = new Predict(client);
+            TinfoBox = new ThreadedInfoBox();
+            TinfoBox.Canceled += () => {
+                client.Close();
+                python.Close();
+            };
             python.OnPythonError += Python_OnPythonError;
         }
 
@@ -47,24 +61,28 @@ namespace OpenSTSM
             HandleException(new Exception(output));
         }
 
-        public bool RunSelectiveSearch()
+        public bool LoadModel()
         {
             try
             {
                 python.RunScript("main.py");
                 client.Connect("openstsm");
 
-                TinfoBox = new ThreadedInfoBox();
-                TinfoBox.Canceled += () => {
-                    client.Close();
-                    python.Close();
-                };
-                TinfoBox.Start("Running selective search algorithm...", "Image Analysis");                             
+                TinfoBox.Start("Loading neural network model", "Image Analysis");
+                return predict.LoadModel(Settings.Default.NN_ModelPath);
+            }
+            catch (Exception e)
+            {
+                return HandleException(e);
+            }
+        }
 
-                bool retValue = predict.RunSelectiveSearch(imagePath, 80);
-
-                TinfoBox.Close();
-                return retValue;
+        public bool RunSelectiveSearch()
+        {
+            try
+            {
+                TinfoBox.DisplayTextChanged?.Invoke("Running selective search algorithm");                                    
+                return predict.RunSelectiveSearch(imagePath, Settings.Default.NumberOfRegionProposals);
             }
             catch (Exception e)
             {
@@ -76,27 +94,24 @@ namespace OpenSTSM
         {
             try
             {
-                bool retValue = false;
-
-                TinfoBox = new ThreadedInfoBox();
-                TinfoBox.Canceled += () => {
+                if (File.Exists(Settings.Default.NN_ModelPath))
+                {
+                    TinfoBox.DisplayTextChanged?.Invoke("Running object prediction on image");
+                    string results = predict.RunPrediction(Settings.Default.MiddlePointDistanceThreshold, Settings.Default.OuterSelectionThreshold, Settings.Default.DecimalPointProbabilityRounding,
+                                                           Settings.Default.RegionProposalsMultiplicity, Settings.Default.SpatialDistanceOfCoordinatePointsThreshold, Settings.Default.NumberOfResultsPerElement,
+                                                           Settings.Default.UseGpuAcceleration);
+                    TinfoBox.Close();
                     client.Close();
                     python.Close();
-                };
-                TinfoBox.Start("Running object prediction on image...", "Image Analysis");
 
-                string results = predict.RunPrediction(Settings.Default.NN_ModelPath, 5, 3, 5, 1, 8, 2, true);
-                if (!string.IsNullOrEmpty(results))
-                {
-                    List<PredictionObject> predObjs = JsonConvert.DeserializeObject<List<PredictionObject>>(results);
-                    retValue = true;
+                    if (!string.IsNullOrEmpty(results))
+                    {
+                        Predictions = JsonConvert.DeserializeObject<List<Prediction>>(results);
+                        return true;
+                    }
                 }
-
-                TinfoBox.Close();                
-                client.Close();
-                python.Close();
-                                
-                return retValue;
+                
+                return false;
             }
             catch (Exception e)
             {
@@ -137,10 +152,36 @@ namespace OpenSTSM
     }
 
 
-    public class PredictionObject
-    {
-        public string Class { get; set; }
-        public double Probability { get; set; }
+    public class Prediction
+    {  
         public int Id { get; set; }
+
+        public string Class { get; set; }
+   
+        public decimal Probability { get; set; }        
+
+        public int X { get; set; }
+
+        public int Y { get; set; }
+
+        [JsonIgnore]
+        private static volatile int _uniqueId;
+
+        [JsonIgnore]
+        public int UniqueId { get; private set; }
+
+        [JsonIgnore]
+        public ControlElementType ControlElementType => this.Class.Contains("arrow") ? ControlElementType.Connector : ControlElementType.Node;
+
+        [JsonIgnore]
+        public string Name => this.Class.FirstCharToUpper();
+
+        [JsonIgnore]
+        public Point Location => new Point(X, Y);
+
+        public Prediction()
+        {
+            UniqueId = Interlocked.Increment(ref _uniqueId);
+        }
     }
 }

@@ -3,13 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="MiddlePointDistanceThreshold" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2</Value>
+      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="NumberOfRegionProposals" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="OuterSelectionThreshold" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="DecimalPointProbabilityRounding" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>

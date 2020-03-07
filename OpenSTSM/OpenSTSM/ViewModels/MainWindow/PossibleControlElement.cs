@@ -28,7 +28,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
     public class PossibleConnectorControlElement : PossibleControlElement
     {
-        public PossibleConnectorControlElement(string possibleControlElement, decimal probability, Guid? origin, Guid target)
+        public PossibleConnectorControlElement(string possibleControlElement, decimal probability, Guid origin, Guid target)
             : base(ControlElementType.Connector, possibleControlElement, probability, location: null, origin, target)
         {
 

@@ -24,7 +24,7 @@ namespace OpenSTSM.ViewModels.MainWindow
         public PredictedControlElement(ControlElementType type, string predictedControlElementName, decimal probability, Point? location, Guid? origin, Guid? target)
             : base(type, predictedControlElementName, probability, location, origin, target)
         {
-          
+            PossibleControlElements = new List<PossibleControlElement>();
         }
 
         public int CompareTo(PredictedControlElement other)
@@ -59,7 +59,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
     public class PredictedConnectorControlElement : PredictedControlElement
     {
-        public PredictedConnectorControlElement(string predictedControlElementName, decimal probability, Guid? origin, Guid target)
+        public PredictedConnectorControlElement(string predictedControlElementName, decimal probability, Guid origin, Guid target)
             : base(ControlElementType.Connector, predictedControlElementName, probability, location: null, origin, target)
         {
 

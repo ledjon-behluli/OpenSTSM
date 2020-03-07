@@ -22,7 +22,7 @@ namespace IpcPythonCS.Engine.CSharp.Communication.Pipe
 
         ~PipeServer()
         {
-            Close();
+            Dispose();
         }
 
         public void WaitForConnection(string pipeName)

@@ -19,9 +19,9 @@ from keras.preprocessing import image
 from keras.applications.inception_v3 import preprocess_input
 
 class Prediction:
-	def __init__(self, Class, Probability):
+	def __init__(self, Class, Probability, decimalPoint_Probability):
 		self.Class = Class
-		self.Probability = round(Probability, 2)	#str(Probability)[:DecimalPoint_Probability]
+		self.Probability = round(Probability, decimalPoint_Probability)
 
 class Element:
 	Id = itertools.count()
@@ -94,8 +94,8 @@ class Predict(RPCWrapper):
     RegionProposals_Multiplicity = 1
     SpatialDistanceOfCoordinatePoints_Threshold = 8		# Spatial distance between two point which is considered to be the "same" point in space
     NumOfResultsPerElement = 2      # Number of results per identified element (Probability 1, 2 ... numOfResults)
-    model_path = ''
     img_width, img_height = 299, 299
+    model = ''
 
     def __init__(self, communicator):
         self._communicator = communicator
@@ -124,7 +124,7 @@ class Predict(RPCWrapper):
             if os.path.isfile(file_path):
                 os.unlink(file_path)    
 
-    def predict(self, model, img, numOfResults):
+    def predict(self, model, img, numOfResults, decimalPoint_Probability):
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
@@ -134,7 +134,7 @@ class Predict(RPCWrapper):
         indexes = heapq.nlargest(numOfResults, range(len(preds[0])), (preds[0]).take)
         
         for idx in indexes:
-            Predictions.append(Prediction(self.CATEGORICAL[idx], preds[0][idx] * 100))
+            Predictions.append(Prediction(self.CATEGORICAL[idx], preds[0][idx] * 100, decimalPoint_Probability))
         
         return Predictions
 
@@ -205,7 +205,23 @@ class Predict(RPCWrapper):
         
         return p1_p2_diagonal + p3_p4_diagonal
 
+    def CalculateMiddlePoint(self, x1, y1, x2, y2):
+        horizontal_middle_length = int(math.ceil((x2 - x1) / 2))
+        vertical_middle_length = int(math.ceil((y2 - y1) / 2))
+        
+        x_middle_point = int(math.ceil(x1 + horizontal_middle_length))
+        y_middle_point = int(math.ceil(y1 + vertical_middle_length))
+        
+        return x_middle_point, y_middle_point
+
     ###################################################################
+
+    def LoadModel(self, modelPath):
+        try:
+            self.model = load_model(modelPath)
+            return True
+        except:
+            return False
 
     def RunSelectiveSearch(self, inputImgPath, numRegionProposals):
         try:
@@ -270,7 +286,7 @@ class Predict(RPCWrapper):
         except:
             return False
 
-    def RunPrediction(self, modelPath, middlePointDistance_Threshold, outerSelection_Threshold, decimalPoint_Probability, regionProposals_Multiplicity, spatialDistanceOfCoordinatePoints_Threshold, numOfResultsPerElement, useGpuAcceleration):  
+    def RunPrediction(self, middlePointDistance_Threshold, outerSelection_Threshold, decimalPoint_Probability, regionProposals_Multiplicity, spatialDistanceOfCoordinatePoints_Threshold, numOfResultsPerElement, useGpuAcceleration):  
         try:
             self.MiddlePointDistance_Threshold = middlePointDistance_Threshold
             self.OuterSelection_Threshold = outerSelection_Threshold
@@ -278,7 +294,6 @@ class Predict(RPCWrapper):
             self.RegionProposals_Multiplicity = regionProposals_Multiplicity
             self.SpatialDistanceOfCoordinatePoints_Threshold = spatialDistanceOfCoordinatePoints_Threshold	
             self.NumOfResultsPerElement = numOfResultsPerElement
-            self.model_path = modelPath
 
             if(useGpuAcceleration == False):
                 os.environ["CUDA_VISIBLE_DEVICES"]="1"     # Run on CPU
@@ -414,8 +429,6 @@ class Predict(RPCWrapper):
             newWidth = int(im.shape[1]*200/im.shape[0])
             im = cv2.resize(im, (newWidth, newHeight))    
 
-            model = load_model(self.model_path)
-
             data = []
 
             # Print out results
@@ -428,10 +441,11 @@ class Predict(RPCWrapper):
                 roi = im[y1:y2, x1:x2]     		
                 resize_roi = cv2.resize(roi, (self.img_width, self.img_height))	
             
-                _predictions = self.predict(model, resize_roi, self.NumOfResultsPerElement)
+                _predictions = self.predict(self.model, resize_roi, self.NumOfResultsPerElement, self.DecimalPoint_Probability)
             
-                for _predict in _predictions:                
-                    data.append({"Id": element.Id, "Class": _predict.Class, "Probability": _predict.Probability})
+                for _predict in _predictions:  
+                    point = self.CalculateMiddlePoint(element.Coordinates.x1, element.Coordinates.y1, element.Coordinates.x2, element.Coordinates.y2)
+                    data.append({"Id": element.Id, "Class": _predict.Class, "Probability": _predict.Probability, "X": point[0], "Y": point[1]})
 
             return json.dumps(data)
         except Exception as e:

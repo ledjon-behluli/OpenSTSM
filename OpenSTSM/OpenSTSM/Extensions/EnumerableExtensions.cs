@@ -2,13 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenSTSM.Extensions
 {
     public static class EnumerableExtensions
     {
+        public static T MaxBy<T, R>(this IEnumerable<T> enumeration, Func<T, R> evaluate) where R : IComparable<R>
+        {
+            return enumeration.Select(t => new Tuple<T, R>(t, evaluate(t)))
+                              .Aggregate((max, next) => next.Item2.CompareTo(max.Item2) > 0 ? next : max).Item1;
+        }
+
+        public static int MaxOrDefault<T>(this IEnumerable<T> enumeration, Func<T, int> selector)
+        {
+            return enumeration.Any() ? enumeration.Max(selector) : default(int);
+        }
+
         /// <summary>
         /// Except implicitly runs a distinct on the result set (same as in SQL).
         /// This method is the equivalent of EXCEPT ALL in SQL.

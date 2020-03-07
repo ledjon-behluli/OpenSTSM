@@ -1,4 +1,8 @@
-﻿using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+﻿using OpenSTSM.Extensions;
+using OpenSTSM.ViewModels.MainWindow;
+using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+using System.Linq;
+using System.Windows;
 
 namespace OpenSTSM
 {
@@ -41,6 +45,6 @@ namespace OpenSTSM
                 default: 
                     return new SimulinkBrowserTabVisibilities(true, true, true, true);
             }
-        }
+        }        
     }
 }
