@@ -15,9 +15,14 @@ namespace OpenSTSM
             MainWindowViewModel viewModel = new MainWindowViewModel(ApplicationService.Instance.EventAggregator);
             DataContext = viewModel;
             viewModel.RequestClose += () => this.Close();
-
+            this.Closing += MainWindow_Closing;
 
             InitializeComponent();
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ViewModel.TerminateAnalysisServiceConnections();
         }
 
         public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;

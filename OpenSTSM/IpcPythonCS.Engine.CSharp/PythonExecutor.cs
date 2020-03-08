@@ -210,9 +210,10 @@ namespace IpcPythonCS.Engine.CSharp
         /// </summary>
         public void Close()
         {
-            if (_thread != null && _thread.ThreadState == System.Threading.ThreadState.Background)
+            if (_thread != null && (_thread.ThreadState == System.Threading.ThreadState.Background || _thread.ThreadState == System.Threading.ThreadState.AbortRequested))
             {
-                _thread.Abort();                
+                _thread.Abort();
+                pythonProc.Kill();
             }
         }
     }

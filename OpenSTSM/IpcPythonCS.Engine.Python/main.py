@@ -1,6 +1,8 @@
 from ML.Predict import Predict
 from IpcPythonCS.Communication.Pipe.PipeServer import PipeServer
 
+import time
+
 server = PipeServer()
 server.WaitForConnection("openstsm")
 predict = Predict(server)

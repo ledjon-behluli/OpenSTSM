@@ -21,25 +21,12 @@ namespace OpenSTSM.Test
             try
             {
                 python.RunScript("main.py");
-                client.Connect("openstsm");    
-                
-                bool run = predict.RunSelectiveSearch("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);                
 
-            }
-            catch (System.Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("---------------------");
-                System.Diagnostics.Debug.WriteLine(e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("---------------------");
-                if (client.isConnected())
-                    client.Close();
-
-                python.Close();
-            }
-
-            try
-            {
-                string results = predict.RunPrediction(@"E:\\Storage\\Python\\OpenSTSM\\ML\\models\\model.model", 5, 3, 5, 1, 8, 2, true);
+                client.Connect("openstsm");
+                predict = new Predict(client);
+                bool run = predict.LoadModel(@"E:\\Storage\\Python\\OpenSTSM\\ML\\models\\model.model");
+                run = predict.RunSelectiveSearch("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);
+                string results = predict.RunPrediction(5, 3, 5, 1, 8, 2, true);
 
                 client.Close();
                 python.Close();
@@ -54,29 +41,6 @@ namespace OpenSTSM.Test
 
                 python.Close();
             }
-
-            //try
-            //{
-            //    python.RunScript("main.py");
-
-            //    client.Connect("openstsm");
-            //    predict = new Predict(client);
-            //    bool run = predict.RunSelectiveSearch("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);
-            //    string results = predict.RunPrediction(@"E:\\Storage\\Python\\OpenSTSM\\ML\\models\\model.model", 5, 3, 5, 1, 8, 2, true);
-
-            //    client.Close();
-            //    python.Close();
-            //}
-            //catch (System.Exception e)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("---------------------");
-            //    System.Diagnostics.Debug.WriteLine(e.StackTrace);
-            //    System.Diagnostics.Debug.WriteLine("---------------------");
-            //    if (client.isConnected())
-            //        client.Close();
-
-            //    python.Close();
-            //}
         }
     }
 }

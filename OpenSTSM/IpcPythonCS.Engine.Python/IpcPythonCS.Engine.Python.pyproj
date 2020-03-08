@@ -45,8 +45,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Communication\" />
-    <Folder Include="Communication\Pipe\" />
     <Folder Include="IpcPythonCS\" />
     <Folder Include="IpcPythonCS\Communication\" />
     <Folder Include="IpcPythonCS\Communication\Pipe\" />

@@ -31,7 +31,7 @@
                     <Label Content="Show yellow leaf if probability is over:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
                     <xctk:DecimalUpDown Name="udShowYellowLeafOnProbability" Height="28" Value="{Binding Path=Preferences.LeafProbabilityThreshold}" Increment="0.5" Minimum="0.00" Maximum="100.00" Grid.Column="1" Grid.Row="0" />
                     <Label Content="Number of results per identified element:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
-                    <xctk:IntegerUpDown Name="udNumberOfResultsPerElement" Height="28" Value="{Binding Path=Preferences.NumberOfResultsPerElement}" Minimum="1" Grid.Column="1" Grid.Row="1"/>
+                    <xctk:IntegerUpDown Name="udNumberOfResultsPerElement" Height="28" Value="{Binding Path=Preferences.NumberOfResultsPerElement}" Minimum="1" Maximum="14" Grid.Column="1" Grid.Row="1"/>
                     <Label Content="Use GPU acceleration for image analysis:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
                     <CheckBox IsChecked="{Binding Preferences.UseGpuAcceleration}" Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" />
                 </Grid>

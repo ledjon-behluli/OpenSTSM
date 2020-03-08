@@ -13,24 +13,28 @@ using System.Windows;
 
 namespace OpenSTSM
 {
-    public class ImageAnalysis
+    public class ImageAnalysisService
     {
-        private string imagePath;
+        private bool isFirstLoad;
+
+        private const string title = "Image Analysis";
+        private const string initText = "Initiating server connection";
+        private const string loadModelText = "Loading neural network model";
+        private const string runSSText = "Running selective search algorithm";
+        private const string runPredictText = "Running object prediction on image";
+
         private string pythonPath;        
         private Predict predict;
         private PythonExecutor python;
         private PipeClient client;
-        private ThreadedInfoBox TinfoBox;
+        private ThreadedInfoBox TinfoBox;               
 
 
         public List<Prediction> Predictions { get; private set; }
 
-        public ImageAnalysis(string imagePath)
+        public ImageAnalysisService()
         {
-            if (string.IsNullOrEmpty(imagePath))
-                throw new ArgumentException("Invalid image path!");
-
-            this.imagePath = imagePath;
+            isFirstLoad = true;         
             Predictions = null;
             pythonPath = GetPythonPath();
             python = !string.IsNullOrEmpty(pythonPath) ? new PythonExecutor(pythonPath) : new PythonExecutor();
@@ -44,9 +48,12 @@ namespace OpenSTSM
                 python.Close();
             };
             python.OnPythonError += Python_OnPythonError;
+            TinfoBox.Start(initText, title);
+            python.RunScript("main.py");
+            client.Connect("openstsm");
         }
 
-        ~ImageAnalysis()
+        ~ImageAnalysisService()
         {            
             TinfoBox.Close();
             if (client.isConnected())
@@ -65,11 +72,15 @@ namespace OpenSTSM
         {
             try
             {
-                python.RunScript("main.py");
-                client.Connect("openstsm");
-
-                TinfoBox.Start("Loading neural network model", "Image Analysis");
-                return predict.LoadModel(Settings.Default.NN_ModelPath);
+                if (isFirstLoad)
+                {
+                    TinfoBox.DisplayTextChanged?.Invoke(loadModelText);
+                    return predict.LoadModel(Settings.Default.NN_ModelPath);
+                }
+                else
+                {
+                    return true;
+                }
             }
             catch (Exception e)
             {
@@ -77,11 +88,18 @@ namespace OpenSTSM
             }
         }
 
-        public bool RunSelectiveSearch()
+        public bool RunSelectiveSearch(string imagePath)
         {
             try
             {
-                TinfoBox.DisplayTextChanged?.Invoke("Running selective search algorithm");                                    
+                if (string.IsNullOrEmpty(imagePath))
+                    throw new ArgumentException("Invalid image path!");
+
+                if (isFirstLoad)
+                    TinfoBox.DisplayTextChanged?.Invoke(runSSText);
+                else
+                    TinfoBox.Start(runSSText, title);
+
                 return predict.RunSelectiveSearch(imagePath, Settings.Default.NumberOfRegionProposals);
             }
             catch (Exception e)
@@ -96,14 +114,13 @@ namespace OpenSTSM
             {
                 if (File.Exists(Settings.Default.NN_ModelPath))
                 {
-                    TinfoBox.DisplayTextChanged?.Invoke("Running object prediction on image");
+                    TinfoBox.DisplayTextChanged?.Invoke(runPredictText);
                     string results = predict.RunPrediction(Settings.Default.MiddlePointDistanceThreshold, Settings.Default.OuterSelectionThreshold, Settings.Default.DecimalPointProbabilityRounding,
                                                            Settings.Default.RegionProposalsMultiplicity, Settings.Default.SpatialDistanceOfCoordinatePointsThreshold, Settings.Default.NumberOfResultsPerElement,
                                                            Settings.Default.UseGpuAcceleration);
                     TinfoBox.Close();
-                    client.Close();
-                    python.Close();
 
+                    isFirstLoad = false;
                     if (!string.IsNullOrEmpty(results))
                     {
                         Predictions = JsonConvert.DeserializeObject<List<Prediction>>(results);
@@ -119,15 +136,25 @@ namespace OpenSTSM
             }
         }
 
+        public void Close()
+        {
+            if (client != null)
+                if (client.isConnected())
+                    client.Close();
+
+            if (python != null)
+                python.Close();
+        }
+
         private bool HandleException(Exception e)
         {
-            TinfoBox.Close();
+            TinfoBox?.Close();
             if (client.isConnected())
                 client.Close();
 
             python.Close();
 
-            System.Windows.Forms.MessageBox.Show(e.Message);
+            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
 

@@ -21,6 +21,7 @@ namespace OpenSTSM.ViewModels.MainWindow
     {
         private bool _isProcessing = false;
         public Guid? LastSelectedGuid;
+        private ImageAnalysisService analysisService;
 
         #region Properties
 
@@ -123,20 +124,26 @@ namespace OpenSTSM.ViewModels.MainWindow
         
         private void AnalyseImage(object sender)
         {
-            _isProcessing = true;
-            this.ControlSystems = new List<ControlSystem>();
+            _isProcessing = true;            
             this.Network = new NetworkViewModel();
+            PopulateControlSystemsView(null);
             ChangeCanExecute(false, ref canExecute_ImportImage);
             ChangeCanExecute(false, ref canExecute_AnalyseImage);
 
-            ImageAnalysis analysis = new ImageAnalysis(FileName);
-            if(analysis.LoadModel())            
-                if(analysis.RunSelectiveSearch())            
-                    if (analysis.RunPrediction())
+            if (analysisService == null)
+                analysisService = new ImageAnalysisService();
+
+            if (analysisService.LoadModel())
+            {
+                if (analysisService.RunSelectiveSearch(FileName))
+                {
+                    if (analysisService.RunPrediction())
                     {
-                        PopulateControlSystemsView(analysis.Predictions);
+                        PopulateControlSystemsView(analysisService.Predictions);
                         ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
-                    }            
+                    }
+                }
+            }
             
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
             ChangeCanExecute(true, ref canExecute_ImportImage);
@@ -208,7 +215,7 @@ namespace OpenSTSM.ViewModels.MainWindow
                 string identifier = elementName.StringBetweenCharacters('(', ')');                
 
                 string elementActualName = elementName.SplitStringOnCharTakeFirst(' ');
-                if(elementActualName != "Arrow")
+                if(!elementActualName.Contains("Arrow"))
                 {
                     var parent = this.GetParentObjectOfPossibleControlElement(Guid.Parse(identifier));
                     if(parent != null)
@@ -275,10 +282,20 @@ namespace OpenSTSM.ViewModels.MainWindow
             if (_isProcessing)
             {
                 if (MessageBox.Show("Processing is running!\nAre you sure you want to close the program?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
                     base.Close();
+                }
             }
             else
+            {
                 base.Close();
+            }
+        }
+
+        public void TerminateAnalysisServiceConnections()
+        {
+            if (analysisService != null)
+                analysisService.Close();
         }
 
         private void RemoveLinkingNeed(Guid? identifier)
@@ -363,9 +380,13 @@ namespace OpenSTSM.ViewModels.MainWindow
                         system.PredictedControlElements.Add(pcce);
                     }
                 }
-            }            
 
-            ControlSystems = controlSystems;
+                ControlSystems = controlSystems;
+            }    
+            else
+            {
+                ControlSystems = ControlSystems ?? controlSystems;
+            }
         }
 
         private List<ControlSystem> GetControlSystems()
@@ -597,7 +618,6 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         #endregion
         
-
         public ConnectionViewModel ConnectionDragStarted(ConnectorViewModel draggedOutConnector, Point curDragPoint)
         {
             var connection = new ConnectionViewModel();

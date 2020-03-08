@@ -1,8 +1,4 @@
-﻿using OpenSTSM.Extensions;
-using OpenSTSM.ViewModels.MainWindow;
-using OpenSTSM.ViewModels.SimulinkElementsBrowser;
-using System.Linq;
-using System.Windows;
+﻿using OpenSTSM.ViewModels.SimulinkElementsBrowser;
 
 namespace OpenSTSM
 {
