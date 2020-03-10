@@ -16,6 +16,7 @@ namespace OpenSTSM
     public class ImageAnalysisService
     {
         private bool isFirstLoad;
+        private bool isCanceled;
 
         private const string title = "Image Analysis";
         private const string initText = "Initiating server connection";
@@ -34,53 +35,67 @@ namespace OpenSTSM
 
         public ImageAnalysisService()
         {
-            isFirstLoad = true;         
-            Predictions = null;
             pythonPath = GetPythonPath();
-            python = !string.IsNullOrEmpty(pythonPath) ? new PythonExecutor(pythonPath) : new PythonExecutor();
-            python.AddStandartOutputErrorFilters("Using TensorFlow backend.");
-            python.AddStandartOutputErrorFilters("CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected");
-            client = new PipeClient();
-            predict = new Predict(client);
             TinfoBox = new ThreadedInfoBox();
-            TinfoBox.Canceled += () => {
-                client.Close();
-                python.Close();
+            TinfoBox.Canceled += () =>
+            {
+                Close();
+                isCanceled = true;
             };
-            python.OnPythonError += Python_OnPythonError;
-            TinfoBox.Start(initText, title);
-            python.RunScript("main.py");
-            client.Connect("openstsm");
+            Init();
         }
 
         ~ImageAnalysisService()
         {            
             TinfoBox.Close();
-            if (client.isConnected())
-                client.Close();
-
-            python.OnPythonError -= Python_OnPythonError;
-            python.Close();
-        }
+            Close();
+        }        
 
         private void Python_OnPythonError(string output)
         {
             HandleException(new Exception(output));
         }
 
+        private void Init() 
+        {
+            isFirstLoad = true;
+            Predictions = null;            
+            python = !string.IsNullOrEmpty(pythonPath) ? new PythonExecutor(pythonPath) : new PythonExecutor();
+            python.AddStandartOutputErrorFilters("Using TensorFlow backend.");
+            python.AddStandartOutputErrorFilters("CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected");
+            client = new PipeClient();
+            predict = new Predict(client);            
+            python.OnPythonError += Python_OnPythonError;
+            TinfoBox.Start(initText, title);
+            python.RunScript("main.py");
+            client.Connect("openstsm");
+        }
+
         public bool LoadModel()
         {
             try
             {
+                bool retValue = false;
+                if (isCanceled)
+                {
+                    Init();
+                    isCanceled = false;
+                }
+
                 if (isFirstLoad)
                 {
                     TinfoBox.DisplayTextChanged?.Invoke(loadModelText);
-                    return predict.LoadModel(Settings.Default.NN_ModelPath);
+                    retValue = predict.LoadModel(Settings.Default.NN_ModelPath);
                 }
                 else
                 {
-                    return true;
+                    retValue = true;
                 }
+
+                if (!retValue)
+                    TinfoBox.DisplayTextChanged?.Invoke("Failed to load model!");
+
+                return retValue;
             }
             catch (Exception e)
             {
@@ -95,12 +110,19 @@ namespace OpenSTSM
                 if (string.IsNullOrEmpty(imagePath))
                     throw new ArgumentException("Invalid image path!");
 
+                bool retValue = false;
+
                 if (isFirstLoad)
                     TinfoBox.DisplayTextChanged?.Invoke(runSSText);
                 else
                     TinfoBox.Start(runSSText, title);
 
-                return predict.RunSelectiveSearch(imagePath, Settings.Default.NumberOfRegionProposals);
+                retValue = predict.RunSelectiveSearch(imagePath, Settings.Default.NumberOfRegionProposals, Settings.Default.ImageResizeFactor);
+
+                if (!retValue)
+                    TinfoBox.DisplayTextChanged?.Invoke("Failed to run selective search successfully!");
+
+                return retValue;
             }
             catch (Exception e)
             {
@@ -112,6 +134,8 @@ namespace OpenSTSM
         {
             try
             {
+                bool retValue = false;
+
                 if (File.Exists(Settings.Default.NN_ModelPath))
                 {
                     TinfoBox.DisplayTextChanged?.Invoke(runPredictText);
@@ -124,11 +148,14 @@ namespace OpenSTSM
                     if (!string.IsNullOrEmpty(results))
                     {
                         Predictions = JsonConvert.DeserializeObject<List<Prediction>>(results);
-                        return true;
+                        retValue = true;
                     }
                 }
-                
-                return false;
+
+                if (!retValue)
+                    TinfoBox.DisplayTextChanged?.Invoke("Failed to run object prediction successfully!");
+
+                return retValue;
             }
             catch (Exception e)
             {
@@ -143,16 +170,16 @@ namespace OpenSTSM
                     client.Close();
 
             if (python != null)
+            {
+                python.OnPythonError -= Python_OnPythonError;
                 python.Close();
+            }
         }
 
         private bool HandleException(Exception e)
         {
             TinfoBox?.Close();
-            if (client.isConnected())
-                client.Close();
-
-            python.Close();
+            Close();
 
             MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
@@ -180,12 +207,12 @@ namespace OpenSTSM
 
 
     public class Prediction
-    {  
+    {
         public int Id { get; set; }
 
         public string Class { get; set; }
-   
-        public decimal Probability { get; set; }        
+
+        public decimal Probability { get; set; }
 
         public int X { get; set; }
 
@@ -201,8 +228,8 @@ namespace OpenSTSM
         public ControlElementType ControlElementType => this.Class.Contains("arrow") ? ControlElementType.Connector : ControlElementType.Node;
 
         [JsonIgnore]
-        public string Name => this.Class.FirstCharToUpper();
-
+        public string Name => ControlElementType == ControlElementType.Connector ? "Arrow" : this.Class.FirstCharToUpper();                
+        
         [JsonIgnore]
         public Point Location => new Point(X, Y);
 

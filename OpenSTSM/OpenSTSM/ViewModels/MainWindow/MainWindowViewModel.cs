@@ -346,7 +346,8 @@ namespace OpenSTSM.ViewModels.MainWindow
 
             if (predictions != null)
             {
-                foreach (var predGroup in predictions.GroupBy(p => p.Id))
+                IEnumerable<IGrouping<int, Prediction>> predGroups = predictions.GroupBy(p => p.Id);
+                foreach (IGrouping<int, Prediction> predGroup in predGroups)
                 {
                     Prediction mostProbable = predGroup.MaxBy(g => g.Probability);
                     if (mostProbable.ControlElementType == ControlElementType.Node)
@@ -364,17 +365,21 @@ namespace OpenSTSM.ViewModels.MainWindow
                         }
                         system.PredictedControlElements.Add(pnce);
                     }
-                    else
+                }
+
+                foreach (IGrouping<int, Prediction> predGroup in predGroups)
+                {
+                    Prediction mostProbable = predGroup.MaxBy(g => g.Probability);
+                    if(mostProbable.ControlElementType == ControlElementType.Connector)
                     {
-                        PredictedConnectorControlElement pcce = new PredictedConnectorControlElement(mostProbable.Name, mostProbable.Probability, Guid.NewGuid(), Guid.NewGuid());
+                        ConnectorNeighbors neighbors = FindNeighborsForConnector(mostProbable, system);
+                        PredictedConnectorControlElement pcce = new PredictedConnectorControlElement(mostProbable.Name, mostProbable.Probability, neighbors.Origin, neighbors.Target);
                         foreach (var pred in predGroup)
                         {
                             if (pred.UniqueId != mostProbable.UniqueId)
                             {
                                 if (pred.ControlElementType == ControlElementType.Node)
                                     pcce.PossibleControlElements.Add(new PossibleNodeControlElement(pred.Name, pred.Probability, pred.Location));
-                                else
-                                    pcce.PossibleControlElements.Add(new PossibleConnectorControlElement(pred.Name, pred.Probability, Guid.NewGuid(), Guid.NewGuid()));
                             }
                         }
                         system.PredictedControlElements.Add(pcce);
@@ -387,6 +392,46 @@ namespace OpenSTSM.ViewModels.MainWindow
             {
                 ControlSystems = ControlSystems ?? controlSystems;
             }
+        }
+
+        private ConnectorNeighbors FindNeighborsForConnector(Prediction connectorPrediction, ControlSystem system)
+        {
+            if (connectorPrediction.ControlElementType != ControlElementType.Connector)
+                throw new ArgumentException("Prediction object must be of type 'Connector'");
+
+            ConnectorNeighbors neighbors = new ConnectorNeighbors();
+
+            double closestLeftDiagonal = int.MaxValue, closestRightDiagonal = int.MaxValue;            
+            foreach (var node in system.PredictedControlElements.Where(pce => pce.Type == ControlElementType.Node && pce.Location.X < connectorPrediction.X))
+            {
+                double X = connectorPrediction.Location.X - node.Location.X;
+                double Y = connectorPrediction.Location.Y - node.Location.Y;
+                double diagonal = Math.Sqrt(X * X + Y * Y);
+                if (diagonal < closestLeftDiagonal)
+                {
+                    closestLeftDiagonal = diagonal;
+                    neighbors.Origin = node.Guid;
+                }
+            }
+            foreach (var node in system.PredictedControlElements.Where(pce => pce.Type == ControlElementType.Node && pce.Location.X > connectorPrediction.X))
+            {
+                double X = connectorPrediction.Location.X - node.Location.X;
+                double Y = connectorPrediction.Location.Y - node.Location.Y;
+                double diagonal = Math.Sqrt(X * X + Y * Y);
+                if (diagonal < closestRightDiagonal)
+                {
+                    closestRightDiagonal = diagonal;
+                    neighbors.Target = node.Guid;
+                }
+            }
+
+            return neighbors;
+        }
+
+        private class ConnectorNeighbors
+        {
+            public Guid Origin { get; set; }
+            public Guid Target { get; set; }
         }
 
         private List<ControlSystem> GetControlSystems()

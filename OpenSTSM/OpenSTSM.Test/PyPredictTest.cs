@@ -25,7 +25,7 @@ namespace OpenSTSM.Test
                 client.Connect("openstsm");
                 predict = new Predict(client);
                 bool run = predict.LoadModel(@"E:\\Storage\\Python\\OpenSTSM\\ML\\models\\model.model");
-                run = predict.RunSelectiveSearch("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80);
+                run = predict.RunSelectiveSearch("E:\\Libraries\\Desktop\\Visa Docs\\test_selective_1.png", 80, 1.0f);
                 string results = predict.RunPrediction(5, 3, 5, 1, 8, 2, true);
 
                 client.Close();

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:OpenSTSM"
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.Options"    
         mc:Ignorable="d"
-        Title="Options" Height="371" Width="395.017" Icon="/Resources/gear.png"
+        Title="Options" Height="401" Width="395.017" Icon="/Resources/gear.png"
         ResizeMode="NoResize" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -48,6 +48,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -61,15 +62,17 @@
                     <Label Content="Probability Decimal Point Rounding:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,3"/>
                     <Label Content="Region Proposals Multiplicity:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="3" Margin="0,3"/>
                     <Label Content="Spatial Distance of Coordinance Points Threshold:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="3" Margin="0,3"/>
-                    <Label Content="Neural Network Model Path:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.ColumnSpan="3" Margin="0,3,0,2"/>
+                    <Label Content="Image Resize Factor:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.ColumnSpan="3" Margin="0,3"/>
+                    <Label Content="Neural Network Model Path:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="7" Grid.ColumnSpan="3" Margin="0,3,0,2"/>
                     <xctk:IntegerUpDown Name="udNumberOfRegionProposals" Height="30" Value="{Binding Path=PredictionParameters.NumberOfRegionProposals}" Increment="5" Minimum="0" Grid.Column="3" Grid.Row="0" Margin="0,1" />
                     <xctk:IntegerUpDown Name="udMiddlePointDistanceThreshold" Height="30" Value="{Binding Path=PredictionParameters.MiddlePointDistanceThreshold}" Minimum="0" Grid.Column="3" Grid.Row="1" Margin="0,0,0,1"/>
                     <xctk:IntegerUpDown Name="udOuterSelectionThreshold" Height="30" Value="{Binding Path=PredictionParameters.OuterSelectionThreshold}" Minimum="0" Grid.Column="3" Grid.Row="2" Margin="0,1"/>
                     <xctk:IntegerUpDown Name="udDecimalPointProbabilityRounding" Height="30" Value="{Binding Path=PredictionParameters.DecimalPointProbabilityRounding}" Minimum="0" Grid.Column="3" Grid.Row="3" Margin="0,1"/>
                     <xctk:IntegerUpDown Name="udRegionProposalsMultiplicity" Height="30" Value="{Binding Path=PredictionParameters.RegionProposalsMultiplicity}" Minimum="0" Grid.Column="3" Grid.Row="4" Margin="0,1"/>
                     <xctk:IntegerUpDown Name="udSpatialDistanceOfCoordinatePointsThreshold" Height="30" Value="{Binding Path=PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold}" Minimum="0" Grid.Column="3" Grid.Row="5" Margin="0,1"/>
-                    <TextBox Name="txtNN_ModelPath" Text="{Binding Path=PredictionParameters.NN_ModelPath}" Grid.Column="2" Grid.Row="6" Height="30" Margin="122,1,35,1" Grid.ColumnSpan="2"/>
-                    <Button Grid.Row="6" Grid.Column="3" Margin="70,0,0,0" Command="{Binding Path=ChooseModelPathCommand}">
+                    <xctk:DecimalUpDown Name="udImageResizeFactor" Height="30" Value="{Binding Path=PredictionParameters.ImageResizeFactor}" Increment="0.1" Minimum="0.1" Maximum="1.0" Grid.Column="3" Grid.Row="6" Margin="0,1"/>
+                    <TextBox Name="txtNN_ModelPath" Text="{Binding Path=PredictionParameters.NN_ModelPath}" Grid.Column="2" Grid.Row="7" Height="30" Margin="122,1,35,1" Grid.ColumnSpan="2"/>
+                    <Button Grid.Row="7" Grid.Column="3" Margin="70,0,0,0" Command="{Binding Path=ChooseModelPathCommand}">
                         <Button.Template>
                             <ControlTemplate>
                                 <StackPanel>
@@ -81,7 +84,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,62,95,10" Width="75" Grid.Row="1"/>
-        <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,62,10,10"  Width="75" Grid.Row="1"/>
+        <Button Content="OK" Command="{Binding Path=UpdateCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,92,95,10" Width="75" Grid.Row="1"/>
+        <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,92,10,10"  Width="75" Grid.Row="1"/>
     </Grid>
 </Window>

@@ -76,6 +76,8 @@ namespace IpcPythonCS.Engine.CSharp.RPC
             node = nodes[0];
 
             text = node.InnerText;
+            if (text.Contains("Error:"))
+                throw new Exception(text.Substring(6, text.Length - 6));
 
             return ConvertToGenericType<T>(text);
         }

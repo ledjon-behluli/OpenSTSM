@@ -33,6 +33,8 @@ class RPCWrapper:
                     args.append(int(child.text))
                 elif (child.attrib["type"] == "string" or child.attrib["type"] == "System.String"): # if type is int
                     args.append(str(child.text))
+                elif (child.attrib["type"] == "float" or child.attrib["type"] == "System.Single"): # if type is float
+                    args.append(float(child.text))
                 elif (child.attrib["type"] == "bool" or child.attrib["type"] == "System.Boolean"): # if type is boolean
                     args.append(child.text == "True")
 

@@ -66,6 +66,7 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.DecimalPointProbabilityRounding = PredictionParameters.DecimalPointProbabilityRounding;
             Settings.Default.RegionProposalsMultiplicity = PredictionParameters.RegionProposalsMultiplicity;
             Settings.Default.SpatialDistanceOfCoordinatePointsThreshold = PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold;
+            Settings.Default.ImageResizeFactor = PredictionParameters.ImageResizeFactor;
             Settings.Default.NN_ModelPath = PredictionParameters.NN_ModelPath;
 
             // Preferences

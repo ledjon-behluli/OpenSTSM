@@ -94,6 +94,7 @@ class Predict(RPCWrapper):
     RegionProposals_Multiplicity = 1
     SpatialDistanceOfCoordinatePoints_Threshold = 8		# Spatial distance between two point which is considered to be the "same" point in space
     NumOfResultsPerElement = 2      # Number of results per identified element (Probability 1, 2 ... numOfResults)
+    ImageResizeFactor = 1.0
     img_width, img_height = 299, 299
     model = ''
 
@@ -220,13 +221,14 @@ class Predict(RPCWrapper):
         try:
             self.model = load_model(modelPath)
             return True
-        except:
-            return False
+        except Exception as e:
+            return str('Error:{}'.format(e))
 
-    def RunSelectiveSearch(self, inputImgPath, numRegionProposals):
+    def RunSelectiveSearch(self, inputImgPath, numRegionProposals, imgResizeFactor):
         try:
             self.inputImgPath = inputImgPath
             self.numRegionProposals = numRegionProposals
+            self.ImageResizeFactor = imgResizeFactor
 
             self.DeletePreviousData()
 
@@ -240,8 +242,8 @@ class Predict(RPCWrapper):
             im = cv2.imread(self.inputImgPath)
   
             # resize image
-            newHeight = 200
-            newWidth = int(im.shape[1]*200/im.shape[0])
+            newHeight = int(imgResizeFactor * im.shape[1])
+            newWidth = int(im.shape[1]*newHeight/im.shape[0])
             im = cv2.resize(im, (newWidth, newHeight))    
  
             # create Selective Search Segmentation Object using default parameters
@@ -283,8 +285,8 @@ class Predict(RPCWrapper):
                         file.write("x1:{}, y1:{}, x2:{}, y2:{}".format(x, y, x+w, y+h))   
         
             return True
-        except:
-            return False
+        except Exception as e:
+            return str('Error:{}'.format(e))
 
     def RunPrediction(self, middlePointDistance_Threshold, outerSelection_Threshold, decimalPoint_Probability, regionProposals_Multiplicity, spatialDistanceOfCoordinatePoints_Threshold, numOfResultsPerElement, useGpuAcceleration):  
         try:
@@ -425,8 +427,8 @@ class Predict(RPCWrapper):
                 Elements.append(_FinalElementOfGroup)
 
             im = cv2.imread(self.inputImgPath)
-            newHeight = 200
-            newWidth = int(im.shape[1]*200/im.shape[0])
+            newHeight = int(self.ImageResizeFactor * im.shape[1])
+            newWidth = int(im.shape[1]*newHeight/im.shape[0])
             im = cv2.resize(im, (newWidth, newHeight))    
 
             data = []
@@ -449,4 +451,4 @@ class Predict(RPCWrapper):
 
             return json.dumps(data)
         except Exception as e:
-            return str(e)
+            return str('Error:{}'.format(e))

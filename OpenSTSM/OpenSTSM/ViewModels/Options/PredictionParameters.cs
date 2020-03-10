@@ -3,7 +3,7 @@ namespace OpenSTSM.ViewModels.Options
 {
     public class PredictionParameters : ViewModelBase
     {
-        private int _middlePointDistanceThreshold { get; set; }
+        private int _middlePointDistanceThreshold;
         public int MiddlePointDistanceThreshold
         {
             get
@@ -17,7 +17,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private int _numberOfRegionProposals { get; set; }
+        private int _numberOfRegionProposals;
         public int NumberOfRegionProposals
         {
             get
@@ -31,7 +31,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private int _outerSelectionThreshold { get; set; } 
+        private int _outerSelectionThreshold;
         public int OuterSelectionThreshold
         {
             get
@@ -45,7 +45,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private int _decimalPointProbabilityRounding { get; set; }
+        private int _decimalPointProbabilityRounding;
         public int DecimalPointProbabilityRounding
         {
             get
@@ -59,7 +59,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private int _regionProposalsMultiplicity { get; set; }
+        private int _regionProposalsMultiplicity;
         public int RegionProposalsMultiplicity
         {
             get
@@ -73,7 +73,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private int _spatialDistanceOfCoordinatePointsThreshold { get; set; }
+        private int _spatialDistanceOfCoordinatePointsThreshold;
         public int SpatialDistanceOfCoordinatePointsThreshold
         {
             get
@@ -87,7 +87,7 @@ namespace OpenSTSM.ViewModels.Options
             }
         }
 
-        private string _NN_ModelPath { get; set; }
+        private string _NN_ModelPath;
         public string NN_ModelPath
         {
             get
@@ -97,6 +97,20 @@ namespace OpenSTSM.ViewModels.Options
             set
             {
                 _NN_ModelPath = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private float _imageResizeFactor;
+        public float ImageResizeFactor
+        {
+            get
+            {
+                return _imageResizeFactor;
+            }
+            set
+            {
+                _imageResizeFactor = value;
                 OnPropertyChanged();
             }
         }

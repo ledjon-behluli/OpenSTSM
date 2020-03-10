@@ -15,6 +15,7 @@ namespace OpenSTSM.Guis
                 DecimalPointProbabilityRounding = Settings.Default.DecimalPointProbabilityRounding,
                 RegionProposalsMultiplicity = Settings.Default.RegionProposalsMultiplicity,
                 SpatialDistanceOfCoordinatePointsThreshold = Settings.Default.SpatialDistanceOfCoordinatePointsThreshold,
+                ImageResizeFactor = Settings.Default.ImageResizeFactor,
                 NN_ModelPath = Settings.Default.NN_ModelPath
             };
             Preferences Preferences = new Preferences()

@@ -35,5 +35,8 @@
     <Setting Name="NN_ModelPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ImageResizeFactor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -154,5 +154,17 @@ namespace OpenSTSM {
                 this["NN_ModelPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float ImageResizeFactor {
+            get {
+                return ((float)(this["ImageResizeFactor"]));
+            }
+            set {
+                this["ImageResizeFactor"] = value;
+            }
+        }
     }
 }
