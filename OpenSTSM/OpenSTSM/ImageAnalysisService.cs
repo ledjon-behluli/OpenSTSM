@@ -103,6 +103,8 @@ namespace OpenSTSM
             }
         }
 
+        //TODO: ConvertToGrayscale
+
         public bool RunSelectiveSearch(string imagePath)
         {
             try

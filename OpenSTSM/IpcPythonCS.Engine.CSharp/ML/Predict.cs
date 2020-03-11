@@ -18,9 +18,14 @@ namespace IpcPythonCS.Engine.ML
             return CallPythonFunction<bool>(modelPath);
         }
 
-        public bool RunSelectiveSearch(string inputImgPath, int numRegionProposals, float imgResizeFactor)
+        public bool ConvertToGrayscale(string inputImgPath)
         {
-            return CallPythonFunction<bool>(inputImgPath, numRegionProposals, imgResizeFactor);
+            return CallPythonFunction<bool>(inputImgPath);
+        }
+
+        public bool RunSelectiveSearch(int numRegionProposals, float imgResizeFactor)
+        {
+            return CallPythonFunction<bool>(numRegionProposals, imgResizeFactor);
         }
 
         public string RunPrediction(int middlePointDistance_Threshold, int outerSelection_Threshold, int decimalPoint_Probability, int regionProposals_Multiplicity, int spatialDistanceOfCoordinatePoints_Threshold, int numOfResultsPerElement, bool useGpuAcceleration)

@@ -224,9 +224,19 @@ class Predict(RPCWrapper):
         except Exception as e:
             return str('Error:{}'.format(e))
 
-    def RunSelectiveSearch(self, inputImgPath, numRegionProposals, imgResizeFactor):
+    def ConvertToGrayscale(self, inputImgPath):
         try:
-            self.inputImgPath = inputImgPath
+            newPath = inputImgPath.split('.')[0]
+            img = cv2.imread(inputImgPath, 0)  
+            (thresh, img_bw) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)    
+            newPath = '{}{}'.format(newPath, '_bw.png')
+            cv2.imwrite(newPath, img_bw)
+            self.inputImgPath = newPath
+        except Exception as e:
+            return str('Error:{}'.format(e))
+
+    def RunSelectiveSearch(self, numRegionProposals, imgResizeFactor):
+        try:            
             self.numRegionProposals = numRegionProposals
             self.ImageResizeFactor = imgResizeFactor
 
