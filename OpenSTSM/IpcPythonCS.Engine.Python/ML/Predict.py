@@ -13,6 +13,7 @@ import re
 import itertools
 import math
 import natsort 
+from PIL import Image
 
 from keras.models import load_model
 from keras.preprocessing import image
@@ -224,14 +225,48 @@ class Predict(RPCWrapper):
         except Exception as e:
             return str('Error:{}'.format(e))
 
-    def ConvertToGrayscale(self, inputImgPath):
+    def ImageDimessionCorrections(self, inputImgPath):
         try:
-            newPath = inputImgPath.split('.')[0]
-            img = cv2.imread(inputImgPath, 0)  
-            (thresh, img_bw) = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)    
-            newPath = '{}{}'.format(newPath, '_bw.png')
-            cv2.imwrite(newPath, img_bw)
-            self.inputImgPath = newPath
+            '''
+            Make image into a square so it can be used by opencv for SS algorithm
+            '''
+            img_pil = Image.open('{}'.format(inputImgPath))
+
+            target_width = 0
+            target_height = 0
+
+            if(img_pil.height > img_pil.width):
+                target_height = img_pil.height
+                target_width = img_pil.height
+            else:
+                target_height = img_pil.width
+                target_width = img_pil.width
+
+            target_ratio = target_height / target_width
+            im_ratio = img_pil.height / img_pil.width
+            if target_ratio > im_ratio:
+                # Fixed by width
+                resize_width = target_width
+                resize_height = round(resize_width * im_ratio)
+            else:
+                # Fixed by height
+                resize_height = target_height
+                resize_width = round(resize_height / im_ratio)
+
+            image_resize = img_pil.resize((resize_width, resize_height), Image.ANTIALIAS)
+            background = Image.new('RGBA', (target_width, target_height), (255, 255, 255, 255))
+            offset = (round((target_width - resize_width) / 2), round((target_height - resize_height) / 2))
+            background.paste(image_resize, offset)  
+            newPath = inputImgPath.split('.')[0]    
+            newPath = '{}{}'.format(newPath, '_corr.png')        
+            background.save(newPath)
+
+            img_cv2 = cv2.imread(newPath, 0)  # Read in grascale mode
+            (thresh, img_bw) = cv2.threshold(img_cv2, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)   
+            cv2.imwrite(newPath, img_cv2)
+            self.inputImgPath = newPath        
+
+            return True
         except Exception as e:
             return str('Error:{}'.format(e))
 

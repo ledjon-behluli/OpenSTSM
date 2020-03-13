@@ -135,12 +135,15 @@ namespace OpenSTSM.ViewModels.MainWindow
 
             if (analysisService.LoadModel())
             {
-                if (analysisService.RunSelectiveSearch(FileName))
+                if (analysisService.ImageDimessionCorrections(FileName))
                 {
-                    if (analysisService.RunPrediction())
+                    if (analysisService.RunSelectiveSearch())
                     {
-                        PopulateControlSystemsView(analysisService.Predictions);
-                        ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
+                        if (analysisService.RunPrediction())
+                        {
+                            PopulateControlSystemsView(analysisService.Predictions);
+                            ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
+                        }
                     }
                 }
             }

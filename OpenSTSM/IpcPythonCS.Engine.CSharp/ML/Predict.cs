@@ -18,7 +18,7 @@ namespace IpcPythonCS.Engine.ML
             return CallPythonFunction<bool>(modelPath);
         }
 
-        public bool ConvertToGrayscale(string inputImgPath)
+        public bool ImageDimessionCorrections(string inputImgPath)
         {
             return CallPythonFunction<bool>(inputImgPath);
         }

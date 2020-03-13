@@ -21,6 +21,7 @@ namespace OpenSTSM
         private const string title = "Image Analysis";
         private const string initText = "Initiating server connection";
         private const string loadModelText = "Loading neural network model";
+        private const string imageCorrectionsText = "Applying image corrections";
         private const string runSSText = "Running selective search algorithm";
         private const string runPredictText = "Running object prediction on image";
 
@@ -103,9 +104,7 @@ namespace OpenSTSM
             }
         }
 
-        //TODO: ConvertToGrayscale
-
-        public bool RunSelectiveSearch(string imagePath)
+        public bool ImageDimessionCorrections(string imagePath)
         {
             try
             {
@@ -115,11 +114,32 @@ namespace OpenSTSM
                 bool retValue = false;
 
                 if (isFirstLoad)
-                    TinfoBox.DisplayTextChanged?.Invoke(runSSText);
+                    TinfoBox.DisplayTextChanged?.Invoke(imageCorrectionsText);
                 else
-                    TinfoBox.Start(runSSText, title);
+                    TinfoBox.Start(imageCorrectionsText, title);
 
-                retValue = predict.RunSelectiveSearch(imagePath, Settings.Default.NumberOfRegionProposals, Settings.Default.ImageResizeFactor);
+                retValue = predict.ImageDimessionCorrections(imagePath);
+
+                if (!retValue)
+                    TinfoBox.DisplayTextChanged?.Invoke("Failed to apply image corrections!");
+
+                return retValue;
+            }
+            catch (Exception e)
+            {
+                return HandleException(e);
+            }
+        }
+
+        public bool RunSelectiveSearch()
+        {
+            try
+            {
+                bool retValue = false;
+
+                TinfoBox.DisplayTextChanged?.Invoke(runSSText);
+
+                retValue = predict.RunSelectiveSearch(Settings.Default.NumberOfRegionProposals, Settings.Default.ImageResizeFactor);
 
                 if (!retValue)
                     TinfoBox.DisplayTextChanged?.Invoke("Failed to run selective search successfully!");
