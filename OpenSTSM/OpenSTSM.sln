@@ -25,6 +25,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "IpcPythonCS.Engine.Python",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSTSM.Test", "OpenSTSM.Test\OpenSTSM.Test.csproj", "{E1526904-AE0D-4D79-9176-D2157D2C7D57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulinkModelGenerator", "SimulinkModelGenerator\SimulinkModelGenerator.csproj", "{E40E34BC-C79E-45A3-BF84-EA8BA0054143}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{E1526904-AE0D-4D79-9176-D2157D2C7D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1526904-AE0D-4D79-9176-D2157D2C7D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1526904-AE0D-4D79-9176-D2157D2C7D57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E40E34BC-C79E-45A3-BF84-EA8BA0054143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40E34BC-C79E-45A3-BF84-EA8BA0054143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40E34BC-C79E-45A3-BF84-EA8BA0054143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40E34BC-C79E-45A3-BF84-EA8BA0054143}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -165,7 +165,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 
 
 
-            MessageBox.Show("Generating"); // Some long running code ...            
+            MessageBox.Show("To be implemented"); // Some long running code ...            
             
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
             ChangeCanExecute(true, ref canExecute_ImportImage);
