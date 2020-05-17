@@ -14,6 +14,7 @@ using OpenSTSM.Models.MainWindow.SimulinkElements;
 using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
+using SimulinkModelGenerator.Modeler.Builders;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -22,6 +23,8 @@ namespace OpenSTSM.ViewModels.MainWindow
         private bool _isProcessing = false;
         public Guid? LastSelectedGuid;
         private ImageAnalysisService analysisService;
+        private ThreadedInfoBox TinfoBox;
+        private string simulinkModelName;
 
         #region Properties
 
@@ -88,7 +91,10 @@ namespace OpenSTSM.ViewModels.MainWindow
         #endregion
 
         public MainWindowViewModel(IEventAggregator eventAggregator)
-        {            
+        {
+            TinfoBox = new ThreadedInfoBox();
+            TinfoBox.Canceled += () => { };
+            
             PopulateControlSystemsView(null);
 
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
@@ -159,19 +165,32 @@ namespace OpenSTSM.ViewModels.MainWindow
             _isProcessing = true;
             ChangeCanExecute(false, ref canExecute_ImportImage);
             ChangeCanExecute(false, ref canExecute_AnalyseImage);
-            ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);
+            ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);           
 
+            TinfoBox.Start("Generating ...", "Generate Simulink Model");            
 
+            if (this.network.Nodes.Count > 0)
+            {
+                new ModelBuilder()
+                .AddControlSystem(cs =>
+                {
+                    foreach (NodeViewModel node in this.network.Nodes)
+                    {
+                        //switch(node.)
+                    }
+                });                
+            }
 
-
-
-            MessageBox.Show("Generating"); // Some long running code ...            
-            
             ChangeCanExecute(true, ref canExecute_AnalyseImage);
             ChangeCanExecute(true, ref canExecute_ImportImage);
             ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
             _isProcessing = false;
         }
+
+        //private List MapDiagramNodesToSimulinkElements()
+        //{
+            
+        //}
 
         private void OpenDiagramOverview(object sender)
         {
