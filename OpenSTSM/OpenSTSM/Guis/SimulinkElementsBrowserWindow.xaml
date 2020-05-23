@@ -21,7 +21,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TabControl SelectedIndex="{Binding SelectedTabIndex}" TabStripPlacement="Left" HorizontalContentAlignment="Left" Grid.Column="0">
+        <TabControl SelectedIndex="{Binding Path=SelectedTabIndex,Mode=OneWay}" TabStripPlacement="Left" HorizontalContentAlignment="Left" Grid.Column="0">
             <TabItem Header="Sources" Visibility="{Binding Path=SourcesVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>

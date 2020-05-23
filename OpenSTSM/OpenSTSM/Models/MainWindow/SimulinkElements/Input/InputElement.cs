@@ -20,7 +20,9 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
 
         public Point Location { get; set; }
 
-        public ListDictionary Properties { get; set; }
+        public bool IsFlippedHorizontally { get; set; }
+
+        public ListDictionary Properties { get; set; }        
 
 
 
@@ -34,7 +36,8 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
             NumberOfInputs = sep.NumberOfInputs;
             NumberOfOutputs = sep.NumberOfOutputs;
             Properties = new ListDictionary();
-            Location = new Point(0, 0);             
+            Location = new Point(0, 0);
+            IsFlippedHorizontally = sep.IsFlippedHorizontally;
         }
     }
 }

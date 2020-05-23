@@ -9,8 +9,8 @@ namespace OpenSTSM.Guis.BlockParameters.MathOperations
     /// </summary>
     public partial class Gain : UserControl, INotifyPropertyChanged
     {
-        private decimal _value;
-        public decimal Value
+        private double _value;
+        public double Value
         {
             get
             {

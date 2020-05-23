@@ -23,8 +23,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
     public partial class Constant : UserControl, INotifyPropertyChanged
     {
         
-        private decimal _value;
-        public decimal Value
+        private double _value;
+        public double Value
         {
             get
             {

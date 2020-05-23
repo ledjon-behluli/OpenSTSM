@@ -15,6 +15,11 @@ using OpenSTSM.Extensions;
 using OpenSTSM.Guis.BlockParameters.MathOperations;
 using System.Collections;
 using SimulinkModelGenerator.Modeler.Builders;
+using OpenSTSM.Guis.BlockParameters.Continuous;
+using OpenSTSM.Models.SimulinkBlocks;
+using InputType = SimulinkModelGenerator.Modeler.Builders.SystemBlockBuilders.MathOperations.InputType;
+using PidControllerType = OpenSTSM.Models.SimulinkBlocks.PidController;
+using System.Runtime.InteropServices;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -92,9 +97,11 @@ namespace OpenSTSM.ViewModels.MainWindow
 
         public MainWindowViewModel(IEventAggregator eventAggregator)
         {
+            ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
             TinfoBox = new ThreadedInfoBox();
             TinfoBox.Canceled += () => { };
-            
+
+            this.network = new NetworkViewModel();
             PopulateControlSystemsView(null);
 
             ImportImageCommand = new RelayCommand(ImportImage, param => canExecute_ImportImage);
@@ -163,34 +170,306 @@ namespace OpenSTSM.ViewModels.MainWindow
         private void GenerateSimulinkModel(object sender)
         {
             _isProcessing = true;
-            ChangeCanExecute(false, ref canExecute_ImportImage);
-            ChangeCanExecute(false, ref canExecute_AnalyseImage);
-            ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);           
+            //ChangeCanExecute(false, ref canExecute_ImportImage);
+            //ChangeCanExecute(false, ref canExecute_AnalyseImage);
+            //ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);           
 
-            TinfoBox.Start("Generating ...", "Generate Simulink Model");            
+            TinfoBox.Start("Generating ...", "Generate Simulink Model");
+
+            ModelBuilder builder = new ModelBuilder();            
 
             if (this.network.Nodes.Count > 0)
             {
-                new ModelBuilder()
+                builder
                 .AddControlSystem(cs =>
                 {
-                    foreach (NodeViewModel node in this.network.Nodes)
+                    cs.AddSources(source =>
                     {
-                        //switch(node.)
-                    }
-                });                
+                        foreach (NodeViewModel node in this.network.Nodes)
+                        {
+                            NormalizedLocation nLoc = new NormalizedLocation(node);
+                            if (node.Name == "Constant")
+                            {
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    source.AddConstant(c =>
+                                    {
+                                        c.SetValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Value"))
+                                         .FlipHorizontally()
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }
+                                else
+                                {
+                                    source.AddConstant(c =>
+                                    {
+                                        c.SetValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Value"))
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }                                   
+                            }
+                            else if(node.Name == "Step")
+                            {
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    source.AddStep(s =>
+                                    {
+                                        s.SetStepTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "StepTime"))
+                                         .SetInitialValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialValue"))
+                                         .SetFinalValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FinalValue"))
+                                         .SetSampleTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "SampleTime"))
+                                         .FlipHorizontally()
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }
+                                else
+                                {
+                                    source.AddStep(s =>
+                                    {
+                                        s.SetStepTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "StepTime"))
+                                         .SetInitialValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialValue"))
+                                         .SetFinalValue(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FinalValue"))
+                                         .SetSampleTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "SampleTime"))
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }                                    
+                            }
+                            else if(node.Name == "Ramp")
+                            {
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    source.AddRamp(r =>
+                                    {
+                                        r.SetSlope(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Slope"))
+                                         .SetInitialOutput(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialOutput"))
+                                         .SetStartTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "StartTime"))
+                                         .FlipHorizontally()
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }
+                                else
+                                {
+                                    source.AddRamp(r =>
+                                    {
+                                        r.SetSlope(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Slope"))
+                                         .SetInitialOutput(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialOutput"))
+                                         .SetStartTime(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "StartTime"))
+                                         .SetPosition(nLoc.X, nLoc.Y);
+                                    });
+                                }                                
+                            }
+                        }
+                    });
+                    cs.AddSinks(sinks =>
+                    {
+                        foreach (NodeViewModel node in this.network.Nodes)
+                        {
+                            NormalizedLocation nLoc = new NormalizedLocation(node);
+                            if (node.Name == "Scope")
+                            {
+                                sinks.AddScope(s => s.SetPosition(nLoc.X, nLoc.Y));
+                            }
+                            else if (node.Name == "Display")
+                            {
+                                sinks.AddDisplay(d => d.SetPosition(nLoc.X, nLoc.Y));
+                            }
+                        }
+                    });
+                    cs.AddMathOperations(mo =>
+                    {
+                        foreach (NodeViewModel node in this.network.Nodes)
+                        {
+                            NormalizedLocation nLoc = new NormalizedLocation(node);
+                            if (node.Name == "Gain")
+                            {
+                                if(SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    mo.AddGain(g => g.SetGain(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Value"))
+                                      .FlipHorizontally()  
+                                      .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                                else
+                                {
+                                    mo.AddGain(g => g.SetGain(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Value"))
+                                      .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                            }
+                            else if (node.Name == "Sum")
+                            {
+                                List<string> signs = SketchToSimulinkHelper.GetSketchElementsValue<List<string>>(node, "Signs");
+                                InputType[] inputTypes = new InputType[signs.Count];
+
+                                for (int i = 0; i < signs.Count; i++)
+                                {
+                                    inputTypes[i] = signs[i] == "+" ? InputType.Plus : InputType.Minus;
+                                }
+
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    mo.AddSum(sum => sum.SetInputs(inputTypes).FlipHorizontally().SetPosition(nLoc.X, nLoc.Y));
+                                }
+                                else
+                                {
+                                    mo.AddSum(sum => sum.SetInputs(inputTypes).SetPosition(nLoc.X, nLoc.Y));
+                                }                                
+                            }
+                        }
+                    });
+                    cs.AddContinuous(c =>
+                    {
+                        foreach (NodeViewModel node in this.network.Nodes)
+                        {
+                            NormalizedLocation nLoc = new NormalizedLocation(node);
+                            if (node.Name == "Integrator")
+                            {
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    c.AddIntegrator(i => i.SetInitialCondition(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialCondition"))
+                                                          .FlipHorizontally()
+                                                          .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                                else
+                                {
+                                    c.AddIntegrator(i => i.SetInitialCondition(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "InitialCondition"))
+                                                           .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                            }
+                            else if (node.Name == "Transfer Function")
+                            {
+                                double[] numerator = SketchToSimulinkHelper.GetSketchElementsValue<List<double>>(node, "NumeratorCoefficients").ToArray();
+                                double[] denominator = SketchToSimulinkHelper.GetSketchElementsValue<List<double>>(node, "DenominatorCoefficients").ToArray();
+
+                                if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                {
+                                    c.AddTransferFunction(tf => tf.SetNumerator(numerator)
+                                                                  .SetDenominator(denominator)
+                                                                  .FlipHorizontally()
+                                                                  .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                                else
+                                {
+                                    c.AddTransferFunction(tf => tf.SetNumerator(numerator)
+                                                                  .SetDenominator(denominator)
+                                                                  .SetPosition(nLoc.X, nLoc.Y));
+                                }
+                            }
+                            else if (node.Name == "PID Controller")
+                            {
+                                PidControllerType PidType = SketchToSimulinkHelper.GetSketchElementsValue<PidControllerType>(node, "SelectedPidController");
+                                switch (PidType.Name)
+                                {
+                                    case "PID":
+                                        {
+                                            if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                            {
+                                                c.AddPIDController(pid => pid.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                         .SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                         .SetDerivative(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Derivative"))
+                                                                         .SetFilterCoefficient(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FilterCoefficient"))
+                                                                         .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                         .SetInitialConditionForFilter(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Filter"))
+                                                                         .FlipHorizontally()
+                                                                         .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            else
+                                            {
+                                                c.AddPIDController(pid => pid.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                         .SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                         .SetDerivative(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Derivative"))
+                                                                         .SetFilterCoefficient(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FilterCoefficient"))
+                                                                         .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                         .SetInitialConditionForFilter(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Filter"))
+                                                                         .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                        }
+                                        break;
+                                    case "PD":
+                                        {
+                                            if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                            {
+                                                c.AddPDController(pd => pd.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                          .SetDerivative(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Derivative"))
+                                                                          .SetFilterCoefficient(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FilterCoefficient"))
+                                                                          .SetInitialConditionForFilter(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Filter"))
+                                                                          .FlipHorizontally()
+                                                                          .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            else
+                                            {
+                                                c.AddPDController(pd => pd.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                          .SetDerivative(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Derivative"))
+                                                                          .SetFilterCoefficient(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "FilterCoefficient"))
+                                                                          .SetInitialConditionForFilter(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Filter"))
+                                                                          .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                        }
+                                        break;
+                                    case "PI":
+                                        {
+                                            if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                            {
+                                                c.AddPIController(pi => pi.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                        .SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                        .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                        .FlipHorizontally()
+                                                                        .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            else
+                                            {
+                                                c.AddPIController(pi => pi.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                        .SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                        .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                        .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                        }
+                                        break;
+                                    case "I":
+                                        {
+                                            if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                            {
+                                                c.AddIController(i => i.SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                       .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                       .FlipHorizontally()
+                                                                       .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            else
+                                            {
+                                                c.AddIController(i => i.SetIntegral(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integral"))
+                                                                       .SetInitialConditionForIntegrator(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Integrator"))
+                                                                       .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                        }
+                                        break;
+                                    case "P":
+                                        {
+                                            if (SketchToSimulinkHelper.GetSketchElementsValue<bool>(node, "FlipHorizontally"))
+                                            {
+                                                c.AddPController(p => p.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                       .FlipHorizontally()
+                                                                       .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            else
+                                            {
+                                                c.AddPController(p => p.SetProportional(SketchToSimulinkHelper.GetSketchElementsValue<double>(node, "Proportional"))
+                                                                       .SetPosition(nLoc.X, nLoc.Y));
+                                            }
+                                            break;
+                                        }
+                                }
+                            }
+                        }
+                    });
+                })
+                .Build();
             }
 
-            ChangeCanExecute(true, ref canExecute_AnalyseImage);
-            ChangeCanExecute(true, ref canExecute_ImportImage);
-            ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
+            builder.Save(@"C:\SimulinkModelGenerator");
+
+            //ChangeCanExecute(true, ref canExecute_AnalyseImage);
+            //ChangeCanExecute(true, ref canExecute_ImportImage);
+            //ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
             _isProcessing = false;
         }
-
-        //private List MapDiagramNodesToSimulinkElements()
-        //{
-            
-        //}
 
         private void OpenDiagramOverview(object sender)
         {

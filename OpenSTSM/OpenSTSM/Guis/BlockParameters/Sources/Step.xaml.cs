@@ -22,8 +22,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
     /// </summary>
     public partial class Step : UserControl, INotifyPropertyChanged
     {
-        private decimal stepTime;
-        public decimal StepTime
+        private double stepTime;
+        public double StepTime
         {
             get
             {
@@ -36,8 +36,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             }
         }
 
-        private decimal initialValue;
-        public decimal InitialValue
+        private double initialValue;
+        public double InitialValue
         {
             get
             {
@@ -50,8 +50,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             }
         }
 
-        private decimal finalValue;
-        public decimal FinalValue
+        private double finalValue;
+        public double FinalValue
         {
             get
             {
@@ -64,8 +64,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             }
         }
 
-        private decimal sampleTime;
-        public decimal SampleTime
+        private double sampleTime;
+        public double SampleTime
         {
             get
             {

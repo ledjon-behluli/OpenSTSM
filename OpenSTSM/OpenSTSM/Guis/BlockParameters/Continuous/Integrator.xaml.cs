@@ -9,8 +9,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
     /// </summary>
     public partial class Integrator : UserControl, INotifyPropertyChanged
     {
-        public decimal _initialCondition;
-        public decimal InitialCondition
+        public double _initialCondition;
+        public double InitialCondition
         {
             get
             {
