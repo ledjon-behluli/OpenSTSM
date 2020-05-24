@@ -20,6 +20,8 @@ using OpenSTSM.Models.SimulinkBlocks;
 using InputType = SimulinkModelGenerator.Modeler.Builders.SystemBlockBuilders.MathOperations.InputType;
 using PidControllerType = OpenSTSM.Models.SimulinkBlocks.PidController;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Windows.Controls.Primitives;
 
 namespace OpenSTSM.ViewModels.MainWindow
 {
@@ -29,7 +31,6 @@ namespace OpenSTSM.ViewModels.MainWindow
         public Guid? LastSelectedGuid;
         private ImageAnalysisService analysisService;
         private ThreadedInfoBox TinfoBox;
-        private string simulinkModelName;
 
         #region Properties
 
@@ -174,8 +175,8 @@ namespace OpenSTSM.ViewModels.MainWindow
             //ChangeCanExecute(false, ref canExecute_AnalyseImage);
             //ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);           
 
-            TinfoBox.Start("Information", "Generating Simulink Model...");
-
+            TinfoBox.Start("Generating Simulink Model...", "Information");
+           
             ModelBuilder builder = new ModelBuilder();            
 
             if (this.network.Nodes.Count > 0)
@@ -435,19 +436,48 @@ namespace OpenSTSM.ViewModels.MainWindow
                             }
                         }
                     });
-                    cs.AddConnections(this.network.Nodes.OrderBy(n => n.ObjectDebugId).FirstOrDefault()?.Guid.ToString(), l =>
+                    cs.AddConnections(this.network.Nodes.FirstOrDefault()?.Guid.ToString() ?? string.Empty, l =>
                     {
                         if (this.network.Connections.Count > 0)
                         {
+                            List<ConnectorViewModel> trackedSourceConnectors = new List<ConnectorViewModel>();
+                            List<NodeViewModel> trackedParentNode = new List<NodeViewModel>();
+
                             foreach (ConnectionViewModel con in this.network.Connections)
                             {
                                 if (con.SourceConnector.AttachedConnections.Count == 1)
                                 {
-                                    l.Connect(con.SourceConnector.ParentNode.Guid.ToString(), con.DestConnector.ParentNode.Guid.ToString());
-                                }
-                                else if(con.SourceConnector.AttachedConnections.Count > 1)
-                                {
+                                    if (!trackedSourceConnectors.Contains(con.SourceConnector))
+                                    {
+                                        if (!trackedParentNode.Contains(con.DestConnector.ParentNode))
+                                        {
+                                            l.Connect(con.SourceConnector.ParentNode.Guid.ToString(), con.DestConnector.ParentNode.Guid.ToString());
+                                            trackedParentNode.Add(con.DestConnector.ParentNode);
+                                        }
+                                        else
+                                        {
+                                            int count = trackedParentNode.Where(n => n == con.DestConnector.ParentNode).Count();
+                                            l.Connect(con.SourceConnector.ParentNode.Guid.ToString(), con.DestConnector.ParentNode.Guid.ToString(), 1, (uint)count + 1);
+                                            trackedParentNode.Add(con.DestConnector.ParentNode);
+                                        }
+                                    }
 
+                                    trackedSourceConnectors.Add(con.SourceConnector);
+                                }
+                                else if (con.SourceConnector.AttachedConnections.Count > 1)
+                                {                                    
+                                    if (!trackedSourceConnectors.Contains(con.SourceConnector))
+                                    {
+                                        for (int i = 0; i < con.SourceConnector.AttachedConnections.Count; i++)
+                                        {
+                                            l.Branch(b =>
+                                            {
+                                                b.Towards(con.SourceConnector.AttachedConnections[i].DestConnector.ParentNode.Guid.ToString());
+                                            });
+                                        }
+
+                                        trackedSourceConnectors.Add(con.SourceConnector);
+                                    }
                                 }
                             }
                         }
