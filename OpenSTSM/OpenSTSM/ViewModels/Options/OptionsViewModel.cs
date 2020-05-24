@@ -1,6 +1,7 @@
-﻿using Microsoft.Win32;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Prism.Events;
+using System.Windows.Forms;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace OpenSTSM.ViewModels.Options
 {
@@ -43,7 +44,8 @@ namespace OpenSTSM.ViewModels.Options
         #region "Commands"
 
         public ICommand UpdateCommand { get; set; }
-        public ICommand ChooseModelPathCommand { get; set; }
+        public ICommand Choose_NN_ModelPathCommand { get; set; }
+        public ICommand ChooseSimulinkOutputPathCommand { get; set; }
         
         #endregion
 
@@ -54,7 +56,8 @@ namespace OpenSTSM.ViewModels.Options
             Preferences = preferences;
 
             UpdateCommand = new RelayCommand(UpdateOptions);
-            ChooseModelPathCommand = new RelayCommand(ChooseModelPath);
+            Choose_NN_ModelPathCommand = new RelayCommand(Choose_NN_ModelPath);
+            ChooseSimulinkOutputPathCommand = new RelayCommand(ChooseSimulinkOutputPath);
         }
 
         private void UpdateOptions(object sender)
@@ -73,6 +76,7 @@ namespace OpenSTSM.ViewModels.Options
             Settings.Default.LeafProbabilityThreshold = Preferences.LeafProbabilityThreshold;
             Settings.Default.NumberOfResultsPerElement = Preferences.NumberOfResultsPerElement;
             Settings.Default.UseGpuAcceleration = Preferences.UseGpuAcceleration;
+            Settings.Default.Simulink_OutputPath = Preferences.Simulink_OutputPath;
 
             Settings.Default.Save();
             _eventAggregator.GetEvent<PreferencesUpdatedEvent>().Publish();
@@ -80,7 +84,7 @@ namespace OpenSTSM.ViewModels.Options
             base.Close();
         }
 
-        private void ChooseModelPath(object sender)
+        private void Choose_NN_ModelPath(object sender)
         {
             OpenFileDialog ofd = new OpenFileDialog()
             {
@@ -90,6 +94,19 @@ namespace OpenSTSM.ViewModels.Options
             if (ofd.ShowDialog() == true)
             {
                 PredictionParameters.NN_ModelPath = ofd.FileName;
+            }
+        }
+
+        private void ChooseSimulinkOutputPath(object sender)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    Preferences.Simulink_OutputPath = fbd.SelectedPath.TrimEnd(new[] { '/' });
+                }
             }
         }
     }

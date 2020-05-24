@@ -166,5 +166,17 @@ namespace OpenSTSM {
                 this["ImageResizeFactor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\OpenSTSM")]
+        public string Simulink_OutputPath {
+            get {
+                return ((string)(this["Simulink_OutputPath"]));
+            }
+            set {
+                this["Simulink_OutputPath"] = value;
+            }
+        }
     }
 }

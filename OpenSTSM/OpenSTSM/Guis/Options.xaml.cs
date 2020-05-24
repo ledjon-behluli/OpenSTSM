@@ -22,7 +22,8 @@ namespace OpenSTSM.Guis
             {
                 UseGpuAcceleration = Settings.Default.UseGpuAcceleration,
                 NumberOfResultsPerElement = Settings.Default.NumberOfResultsPerElement,
-                LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold
+                LeafProbabilityThreshold = Settings.Default.LeafProbabilityThreshold,
+                Simulink_OutputPath = Settings.Default.Simulink_OutputPath
             };
 
             OptionsViewModel viewModel = new OptionsViewModel(PredictionParameters, Preferences, ApplicationService.Instance.EventAggregator);

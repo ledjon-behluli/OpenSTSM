@@ -20,20 +20,34 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Label Content="Show yellow leaf if probability is over:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
-                    <xctk:DecimalUpDown Name="udShowYellowLeafOnProbability" Height="28" Value="{Binding Path=Preferences.LeafProbabilityThreshold}" Increment="0.5" Minimum="0.00" Maximum="100.00" Grid.Column="1" Grid.Row="0" />
+                    <xctk:DecimalUpDown Name="udShowYellowLeafOnProbability" Height="28" Value="{Binding Path=Preferences.LeafProbabilityThreshold}" Increment="0.5" Minimum="0.00" Maximum="100.00" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" />
                     <Label Content="Number of results per identified element:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
-                    <xctk:IntegerUpDown Name="udNumberOfResultsPerElement" Height="28" Value="{Binding Path=Preferences.NumberOfResultsPerElement}" Minimum="1" Maximum="14" Grid.Column="1" Grid.Row="1"/>
+                    <xctk:IntegerUpDown Name="udNumberOfResultsPerElement" Height="28" Value="{Binding Path=Preferences.NumberOfResultsPerElement}" Minimum="1" Maximum="14" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
                     <Label Content="Use GPU acceleration for image analysis:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
                     <CheckBox IsChecked="{Binding Preferences.UseGpuAcceleration}" Grid.Column="1" Grid.Row="2" Margin="0 8 0 0" />
+                    <Label Content="Simulink model output path:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"/>
+                    <TextBox Name="txtSimulink_ModelPath" Height="28" Text="{Binding Path=Preferences.Simulink_OutputPath}" 
+                             Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Margin="0 0 40 0" />
+                    <Button Grid.Row="3" Grid.Column="2" Margin="100, 0, 0, 0" Command="{Binding Path=ChooseSimulinkOutputPathCommand}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <StackPanel>
+                                    <Image Source="../Resources/folder.png" Height="32" Width="32"/>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </Grid>
 
             </TabItem>
@@ -72,7 +86,7 @@
                     <xctk:IntegerUpDown Name="udSpatialDistanceOfCoordinatePointsThreshold" Height="30" Value="{Binding Path=PredictionParameters.SpatialDistanceOfCoordinatePointsThreshold}" Minimum="0" Grid.Column="3" Grid.Row="5" Margin="0,1"/>
                     <xctk:DecimalUpDown Name="udImageResizeFactor" Height="30" Value="{Binding Path=PredictionParameters.ImageResizeFactor}" Increment="0.1" Minimum="0.1" Maximum="1.0" Grid.Column="3" Grid.Row="6" Margin="0,1"/>
                     <TextBox Name="txtNN_ModelPath" Text="{Binding Path=PredictionParameters.NN_ModelPath}" Grid.Column="2" Grid.Row="7" Height="30" Margin="122,1,35,1" Grid.ColumnSpan="2"/>
-                    <Button Grid.Row="7" Grid.Column="3" Margin="70,0,0,0" Command="{Binding Path=ChooseModelPathCommand}">
+                    <Button Grid.Row="7" Grid.Column="3" Margin="70,0,0,0" Command="{Binding Path=Choose_NN_ModelPathCommand}">
                         <Button.Template>
                             <ControlTemplate>
                                 <StackPanel>

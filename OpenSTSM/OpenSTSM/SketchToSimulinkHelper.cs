@@ -67,8 +67,8 @@ namespace OpenSTSM
 
         public NormalizedLocation(NodeViewModel node)
         {
-            X = (uint)Math.Abs(node.X);
-            Y = (uint)Math.Abs(node.Y);
+            X = (uint)(node.X < 0 ? 0 : node.X);
+            Y = (uint)(node.Y < 0 ? 0 : node.Y);
         }
     }
 }
