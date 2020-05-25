@@ -27,7 +27,7 @@ namespace OpenSTSM.ViewModels.MainWindow
 {
     public class MainWindowViewModel : WorkspaceViewModel
     {
-        private bool _isProcessing = false;
+        private bool _isProcessing = false;        
         public Guid? LastSelectedGuid;
         private ImageAnalysisService analysisService;
         private ThreadedInfoBox TinfoBox;
@@ -100,7 +100,7 @@ namespace OpenSTSM.ViewModels.MainWindow
         {
             ChangeCanExecute(true, ref canExecute_GenerateSimulinkModel);
             TinfoBox = new ThreadedInfoBox();
-            TinfoBox.Canceled += () => { };
+            TinfoBox.Canceled += () => { _isProcessing = false; };
 
             this.network = new NetworkViewModel();
             PopulateControlSystemsView(null);
@@ -174,15 +174,13 @@ namespace OpenSTSM.ViewModels.MainWindow
             //ChangeCanExecute(false, ref canExecute_ImportImage);
             //ChangeCanExecute(false, ref canExecute_AnalyseImage);
             //ChangeCanExecute(false, ref canExecute_GenerateSimulinkModel);           
-
-            TinfoBox.Start("Generating Simulink Model...", "Information");
-           
-            ModelBuilder builder = new ModelBuilder();            
-
+                  
             if (this.network.Nodes.Count > 0)
             {
-                builder
-                .AddControlSystem(cs =>
+                TinfoBox.Start("Generating Simulink Model...", "Information");
+
+                ModelBuilder builder = new ModelBuilder();
+                builder.AddControlSystem(cs =>
                 {
                     cs.AddSources(source =>
                     {
@@ -484,11 +482,14 @@ namespace OpenSTSM.ViewModels.MainWindow
                     });
                 })
                 .Build();
+
+                if (_isProcessing)
+                    builder.Save(Settings.Default.Simulink_OutputPath);
+
+                TinfoBox.Close();
             }
-
-            builder.Save(Settings.Default.Simulink_OutputPath);
-
-            TinfoBox.Close();
+            else
+                MessageBox.Show("Add at least one element to generate a simulink model.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             //ChangeCanExecute(true, ref canExecute_AnalyseImage);
             //ChangeCanExecute(true, ref canExecute_ImportImage);
@@ -596,6 +597,8 @@ namespace OpenSTSM.ViewModels.MainWindow
                 element.Location = this.GetCorrectNodeLocation(element.Guid);
                 CreateNode(element, true);
             }
+
+            App.Current.MainWindow.Activate();
         }
 
         public void ChangeCanExecute(bool canExecute, ref bool canExecuteObj)
