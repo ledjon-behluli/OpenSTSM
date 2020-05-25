@@ -6,15 +6,22 @@
         xmlns:local="clr-namespace:OpenSTSM.Guis"
         xmlns:VM="clr-namespace:OpenSTSM.ViewModels.About"
         mc:Ignorable="d"
-        Title="About OpenSTSM" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" Height="289.376" Width="313.312">
+        Title="About" ResizeMode="NoResize" WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterScreen" Height="295.376" Width="327.312">
     <Grid Margin="10 0 10 0">
-        <Image Source="/Resources/bittorrent.png"  HorizontalAlignment="Left" Margin="0,0,0,201" Width="182" />
-        <TextBlock HorizontalAlignment="Left" Text="©2019 OpenSTSM&#x0a;All Rights Reserved" Margin="0,82,0,106" />
-        <TextBlock HorizontalAlignment="Left" Text="OpenSTSM stands for Open Sketch to Simulink Model." Margin="0,130,0,66" />
-        <TextBlock HorizontalAlignment="Left" Text="Designed and Developed by Ledjon Behluli" Margin="0,156,0,43" />
-        <Button Content="Close" Command="{Binding CloseCommand}" HorizontalAlignment="Left" Margin="202,221,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBlock Margin="0,190,232,36">           
-            <Hyperlink Command="{Binding RequestNavigateCommand}">
+        <Image Source="/Resources/OpenSTSM_icon.png"  HorizontalAlignment="Left" Margin="0,10,0,191" Width="67" />
+        <TextBlock HorizontalAlignment="Left" Text="©2020 OpenSTSM&#x0a;All Rights Reserved" Margin="67,23,0,165" />
+        <TextBlock HorizontalAlignment="Left" Text="OpenSTSM stands for 'Open Sketch to Simulink Model'" Margin="-1,86,0,110" />
+        <TextBlock HorizontalAlignment="Left" Text="It tries to convert hand drawn sketches of control&#x0a;systems to executable Simulink models." Margin="-1,113,0,83" Width="285" />
+        <TextBlock HorizontalAlignment="Left" Text="Designed and Developed by" Margin="-1,156,0,43" />
+        <TextBlock Margin="154,156,43,74">           
+            <Hyperlink Command="{Binding LinkedInUrlCommand}">
+                Ledjon Behluli
+            </Hyperlink>
+        </TextBlock>
+        <Button Content="Close" Command="{Binding CloseCommand}" HorizontalAlignment="Left" Margin="202,222,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBlock Margin="0,189,232,37">           
+            <Hyperlink Command="{Binding GithubUrlCommand}">
                 GitHub
             </Hyperlink>
         </TextBlock>

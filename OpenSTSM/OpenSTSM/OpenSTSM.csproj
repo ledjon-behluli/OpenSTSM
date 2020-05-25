@@ -419,5 +419,8 @@
   <ItemGroup>
     <Resource Include="Resources\folder.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\OpenSTSM_icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

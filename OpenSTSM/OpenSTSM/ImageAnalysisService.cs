@@ -203,7 +203,11 @@ namespace OpenSTSM
             TinfoBox?.Close();
             Close();
 
-            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            string errorMessage = e.Message;
+            if (e.Message == "Root element is missing.")   // This is a know error. This happens if there is still a python instance running.
+                errorMessage = "An existing python instance is running.\nClose that instance and run image analysis again.";
+
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
 

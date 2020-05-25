@@ -12,6 +12,7 @@
         xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"        
         mc:Ignorable="d"
         FocusManager.FocusedElement="{Binding ElementName=NetworkControl}"
+        Icon="/Resources/OpenSTSM_icon.png"
         Title="OpenSTSM" Height="450" Width="1000" UseLayoutRounding="True" ResizeMode="CanResizeWithGrip" >
 
     <Window.Resources>

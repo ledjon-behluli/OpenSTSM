@@ -10,16 +10,23 @@ namespace OpenSTSM.ViewModels.About
 {
     public class AboutViewModel : WorkspaceViewModel
     {   
-        public ICommand RequestNavigateCommand { get; set; }     
+        public ICommand GithubUrlCommand { get; set; }     
+        public ICommand LinkedInUrlCommand { get; set; }
 
         public AboutViewModel()
         {
-            RequestNavigateCommand = new RelayCommand(RequestNavigate);     
+            GithubUrlCommand = new RelayCommand(GithubUrl);
+            LinkedInUrlCommand = new RelayCommand(LinkedInUrl);
         }
 
-        private void RequestNavigate(object sender)
+        private void GithubUrl(object sender)
         {
             Process.Start(new ProcessStartInfo(Settings.Default.GitHubUri));           
+        }
+
+        private void LinkedInUrl(object sender)
+        {
+            Process.Start(new ProcessStartInfo(Settings.Default.LinkedInUrl));
         }
     }
 }
