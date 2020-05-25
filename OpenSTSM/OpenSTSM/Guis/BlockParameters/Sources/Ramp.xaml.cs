@@ -22,8 +22,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
     /// </summary>
     public partial class Ramp : UserControl, INotifyPropertyChanged
     {
-        private decimal slope;
-        public decimal Slope
+        private double slope;
+        public double Slope
         {
             get
             {
@@ -36,8 +36,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             }
         }
 
-        private decimal startTime;
-        public decimal StartTime
+        private double startTime;
+        public double StartTime
         {
             get
             {
@@ -50,8 +50,8 @@ namespace OpenSTSM.Guis.BlockParameters.Sources
             }
         }
 
-        private decimal initialOutput;
-        public decimal InitialOutput
+        private double initialOutput;
+        public double InitialOutput
         {
             get
             {

@@ -15,6 +15,7 @@ namespace OpenSTSM.Models.MainWindow.SimulinkElements
         int NumberOfInputs { get; set; }
         int NumberOfOutputs { get; set; }
         Point Location { get; set; }
+        bool IsFlippedHorizontally { get; set; }
         ListDictionary Properties { get; set; }
         T SimulinkObjectType { get; }
     }

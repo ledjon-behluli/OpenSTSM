@@ -22,19 +22,18 @@ namespace OpenSTSM
     public class SimulinkElementChosenPayload
     {
         public object SimulinkNodeElement { get; private set; }
-        
 
-        public SimulinkElementChosenPayload(FrameworkElement element) 
+        public SimulinkElementChosenPayload(FrameworkElement element, bool isFlippedHorizontally) 
         {
-            this.SetPayload(element);
+            this.SetPayload(element, isFlippedHorizontally);
         }
 
         public SimulinkElementChosenPayload(string elementName)
         {
-            this.SetPayload(new FrameworkElement() { Name = elementName });
+            this.SetPayload(new FrameworkElement() { Name = elementName }, false);
         }
 
-        private void SetPayload(FrameworkElement element)
+        private void SetPayload(FrameworkElement element, bool isFlippedHorizontally)
         {
             object simulinkNodeElement;
             Guid? guid = GlobalVariableManager.LastSelectedElementIdentifer;
@@ -46,6 +45,7 @@ namespace OpenSTSM
                         Constant constant = (element as Constant);
                         simulinkNodeElement = new InputElement(SimulinkInputType.Constant, guid);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(constant.Value), constant.Value);
+                        ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Step":
@@ -56,6 +56,7 @@ namespace OpenSTSM
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.InitialValue), step.InitialValue);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.FinalValue), step.FinalValue);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(step.SampleTime), step.SampleTime);
+                        ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Ramp":
@@ -65,6 +66,7 @@ namespace OpenSTSM
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.Slope), ramp.Slope);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.StartTime), ramp.StartTime);
                         ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add(nameof(ramp.InitialOutput), ramp.InitialOutput);
+                        ((ISimulinkNodeElement<SimulinkInputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Scope":
@@ -79,6 +81,7 @@ namespace OpenSTSM
                         simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.TransferFunction, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(transferFunction.NumeratorCoefficients), transferFunction.NumeratorCoefficients);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(transferFunction.DenominatorCoefficients), transferFunction.DenominatorCoefficients);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "PidController":
@@ -95,6 +98,7 @@ namespace OpenSTSM
                         // Controller Initial Conditions
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(pidController.Integrator), pidController.Integrator);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(pidController.Filter), pidController.Filter);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Integrator":
@@ -102,6 +106,7 @@ namespace OpenSTSM
                         Integrator integrator = (element as Integrator);
                         simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Integrator, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(integrator.InitialCondition), integrator.InitialCondition);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Sum":
@@ -110,6 +115,7 @@ namespace OpenSTSM
                         simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Sum, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).NumberOfInputs = sum.Signs.CountNonEmpty();
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(sum.Signs), sum.Signs);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 case "Gain":
@@ -117,6 +123,7 @@ namespace OpenSTSM
                         Gain gain = (element as Gain);
                         simulinkNodeElement = new InputOutputElement(SimulinkInputOutputType.Gain, guid);
                         ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add(nameof(gain.Value), gain.Value);
+                        ((ISimulinkNodeElement<SimulinkInputOutputType>)simulinkNodeElement).Properties.Add("FlipHorizontally", isFlippedHorizontally);
                     }
                     break;
                 default:

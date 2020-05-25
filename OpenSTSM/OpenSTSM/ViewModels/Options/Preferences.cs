@@ -44,5 +44,20 @@ namespace OpenSTSM.ViewModels.Options
                 OnPropertyChanged();
             }
         }
+
+        private string _Simulink_OutputPath;
+        public string Simulink_OutputPath
+        {
+            get
+            {
+                return _Simulink_OutputPath;
+            }
+            set
+            {
+                _Simulink_OutputPath = value;
+                OnPropertyChanged();
+            }
+        }
+
     }
 }

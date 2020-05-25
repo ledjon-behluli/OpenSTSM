@@ -23,6 +23,17 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
         #endregion
 
+        private bool isFlippedHorizontally;
+        public bool IsFlippedHorizontally
+        {
+            get => isFlippedHorizontally;
+            set
+            {
+                isFlippedHorizontally = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand SelectCommand { get; set; }
 
 
@@ -56,7 +67,7 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
         private void Select(object sender)
         {
-            _eventAggregator.GetEvent<SimulinkElementChosenEvent>().Publish(new SimulinkElementChosenPayload(_instance.GetSelectedUserControl(_elementName)));
+            _eventAggregator.GetEvent<SimulinkElementChosenEvent>().Publish(new SimulinkElementChosenPayload(_instance.GetSelectedUserControl(_elementName), IsFlippedHorizontally));
             base.Close();
         }
     }

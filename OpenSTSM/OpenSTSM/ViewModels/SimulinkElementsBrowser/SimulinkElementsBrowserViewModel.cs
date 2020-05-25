@@ -12,7 +12,6 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
         private IEventAggregator _eventAggregator;
         private List<string> elementsWithoutParameters = new List<string>() { "Scope", "Display" };
         private SimulinkBrowserTabVisibilities _simulinkBrowserTabVisibilities;
-        private int _selectedTabIndex;
 
         #region Properties
 
@@ -57,7 +56,6 @@ namespace OpenSTSM.ViewModels.SimulinkElementsBrowser
 
         public SimulinkElementsBrowserViewModel(IEventAggregator eventAggregator, SimulinkBrowserTabVisibilities simulinkBrowserTabVisibilities, int selectedTabIndex)
         {
-            _selectedTabIndex = selectedTabIndex;
             SelectedTabIndex = selectedTabIndex == -1 ? 0 : selectedTabIndex;
             _simulinkBrowserTabVisibilities = simulinkBrowserTabVisibilities ?? new SimulinkBrowserTabVisibilities(true, true, true, true);
 

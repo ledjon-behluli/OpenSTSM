@@ -20,10 +20,11 @@ namespace OpenSTSM.Extensions
             var member = simulinkType.ToString();
             var enumValueMemberInfo = type.GetField(member);
             var valueAttributes = enumValueMemberInfo.GetCustomAttributes(typeof(SimulinkElementPropertiesAttribute), false);
-           
+      
             sep.Name = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).Name;
             sep.NumberOfInputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfInputs;
             sep.NumberOfOutputs = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).NumberOfOutputs;
+            sep.IsFlippedHorizontally = ((SimulinkElementPropertiesAttribute)valueAttributes[0]).IsFlippedHorizontally;
 
             return sep;
         }

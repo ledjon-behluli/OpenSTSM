@@ -53,6 +53,9 @@
             <Grid Visibility="{Binding IsGainVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ucMathOperations:Gain x:Name="Gain" />
             </Grid>
+            <Grid Margin="00 20 0 0">
+                <CheckBox Content="Flip Horizontally" IsChecked="{Binding IsFlippedHorizontally}"/>
+            </Grid>
         </StackPanel>
         <Button Content="OK" Command="{Binding Path=SelectCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 95 0" Width="75" Grid.Row="1"/>
         <Button Content="Cancel" Command="{Binding Path=CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"  Width="75" Grid.Row="1"/>

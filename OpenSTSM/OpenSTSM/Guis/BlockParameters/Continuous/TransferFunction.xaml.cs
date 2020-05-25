@@ -22,8 +22,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
     /// </summary>
     public partial class TransferFunction : UserControl, INotifyPropertyChanged
     {
-        private List<decimal> _numeratorCoefficients;
-        public List<decimal> NumeratorCoefficients
+        private List<double> _numeratorCoefficients;
+        public List<double> NumeratorCoefficients
         {
             get
             {
@@ -36,8 +36,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             }
         }
 
-        private List<decimal> _denominatorCoefficients;
-        public List<decimal> DenominatorCoefficients
+        private List<double> _denominatorCoefficients;
+        public List<double> DenominatorCoefficients
         {
             get
             {
@@ -53,8 +53,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
 
         public TransferFunction()
         {
-            _numeratorCoefficients = new List<decimal>() { 1 };
-            _denominatorCoefficients = new List<decimal>() { 1, 1 };
+            _numeratorCoefficients = new List<double>() { 1 };
+            _denominatorCoefficients = new List<double>() { 1, 1 };
 
             this.Name = "TransferFunction";
             DataContext = this;

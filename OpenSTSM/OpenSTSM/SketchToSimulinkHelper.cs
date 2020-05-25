@@ -1,4 +1,9 @@
-﻿using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+﻿using NetworkModel;
+using OpenSTSM.ViewModels.SimulinkElementsBrowser;
+using System;
+using System.CodeDom;
+using System.Collections;
+using System.Windows;
 
 namespace OpenSTSM
 {
@@ -41,6 +46,29 @@ namespace OpenSTSM
                 default: 
                     return new SimulinkBrowserTabVisibilities(true, true, true, true);
             }
-        }        
+        }      
+        
+        public static T GetSketchElementsValue<T>(NodeViewModel node, string key)
+        {
+            foreach (DictionaryEntry de in node.Properties)
+            {
+                if ((string)de.Key == key)
+                    return (T)de.Value;                                 
+            }
+
+            throw new ArgumentException();
+        }
+    }
+
+    public class NormalizedLocation 
+    {
+        public uint X { get; private set; }
+        public uint Y { get; private set; }
+
+        public NormalizedLocation(NodeViewModel node)
+        {
+            X = (uint)(node.X < 0 ? 0 : node.X);
+            Y = (uint)(node.Y < 0 ? 0 : node.Y);
+        }
     }
 }

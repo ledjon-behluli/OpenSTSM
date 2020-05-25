@@ -42,8 +42,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
 
         #region Controller Parameters
 
-        private decimal _proportional;
-        public decimal Proportional
+        private double _proportional;
+        public double Proportional
         {
             get
             {
@@ -56,8 +56,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             }
         }
 
-        private decimal _integral;
-        public decimal Integral
+        private double _integral;
+        public double Integral
         {
             get
             {
@@ -70,8 +70,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             }
         }
 
-        private decimal _derivative;
-        public decimal Derivative
+        private double _derivative;
+        public double Derivative
         {
             get
             {
@@ -84,8 +84,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             }
         }
 
-        private decimal _filterCoefficient;
-        public decimal FilterCoefficient
+        private double _filterCoefficient;
+        public double FilterCoefficient
         {
             get
             {
@@ -102,8 +102,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
 
         #region Controller Initial Conditions
 
-        private decimal _integrator;
-        public decimal Integrator
+        private double _integrator;
+        public double Integrator
         {
             get
             {
@@ -116,8 +116,8 @@ namespace OpenSTSM.Guis.BlockParameters.Continuous
             }
         }
 
-        private decimal _filter;
-        public decimal Filter
+        private double _filter;
+        public double Filter
         {
             get
             {
