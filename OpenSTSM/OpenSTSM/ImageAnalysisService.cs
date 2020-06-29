@@ -200,14 +200,14 @@ namespace OpenSTSM
 
         private bool HandleException(Exception e)
         {
-            TinfoBox?.Close();
-            Close();
+            TinfoBox?.Close();            
 
             string errorMessage = e.Message;
             if (e.Message == "Root element is missing.")   // This is a know error. This happens if there is still a python instance running.
                 errorMessage = "An existing python instance is running.\nClose that instance and run image analysis again.";
 
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
             return false;
         }
 
@@ -221,7 +221,13 @@ namespace OpenSTSM
                 string[] allPaths = pathVariable.Split(';');
                 foreach (var path in allPaths)
                 {
-                    string pythonPathFromEnv = path + "\\python.exe";
+                    string pythonexe;
+                    if (path.EndsWith("\\"))
+                        pythonexe = "python.exe";
+                    else
+                        pythonexe = "\\python.exe";
+
+                    string pythonPathFromEnv = path + pythonexe;
                     if (File.Exists(pythonPathFromEnv))
                         return pythonPathFromEnv;
                 }
