@@ -1,3 +1,3 @@
-# OpenSTSM (Under construction!!!)
+# OpenSTSM 
 
 Open Sketch to Simulink Model.
